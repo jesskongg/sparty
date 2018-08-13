@@ -1,0 +1,16 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}
+  
+  form(method='GET' action='/api/search')
+    div.form-group
+      label(for='query') Song:
+      input#query.form-control(type='text', placeholder='song name' name='query' value='')
+    button.btn.btn-primary(type='submit') Submit
+
+  if errors
+    ul
+      for error in errors
+        li!= error.msg
