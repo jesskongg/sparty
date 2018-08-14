@@ -4,13 +4,18 @@ block content
   h1= title
   p Welcome to #{title}
   
-  form(method='GET' action='/api/search')
-    div.form-group
-      label(for='query') Song:
-      input#query.form-control(type='text', placeholder='song name' name='query' value='')
-    button.btn.btn-primary(type='submit') Submit
+  //- form(method='POST' action='/api/search')
+  //-   div.form-group
+  //-     label(for='query') Song:
+  //-     input#query.form-control(type='text', placeholder='song name' name='query' value='')
+  //-   button#search.btn.btn-primary(type='submit') Submit
+  
+  
+  label(for='query') Song:
+  input#query.form-control(type='text', placeholder='song name' name='query' value='')
+  button#search.btn.btn-primary(type='submit') Search
 
-  if errors
-    ul
-      for error in errors
-        li!= error.msg
+  div#search-result(class='card' style='width: 30rem;')
+    ul#search-list(class="list-group list-group-flush")
+
+  script(src='/scripts/index.js')

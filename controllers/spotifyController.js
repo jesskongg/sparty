@@ -5,6 +5,7 @@ var Spotify = require('node-spotify-api');
 var keys = require('../routes/key');
 
 //Create a Spotify Client
+// var spotify = new Spotify(keys.spotifyKeys);
 var spotify = new Spotify(keys.spotifyKeys);
 
 //Store the results of a request to spotify
@@ -15,10 +16,10 @@ exports.spotify_search = function(req, res, next) {
     var type = 'track';
 
     //Get the query from the user
-    var query = req.body.param_query;
+    var query = req.query.query;
 
     //Clear out old results
-    results = [];
+    var results = [];
 
     //Make a request to Spotify
     spotify.search({type: type, query: query})
@@ -32,18 +33,17 @@ exports.spotify_search = function(req, res, next) {
                               // url: ea.external_urls.spotify,
                               id: ea.id,
                               album: ea.album.name,
-                              image: obj.album.images[0].url,
+                              image: ea.album.images[0].url,
                               uri: ea.uri,
                               preview: ea.preview,
                 });
             });
             //Render the homepage and return results to the view
-            res.render('index', {title: 'Spotify', results: results});
+            // res.render('index', {title: 'Spotify', results: results});
+            res.json(results);
         })
         .catch(function (err) {
             console.log(err);
             throw err;
         });
-});
-
-module.exports = router;
+};
