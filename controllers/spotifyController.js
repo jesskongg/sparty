@@ -1,6 +1,8 @@
 // Import the Spotify API
 var Spotify = require('node-spotify-api');
 
+var passport = require('passport');
+
 //Import our Keys File
 var keys = require('../routes/key');
 
@@ -47,3 +49,13 @@ exports.spotify_search = function(req, res, next) {
             throw err;
         });
 };
+
+exports.spotify_login = passport.authenticate('spotify', function(req, res) {
+  // The request will be redirected to spotify for authentication, so this
+  // function will not be called.
+});
+
+exports.spotify_callback = passport.authenticate('spotify', {
+      failureRedirect: '/api/auth/login',
+      successReturnToOrRedirect: '/'
+});

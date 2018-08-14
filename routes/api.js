@@ -7,4 +7,6 @@ var spotify_controller = require('../controllers/spotifyController');
 // router.post('/api/search', spotify_controller.spotify_search);
 router.get('/search', spotify_controller.spotify_search);
 
+router.get('/auth/login', spotify_controller.spotify_login);
+
 module.exports = router;

@@ -9,18 +9,21 @@ $(function() {
           "/api/search", {
             query: $("#query").val(),
           }, function(resp) {
-            $("#search-list").empty();
+            $(".modal-body").empty();
             resp.forEach(function(ea) {
-              var newElement = $('<li></li>').addClass("list-group-item");
+              // var newElement = $('<li></li>').addClass("list-group-item");
+              var newElement = $('<p></p>');
               newElement.append(`<img id='album-image' src='${ea.image}' style='height: 50px'/>
               <span>${ea.song}</span>
               `)
-              $("#search-list").append(newElement);
+              $(".modal-body").append(newElement);
             })
           }
         )
       }
     })
 
-
+    $("#close").click(function() {
+      $("#search-list").empty();
+    })
 });
