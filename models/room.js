@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
   Room.associate = function(models) {
     // associations can be defined here
     Room.belongsTo(models.User, { foreignKey: 'owner', targetKey: 'spotify_id' });
-
+    Room.belongsToMany(models.Song, { through: 'room-song', foreignKey: 'roomId'});
   };
   return Room;
 };
