@@ -8,18 +8,20 @@ html
     link(href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css", rel="stylesheet")
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
-    nav(class="navbar navbar-expand-lg navbar-light bg-light")
-      a(class="navbar-brand" href="/") Sparty
-      button(class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation")
-        <span class="navbar-toggler-icon"></span>
-
-      div(class="collapse navbar-collapse" id="navbarSupportedContent")
-        ul(class="navbar-nav mr-auto")
-          li(class="nav-item active")
-            a(class="nav-link" href="/") Home <span class="sr-only">(current)</span>
-          li(class="nav-item")
-            if (!loggedIn)
-              a(class="nav-link" href="api/auth/login") Login
-            else
-              a(class="nav-link" href="api/auth/logout") Logout
+    block navbar
+      nav(class="navbar navbar-expand-lg navbar-dark bg-primary")
+        a(class="navbar-brand" href="/") Sparty
+        button(class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation")
+          <span class="navbar-toggler-icon"></span>
+      
+        div(class="collapse navbar-collapse" id="navbarSupportedContent")
+          ul(class="navbar-nav mr-auto")
+            li(class="nav-item active")
+              a(class="nav-link" href="/") Home <span class="sr-only">(current)</span>
+          ul(class="navbar-nav ml-auto nav-flex-icons")
+            li(class="nav-item active")
+              if (!loggedIn)
+                a(class="nav-link" href="api/auth/login") Login
+              else
+                a(class="nav-link" href="api/auth/logout") Logout
     block content
