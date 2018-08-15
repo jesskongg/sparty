@@ -1,6 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  var room - song = sequelize.define('room-song', {
+  var RoomSong = sequelize.define('RoomSong', {
     vote: {
       type: DataTypes.NUMBER,
       defaultValue: 0
@@ -22,8 +22,8 @@ module.exports = (sequelize, DataTypes) => {
         }
     },
   }, {});
-  room - song.associate = function(models) {
+  RoomSong.associate = function(models) {
     // associations can be defined here
   };
-  return room - song;
+  return RoomSong;
 };

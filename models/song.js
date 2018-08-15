@@ -25,7 +25,8 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   Song.associate = function(models) {
     // associations can be defined here
-    Song.belongsToMany(models.Room, { through: 'room-song', foreignKey: 'songId'});
+    // This will add methods getSongs, setSongs, addSong,addSongs to Room, and getRooms, setRooms, addRoom, and addRooms to Song
+    Song.belongsToMany(models.Room, { through: 'RoomSong', foreignKey: 'songId'});
   };
   return Song;
 };
