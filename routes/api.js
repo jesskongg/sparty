@@ -9,4 +9,6 @@ router.get('/search', spotify_controller.spotify_search);
 
 router.get('/auth/login', spotify_controller.spotify_login);
 
+router.get('/auth/logout', spotify_controller.spotify_logout);
+
 module.exports = router;

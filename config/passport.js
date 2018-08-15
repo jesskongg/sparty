@@ -11,11 +11,13 @@ module.exports = function(passport) {
   //   have a database of user records, the complete spotify profile is serialized
   //   and deserialized.
   passport.serializeUser(function(user, done) {
-    done(null, user);
+    done(null, user.spotify_id);
   });
 
-  passport.deserializeUser(function(obj, done) {
-    done(null, obj);
+  passport.deserializeUser(function(id, done) {
+    models.User.findById(id).then(user => {
+        done(null, user);
+    });
   });
 
   passport.use(

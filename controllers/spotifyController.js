@@ -59,3 +59,8 @@ exports.spotify_callback = passport.authenticate('spotify', {
       failureRedirect: '/api/auth/login',
       successReturnToOrRedirect: '/'
 });
+
+exports.spotify_logout = function(req, res) {
+  req.logout();
+  res.redirect('/');
+};

@@ -1,8 +1,8 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+  //- h1= title
+  //- p Welcome to #{title}
   
   //- form(method='POST' action='/api/search')
   //-   div.form-group
@@ -10,14 +10,15 @@ block content
   //-     input#query.form-control(type='text', placeholder='song name' name='query' value='')
   //-   button#search.btn.btn-primary(type='submit') Submit
   
-  a.button.btn.btn-primary(href='api/auth/login') Login
+  //- a.button.btn.btn-primary(href='api/auth/login') Login
   
-  div.form-group
-    label(for='query') Song:
-    input#query.form-control(type='text', placeholder='song name' name='query' value='')
-  //- button#search.btn.btn-primary(type='submit') Search
+  //- div.form-group
+  div(class="form-inline my-2 my-lg-0")
+    input#query(class="form-control mr-sm-2" type="search" placeholder="song name" name='query' aria-label="Search" value='')
+    button#search(class="btn btn-outline-success my-2 my-sm-0" data-toggle="modal" data-target="#exampleModalLong" type="submit") Search
+
   <!-- Button trigger modal -->
-  button#search(class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong") Search
+  //- button#search(class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong") Search
 
   <!-- Modal -->
   div(class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true")

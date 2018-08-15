@@ -1,10 +1,25 @@
 doctype html
 html
   head
-    title= title
+    //- title= title
     script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js')
-    script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js')
-    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css')
+    script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js')
+    link(href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css', rel="stylesheet")
+    link(href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css", rel="stylesheet")
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
+    nav(class="navbar navbar-expand-lg navbar-light bg-light")
+      a(class="navbar-brand" href="/") Sparty
+      button(class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation")
+        <span class="navbar-toggler-icon"></span>
+
+      div(class="collapse navbar-collapse" id="navbarSupportedContent")
+        ul(class="navbar-nav mr-auto")
+          li(class="nav-item active")
+            a(class="nav-link" href="/") Home <span class="sr-only">(current)</span>
+          li(class="nav-item")
+            if (!loggedIn)
+              a(class="nav-link" href="api/auth/login") Login
+            else
+              a(class="nav-link" href="api/auth/logout") Logout
     block content

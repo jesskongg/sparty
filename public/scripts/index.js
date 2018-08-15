@@ -3,8 +3,10 @@ $(function() {
 
     $("#search").click(function() {
       if ($("#query").val() === '') {
+        console.log('really');
         $("#search-list").empty();
       } else {
+        console.log('you are doning something');
         $.getJSON(
           "/api/search", {
             query: $("#query").val(),
