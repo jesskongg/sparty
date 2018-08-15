@@ -27,5 +27,10 @@ module.exports = (sequelize, DataTypes) => {
     // This will add methods getSongs, setSongs, addSong,addSongs to Room, and getRooms, setRooms, addRoom, and addRooms to Song
     Room.belongsToMany(models.Song, { through: 'RoomSong', foreignKey: 'roomId'});
   };
+
+  Room.prototype.getUrl = function() {
+    return '/api/room/' + this.id;
+  };
+
   return Room;
 };

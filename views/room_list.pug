@@ -1,0 +1,22 @@
+extends layout
+
+block content
+  //- h1= title
+  //- p Welcome to #{title}
+  div(class="container")
+    div(class="row")
+      each room in rooms
+          div(class="col-sm")
+              a(href='/rooms/'+ room.id style="text-decoration: none;")
+                div(class="card text-white bg-primary mb-3" style="width: 18rem;")
+                  img(class="card-img-top" src= room.avatar alt="Card image cap")
+                  div(class="card-body") Welcome to #{room.name}
+    
+    div(class="row")
+        div(class="col-sm")
+            a(type = 'button' class = 'btn btn-light' href='/api/room/create')
+                span(class="fa fa-plus-circle")
+                <span> Create Room</span>
+
+  //- a.button.btn.btn-primary(href='/api/room/create') Create Room
+  //- script(src='/scripts/room.js')

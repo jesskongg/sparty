@@ -2,7 +2,7 @@
 module.exports = (sequelize, DataTypes) => {
   var RoomSong = sequelize.define('RoomSong', {
     vote: {
-      type: DataTypes.NUMBER,
+      type: DataTypes.INTEGER,
       defaultValue: 0
     },
     roomId: {

@@ -2,3 +2,43 @@
 form(class="form-inline my-2 my-lg-0")
   input(class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search")
   button(class="btn btn-outline-success my-2 my-sm-0" type="submit") Search
+
+//- form
+form(method='POST' action='/api/search')
+  div.form-group
+    label(for='query') Song:
+    input#query.form-control(type='text', placeholder='song name' name='query' value='')
+  button#search.btn.btn-primary(type='submit') Submit
+
+  //- a.button.btn.btn-primary(href='api/auth/login') Login
+
+//- position navbar element to the rightest
+ul(class="navbar-nav ml-auto nav-flex-icons")
+  li(class="nav-item active")
+    if (!loggedIn)
+      a(class="nav-link" href="api/auth/login") Login
+    else
+      a(class="nav-link" href="api/auth/logout") Logout
+
+      div(class="form-inline my-2 my-lg-0")
+        input#query(class="form-control mr-sm-2" type="search" placeholder="song name" name='query' aria-label="Search" value='')
+        button#search(class="btn btn-outline-success my-2 my-sm-0" data-toggle="modal" data-target="#exampleModalLong" type="submit") Search
+
+      <!-- Button trigger modal -->
+      //- button#search(class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong") Search
+
+      <!-- Modal -->
+      div(class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true")
+        div(class="modal-dialog" role="document")
+          div(class="modal-content")
+            div(class="modal-header")
+              h3(class="modal-title" id="exampleModalLongTitle") Seach Result
+              button(class="close" data-dismiss="modal" aria-label="Close")
+                <span aria-hidden="true">&times;</span>
+            div(class="modal-body")
+              //- ...
+            div(class="modal-footer")
+              button#close(class="btn btn-secondary" data-dismiss="modal") Close
+              //- button(class="btn btn-primary") Save changes
+      //- div#search-result(class='card' style='width: 30rem;')
+      //-   ul#search-list(class="list-group list-group-flush")

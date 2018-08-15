@@ -5,7 +5,7 @@ var spotify_controller = require('../controllers/spotifyController');
 var results = [];
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express', results: results});
+  res.redirect('/api/rooms');
 });
 
 router.get('/callback', spotify_controller.spotify_callback);
