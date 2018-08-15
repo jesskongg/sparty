@@ -1,5 +1,6 @@
 // configure passport spotify
 const SpotifyStrategy = require('passport-spotify').Strategy;
+var models = require('../models');
 
 module.exports = function(passport) {
   // Passport session setup.
@@ -25,15 +26,10 @@ module.exports = function(passport) {
         callbackURL: 'http://localhost:3000/callback'
       },
       function(accessToken, refreshToken, expires_in, profile, done) {
-        // asynchronous verification, for effect...
-        process.nextTick(function() {
-          // To keep the example simple, the user's spotify profile is returned to
-          // represent the logged-in user. In a typical application, you would want
-          // to associate the spotify account with a user record in your database,
-          // and return that user instead.
-          // return done(null, profile);
-          return done(null, profile);
-        })
-      })
-    );
+        models.User.findOrCreate({ where: { spotify_id: profile.id }}).spread((user, created) => {
+          return done(null, user);
+        });
+      }
+    )
+  );
 }
