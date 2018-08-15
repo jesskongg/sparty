@@ -18,4 +18,8 @@ router.get('/room/create', room_controller.room_create_get);
 
 router.post('/room/create', room_controller.room_create_post);
 
+router.get('/room/:id', room_controller.room_detail);
+
+
+
 module.exports = router;

@@ -1,6 +1,6 @@
 const { body,validationResult } = require('express-validator/check');
 const { sanitizeBody } = require('express-validator/filter');
-// var async = require('async');
+var async = require('async');
 var models = require('../models/');
 
 exports.room_list = function(req, res, next) {
@@ -10,9 +10,10 @@ exports.room_list = function(req, res, next) {
 };
 
 exports.room_detail = function(req, res, next) {
-  models.Room.findById(res.params.id).then(room => {
+  models.Room.findById(req.params.id).then(room => {
     if (room) {
-      res.render('room-detail', { room: room });
+      res.locals.isOwner = isOwner(room, req.user);
+      res.render('room_detail', { room: room });
     } else {
       res.redirect('/');
     }
@@ -77,4 +78,11 @@ exports.room_delete_get = function(req, res, next) {
 }
 exports.room_delete_post = function(req, res, next) {
   res.send('TODO');
+};
+
+function isOwner(room, user) {
+  if (user) {
+    return room.owner === user.spotify_id;
+  }
+  return false;
 }

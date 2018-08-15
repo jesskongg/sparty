@@ -3,4 +3,28 @@ extend layout
 block content
   h3= title
   
-  
+  div(class="form-inline my-2 my-lg-0")
+    input#query(class="form-control mr-sm-2" type="search" placeholder="song name" name='query' aria-label="Search" value='')
+    button#search(class="btn btn-outline-success my-2 my-sm-0" data-toggle="modal" data-target="#exampleModalLong" type="submit") Search
+
+  <!-- Button trigger modal -->
+  //- button#search(class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong") Search
+
+  <!-- Modal -->
+  div(class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true")
+    div(class="modal-dialog" role="document")
+      div(class="modal-content")
+        div(class="modal-header")
+          h4(class="modal-title" id="exampleModalLongTitle")
+          button(class="close" data-dismiss="modal" aria-label="Close")
+            <span aria-hidden="true">&times;</span>
+        div(class="modal-body")
+          //- ...
+        div(class="modal-footer")
+          button#close(class="btn btn-secondary" data-dismiss="modal") Close
+
+
+  if (isOwner)
+    a.button.btn.btn-primary(href=room.getUrl() + '/update') Edit Room
+
+  script(src='/scripts/room.js')

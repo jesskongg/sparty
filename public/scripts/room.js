@@ -11,6 +11,7 @@ $(function() {
           "/api/search", {
             query: $("#query").val(),
           }, function(resp) {
+            $(".modal-title").text("Search for " + $("#query").val());
             $(".modal-body").empty();
             resp.forEach(function(ea) {
               // var newElement = $('<li></li>').addClass("list-group-item");
