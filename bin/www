@@ -29,6 +29,30 @@ server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
 
+// setup socket.io
+var io = require('socket.io')(server);
+
+// define namespace on server
+var nsp = io.of('/api/rooms');
+// var myroom;
+nsp.on('connection', function (socket) {
+  socket.on('my other event', function (data) {
+    console.log(data);
+  });
+
+  socket.emit('news', 'whats going on there?');
+
+  
+
+
+
+
+
+
+
+});
+
+
 /**
  * Normalize a port into a number, string, or false.
  */

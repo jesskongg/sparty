@@ -1,8 +1,9 @@
 extend layout
 
 block content
-  h3= title
-  
+  h3 Welcome to #{room.id}
+  script.
+    var roomId = #{room.id}
   div(class="form-inline my-2 my-lg-0")
     input#query(class="form-control mr-sm-2" type="search" placeholder="song name" name='query' aria-label="Search" value='')
     button#search(class="btn btn-outline-success my-2 my-sm-0" data-toggle="modal" data-target="#exampleModalLong" type="submit") Search
@@ -23,8 +24,18 @@ block content
         div(class="modal-footer")
           button#close(class="btn btn-secondary" data-dismiss="modal") Close
 
-
+  
+  div(class="input-group mb-3")
+    div(class="input-group-append")
+      button(class="btn btn-outline-secondary" type="button" id="button-addon2") +
+    input(type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="button-addon2")
+    div(class="input-group-append")
+      button(class="btn btn-outline-secondary" type="button" id="button-addon2") +
+  
+  
   if (isOwner)
     a.button.btn.btn-primary(href=room.getUrl() + '/update') Edit Room
 
+  script(src='/socket.io/socket.io.js')
   script(src='/scripts/room.js')
+  
