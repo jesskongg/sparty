@@ -34,12 +34,17 @@ $(function() {
   });
 
   // socket.io
-  socket.on('connect', function (data) {
-    socket.emit('my other event', { my: 'data' });
+  socket.on('connect', function(data) {
+    socket.emit('room', roomId);
   });
 
-  socket.on('news', function(data) {
-    console.log(data);
+  // update number of people in the room
+  socket.on('people_join', function(data) {
+    $("#num_peope").text(data);
+  });
+
+  socket.on('people_left', function(data) {
+    $("#num_peope").text(data);
   });
 
 });

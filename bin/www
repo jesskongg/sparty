@@ -34,22 +34,24 @@ var io = require('socket.io')(server);
 
 // define namespace on server
 var nsp = io.of('/api/rooms');
-// var myroom;
 nsp.on('connection', function (socket) {
-  socket.on('my other event', function (data) {
-    console.log(data);
-  });
+  socket.on('room', function(room) {
+    socket.room = room;
+    socket.join(room);
+    nsp.in(room).clients((error, clients) => {
+      if (error) throw error;
+      nsp.to(room).emit('people_join', clients.length)
+    })
+  })
 
-  socket.emit('news', 'whats going on there?');
+  socket.on('disconnect', function() {
+    nsp.clients((error, clients) => {
+      if (error) throw error;
+      nsp.to(socket.room).emit('people_left', clients.length);
+    })
+  })
 
   
-
-
-
-
-
-
-
 });
 
 

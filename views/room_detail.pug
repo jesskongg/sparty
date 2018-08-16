@@ -4,6 +4,12 @@ block content
   h3 Welcome to #{room.id}
   script.
     var roomId = #{room.id}
+  
+  div
+    p There are 
+      span#num_peope
+      | &nbsp;people in the room.
+    
   div(class="form-inline my-2 my-lg-0")
     input#query(class="form-control mr-sm-2" type="search" placeholder="song name" name='query' aria-label="Search" value='')
     button#search(class="btn btn-outline-success my-2 my-sm-0" data-toggle="modal" data-target="#exampleModalLong" type="submit") Search
