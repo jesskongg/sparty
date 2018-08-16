@@ -6,31 +6,72 @@ $(function() {
   // ajax function to search song from spotify
   $("#search").click(function() {
     if ($("#query").val() === '') {
-      console.log('really');
-      $("#search-list").empty();
-    } else {
-      console.log('you are doning something');
-      $.getJSON(
-        "/api/search", {
-          query: $("#query").val(),
-        }, function(resp) {
-          $(".modal-title").text("Search for " + $("#query").val());
-          $(".modal-body").empty();
-          resp.forEach(function(ea) {
-            // var newElement = $('<li></li>').addClass("list-group-item");
-            var newElement = $('<p></p>');
-            newElement.append(`<img id='album-image' src='${ea.image}' style='height: 50px'/>
-            <span>${ea.song}</span>
-            `)
-            $(".modal-body").append(newElement);
-          })
-        }
-      )
+      $("#query").val('hello');
     }
+    $.getJSON(
+      "/api/search", {
+        query: $("#query").val(),
+      }, function(resp) {
+        $(".modal-title").text("Search for " + $("#query").val());
+        $(".modal-body").empty();
+        var newElement = $('<p></p>');
+        newElement.append(`
+          <div class='container'>
+            <div class='row'>
+              <div class='col-sm'>
+                <strong>COVER</strong>
+              </div>
+              <div class='col-sm'>
+                <strong>ALBUM</strong>
+              </div>
+              <div class='col-sm'>
+                <strong>SONG</strong>
+              </div>
+              <div class='col-sm'>
+
+              </div>
+            </div>
+          </div>
+          <hr>
+        `)
+        $(".modal-body").append(newElement);
+
+        resp.forEach(function(ea) {
+          // var newElement = $('<li></li>').addClass("list-group-item");
+          var newElement = $('<p></p>');
+          newElement.append(`
+            <div class='container'>
+              <div class='row'>
+                <div class='col-sm'>
+                  <img id='album-image' src='${ea.image}' style='height: 40px'/>
+                </div>
+                <div class='col-sm'>
+                  ${ea.album}
+                </div>
+                <div class='col-sm'>
+                  ${ea.song}
+                </div>
+                <div class='col-sm'>
+                  <button type="button" class="btn btn-outline-primary" id=${ea.id}>Add</button>
+                </div>
+              </div>
+            </div>
+            <hr>
+          `)
+          $(".modal-body").append(newElement);
+          $(`#${ea.id}`).click(function() {
+            console.log('you can choose that');
+            ea.vote = 1;
+            socket.emit('add_candidate', ea);
+          })
+        })
+      }
+    )
   });
 
-  $("#close").click(function() {
+  $("#searchModal").on('hidden.bs.modal', function() {
     $("#search-list").empty();
+      socket.emit('show_candidate_list', 'show');
   });
 
   // socket.io
@@ -45,6 +86,37 @@ $(function() {
 
   socket.on('people_left', function(data) {
     $("#num_peope").text(data);
+  });
+
+  socket.on('show_list', function(candidates) {
+    console.log(candidates);
+    for (var key in candidates) {
+      ea = candidates[key];
+      var newElement = $('<p></p>');
+      newElement.append(`
+        <div class='container'>
+          <div class='row'>
+            <div class='col-sm'>
+            <img id='album-image' src='${ea.image}' style='height: 40px'/>
+            </div>
+          <div class='col-sm'>
+            ${ea.album}
+          </div>
+          <div class='col-sm'>
+            ${ea.song}
+          </div>
+          <div class='col-sm'>
+            <input type='text' value='${ea.vote}' id='${ea.id}NumVote'>
+          </div>
+            <div class='col-sm'>
+              <button type="button" class="btn btn-outline-primary" id=${ea.id}AddVote>+</button>
+            </div>
+          </div>
+        </div>
+        <hr>
+      `)
+      $("#candidates").append(newElement);
+    }
   });
 
 });
