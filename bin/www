@@ -45,6 +45,7 @@ nsp.on('connection', function (socket) {
       if (error) throw error;
       nsp.to(room).emit('people_join', clients.length)
     })
+    nsp.to(socket.room).emit('show_list', candidates[socket.room]);
   })
 
   socket.on('disconnect', function() {
@@ -56,15 +57,24 @@ nsp.on('connection', function (socket) {
 
   socket.on('add_candidate', function(ea) {
     if (socket.room in candidates) {
-      candidates[socket.room][ea.id] = ea;
+      if (candidates[socket.room][ea.id]) {
+        candidates[socket.room][ea.id].vote++;
+      } else {
+        candidates[socket.room][ea.id] = ea;
+      }
     } else {
       candidates[socket.room] = {};
       candidates[socket.room][ea.id] = ea;
     }
-    console.log(candidates);
+    // console.log(candidates);
   });
 
-  socket.on('show_candidate_list', function(data) {
+  socket.on('update_candidate_list', function(data) {
+    nsp.to(socket.room).emit('show_list', candidates[socket.room]);
+  })
+
+  socket.on('add_vote', function(ea) {
+    candidates[socket.room][ea.id].vote++;
     nsp.to(socket.room).emit('show_list', candidates[socket.room]);
   })
 

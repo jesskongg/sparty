@@ -28,7 +28,6 @@ $(function() {
                 <strong>SONG</strong>
               </div>
               <div class='col-sm'>
-
               </div>
             </div>
           </div>
@@ -60,7 +59,6 @@ $(function() {
           `)
           $(".modal-body").append(newElement);
           $(`#${ea.id}`).click(function() {
-            console.log('you can choose that');
             ea.vote = 1;
             socket.emit('add_candidate', ea);
           })
@@ -71,7 +69,7 @@ $(function() {
 
   $("#searchModal").on('hidden.bs.modal', function() {
     $("#search-list").empty();
-      socket.emit('show_candidate_list', 'show');
+      socket.emit('update_candidate_list', 'show');
   });
 
   // socket.io
@@ -89,9 +87,17 @@ $(function() {
   });
 
   socket.on('show_list', function(candidates) {
-    console.log(candidates);
+    // sort candidates list to put on top the highest vote song
+    if (candidates) {
+      candidates = Object.values(candidates);
+      candidates.sort(function(a, b) {
+        return b.vote - a.vote;
+      })
+    }
+
+    $('#candidates').empty();
     for (var key in candidates) {
-      ea = candidates[key];
+      let ea = candidates[key];
       var newElement = $('<p></p>');
       newElement.append(`
         <div class='container'>
@@ -106,16 +112,19 @@ $(function() {
             ${ea.song}
           </div>
           <div class='col-sm'>
-            <input type='text' value='${ea.vote}' id='${ea.id}NumVote'>
+            <input type='text' value='${ea.vote}' id='${ea.id}NumVote' readOnly>
           </div>
             <div class='col-sm'>
-              <button type="button" class="btn btn-outline-primary" id=${ea.id}AddVote>+</button>
+              <button type="button" class="btn btn-outline-primary" id='${ea.id}AddVote'>+</button>
             </div>
           </div>
         </div>
         <hr>
       `)
       $("#candidates").append(newElement);
+      $(`#${ea.id}AddVote`).click(function() {
+        socket.emit('add_vote', ea);
+      });
     }
   });
 
