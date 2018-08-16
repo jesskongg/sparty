@@ -50,17 +50,19 @@ exports.spotify_search = function(req, res, next) {
         });
 };
 
-exports.spotify_login = passport.authenticate('spotify', function(req, res) {
-  // The request will be redirected to spotify for authentication, so this
-  // function will not be called.
+exports.spotify_login = passport.authenticate('spotify', {
+    // The request will be redirected to spotify for authentication, so this
+    // function will not be called.
+    showDialog: true,
 });
 
 exports.spotify_callback = passport.authenticate('spotify', {
-      failureRedirect: '/api/auth/login',
+      failureRedirect: '/',
       successReturnToOrRedirect: '/'
 });
 
 exports.spotify_logout = function(req, res) {
   req.logout();
+  req.session.destroy();
   res.redirect('/');
 };
