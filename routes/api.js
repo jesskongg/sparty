@@ -20,6 +20,6 @@ router.post('/room/create', room_controller.room_create_post);
 
 router.get('/room/:id', room_controller.room_detail);
 
-
+router.get('/play', spotify_controller.spotify_play);
 
 module.exports = router;

@@ -7,12 +7,11 @@ block content
     var roomId = #{room.id}
   
     
+  <!-- Search -->
   div(class="form-inline my-2 my-lg-0")
     input#query(class="form-control mr-sm-2" type="search" placeholder="song name" name='query' aria-label="Search" value='')
+    <!-- Button trigger modal -->
     button#search(class="btn btn-outline-success my-2 my-sm-0" data-toggle="modal" data-target="#searchModal" type="submit") Search
-
-  <!-- Button trigger modal -->
-  //- button#search(class="btn btn-primary" data-toggle="modal" data-target="#searchModal") Search
 
   <!-- Modal -->
   div(class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true")
@@ -31,6 +30,8 @@ block content
   
   if (isOwner)
     a.button.btn.btn-primary(href=room.getUrl() + '/update') Edit Room
+
+  button#code Playing
 
   script(src='/socket.io/socket.io.js')
   script(src='/scripts/room.js')

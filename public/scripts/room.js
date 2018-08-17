@@ -86,6 +86,7 @@ $(function() {
     $("#num_peope").text(data);
   });
 
+  // update list of candidates based on #votes
   socket.on('show_list', function(candidates) {
     // sort candidates list to put on top the highest vote song
     if (candidates) {
@@ -127,5 +128,12 @@ $(function() {
       });
     }
   });
+
+  // playback
+  $("#code").click(function() {
+    $.get("/api/play", function(data) {
+      console.log('is it working?');
+    })
+  })
 
 });

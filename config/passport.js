@@ -1,7 +1,6 @@
 // configure passport spotify
 const SpotifyStrategy = require('passport-spotify').Strategy;
 var models = require('../models');
-var key = require('../routes/key')
 
 module.exports = function(passport) {
   // Passport session setup.
@@ -27,8 +26,13 @@ module.exports = function(passport) {
         callbackURL: 'http://localhost:3000/callback'
       },
       function(accessToken, refreshToken, expires_in, profile, done) {
-        models.User.findOrCreate({ where: { spotify_id: profile.id }}).spread((user, created) => {
-          return done(null, user);
+        models.User.findOrCreate({
+          where: { spotify_id: profile.id },
+          defaults: { access_token: accessToken, refresh_token: refreshToken }}).spread((user, created) => {
+            if (created === false) {
+              user.update({ access_token: accessToken, refresh_token: refreshToken });
+            }
+            return done(null, user);
         });
       }
     )
