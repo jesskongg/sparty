@@ -12,8 +12,13 @@ exports.room_list = function(req, res, next) {
 exports.room_detail = function(req, res, next) {
   models.Room.findById(req.params.id).then(room => {
     if (room) {
+      var abc = isOwner(room, req.user);
       res.locals.isOwner = isOwner(room, req.user);
-      res.render('room_detail', { room: room });
+      if (abc === true) {
+        res.render('room_detail', { room: room, token: req.user.access_token })
+      } else {
+        res.render('room_detail', { room: room });
+      }
     } else {
       res.redirect('/');
     }

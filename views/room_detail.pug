@@ -6,7 +6,6 @@ block content
   script.
     var roomId = #{room.id}
   
-    
   <!-- Search -->
   div(class="form-inline my-2 my-lg-0")
     input#query(class="form-control mr-sm-2" type="search" placeholder="song name" name='query' aria-label="Search" value='')
@@ -31,8 +30,16 @@ block content
   if (isOwner)
     a.button.btn.btn-primary(href=room.getUrl() + '/update') Edit Room
 
-  button#code Playing
+  button#transfer Transfer
+  button#play Playing
+  button#pause Pause
+  button#next Next
 
   script(src='/socket.io/socket.io.js')
   script(src='/scripts/room.js')
+  if (isOwner)
+    script(src='https://sdk.scdn.co/spotify-player.js')
+    script(src='/scripts/spotify_sdk.js')
+    script.
+      var access_token = !{JSON.stringify(token)}
   

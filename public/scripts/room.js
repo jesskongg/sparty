@@ -129,11 +129,6 @@ $(function() {
     }
   });
 
-  // playback
-  $("#code").click(function() {
-    $.get("/api/play", function(data) {
-      console.log('is it working?');
-    })
-  })
+
 
 });
