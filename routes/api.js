@@ -20,6 +20,8 @@ router.post('/room/create', room_controller.room_create_post);
 
 router.get('/room/:id', room_controller.room_detail);
 
-router.get('/play', spotify_controller.spotify_play);
+router.post('/playlist/create', spotify_controller.spotify_playlist_create);
+
+router.post('/playlist/:id/add', spotify_controller.spotify_playlist_track_add);
 
 module.exports = router;

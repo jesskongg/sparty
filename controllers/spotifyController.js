@@ -1,4 +1,5 @@
 // Import the Spotify API
+var models = require('../models/');
 var Spotify = require('node-spotify-api');
 var SpotifyWebApi = require('spotify-web-api-node');
 
@@ -7,7 +8,7 @@ var passport = require('passport');
 var credentials = {
   clientId: '64e65c3badf846158593504b9b5ce162',
   clientSecret: 'e3426eb15a3b434ba3dd5176a152e62d',
-  redirectUri: 'http://localhost:3000/api/play'
+  redirectUri: 'http://localhost:3000/playback'
 };
 
 var http = require('http');
@@ -25,8 +26,6 @@ var keys = require('../routes/key');
 //Create a Spotify Client
 // var spotify = new Spotify(keys.spotifyKeys);
 var spotify = new Spotify(keys.spotifyKeys);
-
-var authorizationCode;
 
 // setup for playback
 
@@ -75,7 +74,9 @@ exports.spotify_login = passport.authenticate('spotify', {
             'user-read-email',
             'user-read-private',
             'user-read-recently-played',
-            'user-modify-playback-state'],
+            'user-modify-playback-state',
+            'playlist-modify-public',
+            'playlist-modify-private '],
     showDialog: true
 });
 
@@ -83,9 +84,10 @@ exports.spotify_callback = function(req, res, next) {
   passport.authenticate('spotify', function(err, user, info) {
     if (err) { return next(err); }
     if (!user) { return res.redirect('/'); }
-    authorizationCode = req.query.code;
     req.logIn(user, function(err) {
       if (err) { return next(err); }
+      spotifyApi.setAccessToken(user.access_token);
+      spotifyApi.setRefreshToken(user.refresh_token);
       return res.redirect('/');
     })
   }) (req, res, next);
@@ -93,11 +95,37 @@ exports.spotify_callback = function(req, res, next) {
 
 exports.spotify_logout = function(req, res) {
   req.logout();
-  req.session.destroy();
   res.redirect('/');
 };
 
 // spotify web api node
-exports.spotify_play = function(req, res, next) {
+exports.spotify_playlist_create = function(req, res, next) {
+  // Create a private playlist
+  var user_id = req.user.spotify_id;
+  var playlist_name = req.body.name;
 
+  spotifyApi.createPlaylist(user_id, playlist_name, { 'public' : false })
+    .then(function(data) {
+      console.log('Created playlist!');
+      // console.log(data);
+      res.json(data);
+    }, function(err) {
+      console.log('Create List: Something went wrong!', err);
+    });
+}
+
+exports.spotify_playlist_track_add = function(req, res, next) {
+  var playlist_id = req.params.id;
+  var uris = [req.body.track];
+  models.Room.findById(req.body.roomId).then(room => {
+    var user_id = room.owner;
+    spotifyApi.addTracksToPlaylist(user_id, playlist_id, uris)
+    .then(function(data) {
+      console.log('Added tracks to playlist!');
+      res.json(data);
+    }, function(err) {
+      console.log('Add Track: Something went wrong!', err);
+    });
+  })
+  // Add tracks to a playlist
 }

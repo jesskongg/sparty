@@ -1,8 +1,10 @@
+var socket = io.connect('http://localhost:3000/api/rooms');
+
 window.onSpotifyWebPlaybackSDKReady = () => {
-  var id;
-  const token = access_token;
+  var playerId;
+  var token = access_token;
   const player = new Spotify.Player({
-    name: 'Web Playback SDK Quick Start Player',
+    name: 'Welcome to Party Room ' + roomId,
     getOAuthToken: cb => { cb(token); }
   });
 
@@ -13,12 +15,36 @@ window.onSpotifyWebPlaybackSDKReady = () => {
   player.addListener('playback_error', ({ message }) => { console.error(message); });
 
   // Playback status updates
-  player.addListener('player_state_changed', state => { console.log(state); });
+  player.addListener('player_state_changed', state => {
+    console.log(state);
+    if (state['paused'] === true && state['position'] === 0
+      && state['restrictions']['disallow_pausing_reasons']
+      && state['restrictions']['disallow_pausing_reasons'][0] === 'already_paused') {
+      socket.emit('get next song', 'data');
+    }
+  });
 
   // Ready
   player.addListener('ready', ({ device_id }) => {
     console.log('Ready with Device ID', device_id);
-    id = device_id;
+    // switch to current device
+    var dataObj = {
+      "device_ids": [device_id],
+      "play": false,
+    };
+    $.ajax({
+      url: ' 	https://api.spotify.com/v1/me/player',
+      method: 'PUT',
+      data: JSON.stringify(dataObj),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${access_token}`
+      }
+    }).done(function(data) {
+        console.log('Transfer the device');
+    }).fail(function(err) {
+        console.log('cannot transfer');
+    })
   });
 
   // Not Ready
@@ -29,63 +55,50 @@ window.onSpotifyWebPlaybackSDKReady = () => {
   // Connect to the player!
   player.connect();
 
-  $("#play").click(function() {
-    // TODO: make ajax call to https://api.spotify.com/v1/me/player/play
-    $.ajax({
-      method: 'PUT',
-      url: 'https://api.spotify.com/v1/me/player/play?device_id=' + id,
-      body: {
-        "context_uri": "spotify:album:5ht7ItJgpBH7W6vJ5BqpPr",
-        "offset": {
-          "position": 5
-        }
-      },
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${access_token}`
-      },
-    }).done(function(data) {
-      console.log('you are playing song');
-    }).fail(function(err) {
-      console.log('not good');
-    })
+  $("#resume").click(function() {
+    player.resume().then(() => {
+      console.log('resume');
+    });
   });
-
   $("#pause").click(function() {
-    // TODO: make ajax call to https://api.spotify.com/v1/me/player/play
-    $.ajax({
-      method: 'PUT',
-      url: 'https://api.spotify.com/v1/me/player/pause?device_id=' + id,
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${access_token}`
-      },
-    }).done(function(data) {
-      console.log('you are pausing song');
-    }).fail(function(err) {
-      console.log('not good');
-    })
+    player.pause().then(() => {
+      console.log('paused');
+    });
+  });
+  $("#previous").click(function() {
+    player.previousTrack().then(() => {
+      console.log('Set to previous track.');
+    });
+  });
+  $("#skip").click(function() {
+    // player.nextTrack().then(() => {
+    //   console.log('Set to next track.');
+    // });
+    socket.emit('get next song', 'data');
   });
 
-  $("#transfer").click(function() {
-    // TODO: make ajax call to https://api.spotify.com/v1/me/player/play
-    $.ajax({
-      method: 'PUT',
-      url: 'https://api.spotify.com/v1/me/player',
-      body: {
-        device_ids: ["50612aeccc477a03aae16ea28e3c2fa7e24d6091"], "play": true
-      },
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${access_token}`
-      },
-    }).done(function(data) {
-      console.log('you are swiching device');
-    }).fail(function(err) {
-      console.log('not good');
-    })
-  });
-
+  // $("#template").click(function() {
+  //   // TODO: currently test with hardcoded uri (success), need to send uri of top voted song
+  //   // var dataObj = {
+  //   //   "context_uri": "spotify:album:5ht7ItJgpBH7W6vJ5BqpPr",
+  //   //   "offset": {
+  //   //     "position": 5
+  //   //   }
+  //   // };
+  //   $.ajax({
+  //     url: 'https://api.spotify.com/v1/me/player/play?device_id=' + id,
+  //     method: 'PUT',
+  //     // data: JSON.stringify(dataObj),
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //       'Authorization': `Bearer ${access_token}`
+  //     },
+  //   }).done(function(data) {
+  //     console.log('You start the party');
+  //   }).fail(function(err) {
+  //     console.log('not good');
+  //   })
+  // });
 };
 
 // playback

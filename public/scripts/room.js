@@ -69,7 +69,7 @@ $(function() {
 
   $("#searchModal").on('hidden.bs.modal', function() {
     $("#search-list").empty();
-      socket.emit('update_candidate_list', 'show');
+      socket.emit('update_candidate_list', 'data');
   });
 
   // socket.io
@@ -94,6 +94,7 @@ $(function() {
       candidates.sort(function(a, b) {
         return b.vote - a.vote;
       })
+      nextSong = candidates[0];
     }
 
     $('#candidates').empty();
@@ -129,6 +130,27 @@ $(function() {
     }
   });
 
+  $("#start").click(function() {
+      $("#start").hide();
+      socket.emit('get next song', 'data');
+  });
 
-
+  socket.on('get top song', function(track) {
+    var dataObj = {
+      "uris": [track]
+    };
+    $.ajax({
+      url: 'https://api.spotify.com/v1/me/player/play',
+      method: 'PUT',
+      data: JSON.stringify(dataObj),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${access_token}`
+      },
+    }).done(function(data) {
+      console.log('start playing song');
+    }).fail(function(err) {
+      console.log('cannot play song');
+    })
+  })
 });

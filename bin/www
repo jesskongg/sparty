@@ -34,7 +34,7 @@ var io = require('socket.io')(server);
 
 // variables for votes
 var candidates = {};
-
+var nextSong = 'spotify:track:4sPmO7WMQUAf45kwMOtONw'; // default song
 // define namespace on server
 var nsp = io.of('/api/rooms');
 nsp.on('connection', function (socket) {
@@ -76,6 +76,24 @@ nsp.on('connection', function (socket) {
   socket.on('add_vote', function(ea) {
     candidates[socket.room][ea.id].vote++;
     nsp.to(socket.room).emit('show_list', candidates[socket.room]);
+  })
+
+  socket.on('get next song', function(data) {
+    // TODO: improve finding the top track
+    var topTracks = candidates[socket.room];
+    if (topTracks) {
+      topTracks = Object.values(topTracks);
+      topTracks.sort(function(a, b) {
+        return b.vote - a.vote;
+      })
+      // update top song
+      nextSong = topTracks[0].uri;
+      // TODO: save the top track to database
+      candidates[socket.room][topTracks[0].id].vote = 0;
+      nsp.to(socket.room).emit('show_list', candidates[socket.room]);
+    }
+    // send top track to Client
+    nsp.to(socket.room).emit('get top song', nextSong);
   })
 
 });

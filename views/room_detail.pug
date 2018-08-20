@@ -5,7 +5,7 @@ block content
   h5 Welcome to #{room.name} (<span id='num_peope'></span>&nbsp;people in the room)
   script.
     var roomId = #{room.id}
-  
+    
   <!-- Search -->
   div(class="form-inline my-2 my-lg-0")
     input#query(class="form-control mr-sm-2" type="search" placeholder="song name" name='query' aria-label="Search" value='')
@@ -28,12 +28,28 @@ block content
   div#candidates(class='container')
   
   if (isOwner)
-    a.button.btn.btn-primary(href=room.getUrl() + '/update') Edit Room
+    button#start Let's start the party
+    
+    //- div(class='container')
+    //-   div(class="card bg-dark text-white")
+    //-     img(class="card-img" src="https://guardian.ng/wp-content/uploads/2017/09/Yung6ix-High-Star-ART.jpg" alt="Card image")
+    //-     div(class="card-img-overlay")
+    //-       h5(class="card-title") Card title
+    //-       p(class="card-text") This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer./p)
+    //-       p(class="card-text") Last updated 3 mins ago/p)
+    div#controller
+      div#play-controls
+        div(class="btn-group" role="group" aria-label="Basic example")
+          button(class='btn btn-secondary')#previous
+            span(class="fa fa-step-backward")
+          button(class='btn btn-secondary')#resume
+            span(class="fa fa-play")
+          button(class='btn btn-secondary')#pause
+            span(class="fa fa-stop")
+          button(class='btn btn-secondary')#skip
+            span(class='fa fa-step-forward')
+        //- button#skip-track Skip Track &gt;
 
-  button#transfer Transfer
-  button#play Playing
-  button#pause Pause
-  button#next Next
 
   script(src='/socket.io/socket.io.js')
   script(src='/scripts/room.js')
