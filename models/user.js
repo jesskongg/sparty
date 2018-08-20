@@ -4,6 +4,12 @@ module.exports = (sequelize, DataTypes) => {
     spotify_id: {
       type: DataTypes.STRING,
       primaryKey: true,
+    },
+    access_token: {
+      type: DataTypes.STRING,
+    },
+    refresh_token: {
+      type: DataTypes.STRING,
     }
   }, {});
   User.associate = function(models) {
