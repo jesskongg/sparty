@@ -10,24 +10,31 @@ html
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
     block navbar
-      nav(class="navbar navbar-expand-lg navbar-dark bg-primary")
-        a(class="navbar-brand" href="/") Sparty
-        button(class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation")
-          <span class="navbar-toggler-icon"></span>
-      
-        div(class="collapse navbar-collapse" id="navbarSupportedContent")
-          ul(class="navbar-nav mr-auto")
-            li(class="nav-item active")
-              a(class="nav-link" href="/") Home <span class="sr-only">(current)</span>
-            li.nav-item.active
-              if (isOwner)
-                a.nav-link(href=room.getUrl() + '/update') Edit Room
-            li(class="nav-item active")
-              if (!loggedIn)
-                a(class="nav-link" href="/api/auth/login") Login
-              else
-                a(class="nav-link" href="/api/auth/logout") Logout
-          form(class="form-inline my-2 my-lg-0 nav-flex-icons")
-            input#room-query(class="form-control mr-sm-2" type="search" placeholder="Search Room" aria-label="Search" name='room-query' value='')
-            button#room-search(class="btn btn-outline-light my-2 my-sm-0" type="submit") Search
+      div(class='container')
+        nav(class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top")
+          a(class="navbar-brand" href="/") Sparty
+          button(class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation")
+            <span class="navbar-toggler-icon"></span>
+        
+          div(class="collapse navbar-collapse" id="navbarSupportedContent")
+            ul(class="navbar-nav mr-auto")
+              li(class="nav-item active")
+                a(class="nav-link" href="/") Home <span class="sr-only">(current)</span>
+              li.nav-item.active
+                if (isOwner)
+                  a.nav-link(href=room.getUrl() + '/update') Edit Room
+              li(class="nav-item active")
+                if (!loggedIn)
+                  a(class="nav-link" href="/api/auth/login") Login
+                else
+                  a(class="nav-link" href="/api/auth/logout") Logout
+            form(class="form-inline my-2 my-lg-0 nav-flex-icons")
+              input#room-query(class="form-control mr-sm-2" type="search" placeholder="Search Room" aria-label="Search" name='room-query' value='')
+              button#room-search(class="btn btn-outline-light my-2 my-sm-0" type="submit") Search
+      br
     block content
+      
+    block footer
+      footer(class="bd-footer text-muted fixed-bottom")
+        div(class="container-fluid")
+          p Copyright @2018 to Think Deep

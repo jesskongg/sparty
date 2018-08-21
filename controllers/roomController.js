@@ -53,12 +53,18 @@ exports.room_create_post = [
         if (req.body.room_type) {
           room_type = false;
         }
+        var avatars = [ 'https://images.pexels.com/photos/342520/pexels-photo-342520.jpeg',
+                        'https://images.pexels.com/photos/683039/pexels-photo-683039.jpeg',
+                        'https://images.pexels.com/photos/1071882/pexels-photo-1071882.jpeg',
+                        'https://images.pexels.com/photos/1251089/pexels-photo-1251089.jpeg',
+                        ]
         // Create a Room object with escaped and trimmed data.
+        var room_avatar = (req.body.room_avatar === '') ? avatars[Math.floor(Math.random(1, avatars.length)) + 0] : req.body.room_avatar;
         models.Room.build({
                     name: req.body.room_name,
                     key: req.body.room_key,
                     public: room_type,
-                    avatar: 'https://seda.college/wp-content/uploads/party.jpg',
+                    avatar: room_avatar,
                     owner: req.user.spotify_id,
                   }).save().then(room => {
                       res.redirect(room.getUrl());

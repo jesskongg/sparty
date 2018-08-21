@@ -66,7 +66,6 @@ nsp.on('connection', function (socket) {
       candidates[socket.room] = {};
       candidates[socket.room][ea.id] = ea;
     }
-    // console.log(candidates);
   });
 
   socket.on('update_candidate_list', function(data) {
@@ -78,9 +77,9 @@ nsp.on('connection', function (socket) {
     nsp.to(socket.room).emit('show_list', candidates[socket.room]);
   })
 
-  socket.on('get next song', function(data) {
+  socket.on('get next song', function(roomId) {
     // TODO: improve finding the top track
-    var topTracks = candidates[socket.room];
+    var topTracks = candidates[roomId];
     if (topTracks) {
       topTracks = Object.values(topTracks);
       topTracks.sort(function(a, b) {
@@ -89,11 +88,11 @@ nsp.on('connection', function (socket) {
       // update top song
       nextSong = topTracks[0].uri;
       // TODO: save the top track to database
-      candidates[socket.room][topTracks[0].id].vote = 0;
-      nsp.to(socket.room).emit('show_list', candidates[socket.room]);
+      candidates[roomId][topTracks[0].id].vote = 0;
+      nsp.to(roomId).emit('show_list', candidates[roomId]);
     }
     // send top track to Client
-    nsp.to(socket.room).emit('get top song', nextSong);
+    nsp.to(roomId).emit('get top song', nextSong);
   })
 
 });

@@ -1,7 +1,6 @@
 var socket = io.connect('http://localhost:3000/api/rooms');
 
 window.onSpotifyWebPlaybackSDKReady = () => {
-  var playerId;
   var token = access_token;
   const player = new Spotify.Player({
     name: 'Welcome to Party Room ' + roomId,
@@ -20,7 +19,7 @@ window.onSpotifyWebPlaybackSDKReady = () => {
     if (state['paused'] === true && state['position'] === 0
       && state['restrictions']['disallow_pausing_reasons']
       && state['restrictions']['disallow_pausing_reasons'][0] === 'already_paused') {
-      socket.emit('get next song', 'data');
+      socket.emit('get next song', roomId);
     }
   });
 
@@ -71,9 +70,6 @@ window.onSpotifyWebPlaybackSDKReady = () => {
     });
   });
   $("#skip").click(function() {
-    // player.nextTrack().then(() => {
-    //   console.log('Set to next track.');
-    // });
     socket.emit('get next song', 'data');
   });
 

@@ -132,7 +132,7 @@ $(function() {
 
   $("#start").click(function() {
       $("#start").hide();
-      socket.emit('get next song', 'data');
+      socket.emit('get next song', roomId);
   });
 
   socket.on('get top song', function(track) {
