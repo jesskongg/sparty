@@ -1,6 +1,8 @@
 doctype html
 html
   head
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
     //- title= title
     script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js')
     script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js')
@@ -31,10 +33,9 @@ html
             form(class="form-inline my-2 my-lg-0 nav-flex-icons")
               input#room-query(class="form-control mr-sm-2" type="search" placeholder="Search Room" aria-label="Search" name='room-query' value='')
               button#room-search(class="btn btn-outline-light my-2 my-sm-0" type="submit") Search
-      br
     block content
       
     block footer
-      footer(class="bd-footer text-muted fixed-bottom")
-        div(class="container-fluid")
-          p Copyright @2018 to Think Deep
+      footer(class="footer")
+        div(class="container")
+          <span class="text-muted"> Copyright @2018 to Think Deep </span>
