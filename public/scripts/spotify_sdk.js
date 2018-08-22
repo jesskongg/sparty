@@ -70,7 +70,6 @@ window.onSpotifyWebPlaybackSDKReady = () => {
     });
   });
   $("#skip").click(function() {
-    console.log('you click on skip');
     socket.emit('get next song', roomId);
   });
 

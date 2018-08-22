@@ -11,6 +11,11 @@ var delay = (function(){
   };
 })();
 
+socket.on('connect', function(data) {
+  console.log('refresh can emit room again');
+  socket.emit('room', roomId);
+});
+
 // Shorthand for $( document ).ready()
 $(function() {
   $("#song_search").keyup(function() {
@@ -68,9 +73,10 @@ $(function() {
   })
 
   // socket.io
-  socket.on('connect', function(data) {
-    socket.emit('room', roomId);
-  });
+  // socket.on('connect', function(data) {
+  //   console.log('refresh can emit room again');
+  //   socket.emit('room', roomId);
+  // });
 
   // update number of people in the room
   socket.on('people_join', function(data) {
@@ -92,7 +98,6 @@ $(function() {
       nextSong = candidates[0];
     }
 
-    $('#candidates').show();
     $('#candidates').empty();
     for (var key in candidates) {
       let ea = candidates[key];
@@ -119,6 +124,7 @@ $(function() {
       $(`#${ea.id}AddVote`).click(function() {
         socket.emit('add_vote', ea);
       });
+      $('#candidates').show();
     }
   });
 
