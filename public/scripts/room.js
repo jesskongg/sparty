@@ -1,52 +1,64 @@
 // match the namespace defined on server
 var socket = io.connect('http://localhost:3000/api/rooms');
 
+// function to delay ms before execute
+// ref: https://stackoverflow.com/questions/1909441/how-to-delay-the-keyup-handler-until-the-user-stops-typing
+var delay = (function(){
+  var timer = 0;
+  return function(callback, ms){
+    clearTimeout (timer);
+    timer = setTimeout(callback, ms);
+  };
+})();
+
 // Shorthand for $( document ).ready()
 $(function() {
-  // ajax function to search song from spotify
   $("#song_search").keyup(function() {
-    var query = $("#song_search").val();
-    if (query === '') {
-      query = 'hello';
-    }
-    $("#candidates").hide();
-    $.getJSON(
-      "/api/search", {
-        query: query,
-      }, function(resp) {
-        // $(".modal-title").text("Search for " + $("#song_search").val());
-        $("#searchResults").empty();
-        $("#close").show();
-        // var newElement = $('<a></a>');
-        resp.forEach(function(ea) {
-          // var newElement = $('<li></li>').addClass("list-group-item");
-          $("#searchResults").append(`
-              <div class="row mx-auto user-list">
-                  <div class="col-12 col-sm-6 col-md-4 col-lg-5 flex-fill m-auto user-item">
-                      <div class="user-container">
-                        <a class="text-truncate user-avatar">
-                          <img class="rounded-circle img-fluid" src='${ea.image}' width="48" height="48">
-                        </a>
-                          <p class="user-name">
-                            <a>${ea.song}</a>
-                            <span>${ea.artist} </span>
-                            <span>${ea.album} </span>
-                          </p>
-                          <a id='${ea.id}' class="bg-primary user-delete" href="#">
-                            <span>+</span>
-                          </a>
-                      </div>
-                  </div>
-              </div>
-          `)
-          // $("#searchResults").append(newElement);
-          $(`#${ea.id}`).click(function() {
-            ea.vote = 1;
-            socket.emit('add_candidate', ea);
-          })
-        })
+    delay(function() {
+      var query = $("#song_search").val();
+      if (query === '') {
+        query = 'hello';
       }
-    )
+      // ajax function to search song from spotify
+      $("#candidates").hide();
+      $.getJSON(
+        "/api/search", {
+          query: query,
+        }, function(resp) {
+          // $(".modal-title").text("Search for " + $("#song_search").val());
+          $("#searchResults").empty();
+          $("#close").show();
+          // var newElement = $('<a></a>');
+          resp.forEach(function(ea) {
+            // var newElement = $('<li></li>').addClass("list-group-item");
+            $("#searchResults").append(`
+              <div class="row mx-auto user-list">
+                <div class="col-12 col-sm-6 col-md-4 col-lg-5 flex-fill m-auto user-item">
+                  <div class="user-container">
+                    <a class="text-truncate user-avatar">
+                      <img class="rounded-circle img-fluid" src='${ea.image}' width="48" height="48">
+                    </a>
+                    <p class="user-name">
+                      <a>${ea.song}</a>
+                      <span>${ea.artist} </span>
+                      <span>${ea.album} </span>
+                    </p>
+                    <a id='${ea.id}' class="bg-primary user-delete" href="#">
+                      <span>+</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+              `)
+              // $("#searchResults").append(newElement);
+              $(`#${ea.id}`).click(function() {
+                ea.vote = 1;
+                socket.emit('add_candidate', ea);
+              })
+            })
+          }
+        )
+    }, 300);
   });
 
   $("#close").click(function() {
