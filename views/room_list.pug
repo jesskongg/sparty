@@ -1,21 +1,21 @@
 extends layout
 
 block content
-  div(class="room-list container")
-    div(class="row")
-      each room in rooms
-        div(class="col-sm-3 mb-4")
-            a(href=room.getUrl() style="text-decoration: none;")
-              div(class="card text-white bg-primary")
-                img(class="card-img-top" src= room.avatar alt="Card image cap")
-                div(class="card-body") #{room.name}
-    
-    if (loggedIn)
-      div(class="row")
-          div(class="col-sm")
-              a(type = 'button' class = 'btn btn-light' href='/api/room/create')
-                  span(class="fa fa-plus-circle")
-                  <span> Create Room</span>
-
-  //- a.button.btn.btn-primary(href='/api/room/create') Create Room
-  //- script(src='/scripts/room.js')
+  main.page.lanidng-page
+    div
+    section.portfolio-block.block-intro
+      form.form-inline.mr-auto(target='_self')
+        .form-group.flex-fill
+          input#search-field.form-control.flex-fill.search-field(type='search' name='search' placeholder='search room')
+    section.portfolio-block.projects-cards
+      .container
+        .row
+          each room in rooms
+            .col-md-6.col-lg-4
+              .card.border-0
+                a(href=room.getUrl())
+                  img.card-img-top.scale-on-hover(src=room.avatar alt='Card Image')
+                .card-body
+                  h6
+                    a(href=room.getUrl()) #{room.name}
+                  p.text-muted.card-text Description

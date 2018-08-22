@@ -18,6 +18,10 @@ router.get('/room/create', room_controller.room_create_get);
 
 router.post('/room/create', room_controller.room_create_post);
 
+router.get('/room/:id/update', room_controller.room_update_get);
+
+router.post('/room/:id/update', room_controller.room_update_post);
+
 router.get('/room/:id', room_controller.room_detail);
 
 router.post('/playlist/create', spotify_controller.spotify_playlist_create);

@@ -4,60 +4,42 @@ var socket = io.connect('http://localhost:3000/api/rooms');
 // Shorthand for $( document ).ready()
 $(function() {
   // ajax function to search song from spotify
-  $("#search").click(function() {
-    if ($("#query").val() === '') {
-      $("#query").val('hello');
+  $("#song_search").keyup(function() {
+    var query = $("#song_search").val();
+    if (query === '') {
+      query = 'hello';
     }
+    $("#candidates").hide();
     $.getJSON(
       "/api/search", {
-        query: $("#query").val(),
+        query: query,
       }, function(resp) {
-        $(".modal-title").text("Search for " + $("#query").val());
-        $(".modal-body").empty();
-        var newElement = $('<p></p>');
-        newElement.append(`
-          <div class='container'>
-            <div class='row'>
-              <div class='col-sm'>
-                <strong>COVER</strong>
-              </div>
-              <div class='col-sm'>
-                <strong>ALBUM</strong>
-              </div>
-              <div class='col-sm'>
-                <strong>SONG</strong>
-              </div>
-              <div class='col-sm'>
-              </div>
-            </div>
-          </div>
-          <hr>
-        `)
-        $(".modal-body").append(newElement);
-
+        // $(".modal-title").text("Search for " + $("#song_search").val());
+        $("#searchResults").empty();
+        $("#close").show();
+        // var newElement = $('<a></a>');
         resp.forEach(function(ea) {
           // var newElement = $('<li></li>').addClass("list-group-item");
-          var newElement = $('<p></p>');
-          newElement.append(`
-            <div class='container'>
-              <div class='row'>
-                <div class='col-sm'>
-                  <img id='album-image' src='${ea.image}' style='height: 40px'/>
-                </div>
-                <div class='col-sm'>
-                  ${ea.album}
-                </div>
-                <div class='col-sm'>
-                  ${ea.song}
-                </div>
-                <div class='col-sm'>
-                  <button type="button" class="btn btn-outline-primary" id=${ea.id}>Add</button>
-                </div>
+          $("#searchResults").append(`
+              <div class="row mx-auto user-list">
+                  <div class="col-12 col-sm-6 col-md-4 col-lg-5 flex-fill m-auto user-item">
+                      <div class="user-container">
+                        <a class="text-truncate user-avatar">
+                          <img class="rounded-circle img-fluid" src='${ea.image}' width="48" height="48">
+                        </a>
+                          <p class="user-name">
+                            <a>${ea.song}</a>
+                            <span>${ea.artist} </span>
+                            <span>${ea.album} </span>
+                          </p>
+                          <a id='${ea.id}' class="bg-primary user-delete" href="#">
+                            <span>+</span>
+                          </a>
+                      </div>
+                  </div>
               </div>
-            </div>
-            <hr>
           `)
-          $(".modal-body").append(newElement);
+          // $("#searchResults").append(newElement);
           $(`#${ea.id}`).click(function() {
             ea.vote = 1;
             socket.emit('add_candidate', ea);
@@ -67,10 +49,11 @@ $(function() {
     )
   });
 
-  $("#searchModal").on('hidden.bs.modal', function() {
-    $("#search-list").empty();
-      socket.emit('update_candidate_list', 'data');
-  });
+  $("#close").click(function() {
+    $("#searchResults").hide();
+    $("#close").hide();
+    socket.emit('update_candidate_list', 'data');
+  })
 
   // socket.io
   socket.on('connect', function(data) {
@@ -97,31 +80,28 @@ $(function() {
       nextSong = candidates[0];
     }
 
+    $('#candidates').show();
     $('#candidates').empty();
     for (var key in candidates) {
       let ea = candidates[key];
-      var newElement = $('<p></p>');
+      var newElement = $(`<a id='${ea.id}AddVote'></a>`);
       newElement.append(`
-        <div class='container'>
-          <div class='row'>
-            <div class='col-sm'>
-            <img id='album-image' src='${ea.image}' style='height: 40px'/>
+        <div class="row mx-auto user-list">
+            <div class="col-12 col-sm-6 col-md-4 col-lg-5 flex-fill m-auto user-item">
+                <div class="user-container">
+                  <a href="#" class="user-avatar">
+                    <img class="rounded-circle img-fluid" src='${ea.image}' width="48" height="48">
+                  </a>
+                    <p class="user-name">
+                      <a href="#">${ea.song}</a>
+                      <span>${ea.artist} </span>
+                      <span>${ea.album} </span>
+                    </p>
+                    <a class="bg-primary user-delete" href="#"> <span>${ea.vote}</span>
+                    </a>
+                  </div>
             </div>
-          <div class='col-sm'>
-            ${ea.album}
-          </div>
-          <div class='col-sm'>
-            ${ea.song}
-          </div>
-          <div class='col-sm'>
-            <input type='text' value='${ea.vote}' id='${ea.id}NumVote' readOnly>
-          </div>
-            <div class='col-sm'>
-              <button type="button" class="btn btn-outline-primary" id='${ea.id}AddVote'>+</button>
-            </div>
-          </div>
         </div>
-        <hr>
       `)
       $("#candidates").append(newElement);
       $(`#${ea.id}AddVote`).click(function() {
