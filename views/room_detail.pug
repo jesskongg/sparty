@@ -2,20 +2,15 @@ extend layout
 
 block content
   main.page.lanidng-page
+    section.text-center
+      p You are in Room: #{room.name} with <span id='num_peope'></span> people.
+      #currentSong
+    
     if (isOwner)
       section.text-center
         br
         button#start.btn.btn-primary.center(type='button') Lets start the party
-        .row.mx-auto.user-list
-          .col-auto.col-sm-6.col-md-4.col-lg-5.flex-fill.m-auto.user-item
-            .user-container
-              a.user-avatar(href='#')
-                img.rounded-circle.img-fluid(src='assets/img/avatar.jpg' alt='Profile of Mark Smith Peterson' width='48' height='48')
-              p.user-name
-                a(href='#') Mark Smith Peterson
-                span Last seen on 27th Sep 2014 
-              a.bg-primary.user-delete(href='#')
-                span 12345
+
         .btn-group.mx-auto(role='group')
           button#resume.btn.btn-primary.pull-right(type='button')
             i.fa.fa-play
@@ -28,71 +23,9 @@ block content
         .form-group.flex-fill
           input#song_search.form-control.flex-fill.search-field(type='search' name='song_search' placeholder='search song')
       #candidates
-        //- .row.mx-auto.user-list
-        //-   .col-auto.col-sm-6.col-md-4.col-lg-5.flex-fill.m-auto.user-item
-        //-     .user-container
-        //-       a.user-avatar(href='#')
-        //-         img.rounded-circle.img-fluid(src='assets/img/avatar.jpg' alt='Profile of Mark Smith Peterson' width='48' height='48')
-        //-       p.user-name
-        //-         a(href='#') Mark Smith Peterson
-        //-         span Last seen on 27th Sep 2014 
-        //-       a.bg-primary.user-delete(href='#')
-        //-         span 12345
+
       button#close.btn.btn-primary.center(type='button' style='display: none;') Close Search
       #searchResults
-
-  //- div(class="room-detail container")
-  //-   h5 Room: #{room.name} (<span id='num_peope'></span>&nbsp;members)
-  //-   script.
-  //-     var roomId = #{room.id}
-  //- 
-  //-   <!-- Search -->
-  //-   div(class="form-inline my-2 my-lg-0")
-  //-     input#query(class="form-control mr-sm-2" type="search" placeholder="song name" name='query' aria-label="Search" value='')
-  //-     <!-- Button trigger modal -->
-  //-     button#search(class="btn btn-outline-success my-2 my-sm-0" hidden data-toggle="modal" data-target="#searchModal" type="submit") Search
-  //- 
-  //-   <!-- Modal -->
-  //-   div(class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true")
-  //-     div(class="modal-dialog" role="document")
-  //-       div(class="modal-content")
-  //-         div(class="modal-header")
-  //-           h4(class="modal-title" id="exampleModalLongTitle")
-  //-           button(class="close" data-dismiss="modal" aria-label="Close")
-  //-             <span aria-hidden="true">&times;</span>
-  //-         div(class="modal-body")
-  //-           //- ...
-  //-         div(class="modal-footer")
-  //-           button#close(class="btn btn-secondary" data-dismiss="modal") Close
-  //- 
-  //-   div#player(class='container')
-  //- 
-  //- 
-  //-   div#candidates(class='container')
-  //- 
-  //-   if (isOwner)
-  //-     button#start Let's start the party
-  //- 
-  //-     //- div(class='container')
-  //-     //-   div(class="card bg-dark text-white")
-  //-     //-     img(class="card-img" src="https://guardian.ng/wp-content/uploads/2017/09/Yung6ix-High-Star-ART.jpg" alt="Card image")
-  //-     //-     div(class="card-img-overlay")
-  //-     //-       h5(class="card-title") Card title
-  //-     //-       p(class="card-text") This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer./p)
-  //-     //-       p(class="card-text") Last updated 3 mins ago/p)
-  //-     div#controller
-  //-       div#play-controls
-  //-         div(class="btn-group" role="group" aria-label="Basic example")
-  //-           button(class='btn btn-secondary')#previous
-  //-             span(class="fa fa-step-backward")
-  //-           button(class='btn btn-secondary')#resume
-  //-             span(class="fa fa-play")
-  //-           button(class='btn btn-secondary')#pause
-  //-             span(class="fa fa-stop")
-  //-           button(class='btn btn-secondary')#skip
-  //-             span(class='fa fa-step-forward')
-  //-         //- button#skip-track Skip Track &gt;
-
 
   script(src='/socket.io/socket.io.js')
   script(src='/scripts/room.js')

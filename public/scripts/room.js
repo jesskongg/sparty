@@ -1,6 +1,9 @@
 // match the namespace defined on server
 var socket = io.connect('http://localhost:3000/api/rooms');
 
+socket.on('connect', function(data) {
+  socket.emit('room', roomId);
+});
 // function to delay ms before execute
 // ref: https://stackoverflow.com/questions/1909441/how-to-delay-the-keyup-handler-until-the-user-stops-typing
 var delay = (function(){
@@ -10,11 +13,6 @@ var delay = (function(){
     timer = setTimeout(callback, ms);
   };
 })();
-
-socket.on('connect', function(data) {
-  console.log('refresh can emit room again');
-  socket.emit('room', roomId);
-});
 
 // Shorthand for $( document ).ready()
 $(function() {
@@ -72,12 +70,6 @@ $(function() {
     socket.emit('update_candidate_list', 'data');
   })
 
-  // socket.io
-  // socket.on('connect', function(data) {
-  //   console.log('refresh can emit room again');
-  //   socket.emit('room', roomId);
-  // });
-
   // update number of people in the room
   socket.on('people_join', function(data) {
     $("#num_peope").text(data);
@@ -133,22 +125,27 @@ $(function() {
       socket.emit('get next song', roomId);
   });
 
-  socket.on('get top song', function(track) {
-    var dataObj = {
-      "uris": [track]
-    };
-    $.ajax({
-      url: 'https://api.spotify.com/v1/me/player/play',
-      method: 'PUT',
-      data: JSON.stringify(dataObj),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${access_token}`
-      },
-    }).done(function(data) {
-      console.log('start playing song');
-    }).fail(function(err) {
-      console.log('cannot play song');
-    })
-  })
+  socket.on('update current song', function(track) {
+    if (track.uri) {
+      $("#currentSong").empty();
+      $("#currentSong").append(`
+        <div class="row mx-auto user-list">
+          <div class="col-12 col-sm-6 col-md-4 col-lg-5 flex-fill m-auto user-item">
+          <p>You are listening</p>
+            <div class="user-container">
+              <a class="text-truncate user-avatar">
+                <img class="rounded-circle img-fluid" src='${track.image}' width="48" height="48">
+              </a>
+              <p class="user-name">
+                <a>${track.song}</a>
+                <span>${track.artist} </span>
+                <span>${track.album} </span>
+              </p>
+            </div>
+          </div>
+        </div>
+        `)
+      }
+  });
+
 });

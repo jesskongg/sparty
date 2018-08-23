@@ -73,6 +73,28 @@ window.onSpotifyWebPlaybackSDKReady = () => {
     socket.emit('get next song', roomId);
   });
 
+
+  socket.on('get top song', function(track) {
+    if (track.uri) {
+      var dataObj = {
+        "uris": [track.uri]
+      };
+      $.ajax({
+        url: 'https://api.spotify.com/v1/me/player/play',
+        method: 'PUT',
+        data: JSON.stringify(dataObj),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${access_token}`
+        },
+      }).done(function() {
+        // this ajax call returns nothing
+        socket.emit('current song', roomId)
+      }).fail(function(err) {
+        console.log('cannot play song');
+      })
+    }
+  })
   // $("#template").click(function() {
   //   // TODO: currently test with hardcoded uri (success), need to send uri of top voted song
   //   // var dataObj = {
