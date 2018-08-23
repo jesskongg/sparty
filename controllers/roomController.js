@@ -62,13 +62,13 @@ exports.room_create_post = [
 
         // Create a Room object with escaped and trimmed data.
         // var room_avatar = (req.body.room_avatar === '') ? avatars[Math.floor(Math.random(1, avatars.length)) + 0] : req.body.room_avatar;
-        var room_avatar = avatars[getRandomInt(0, avatars.length - 1)];
+        // var room_avatar = avatars[getRandomInt(0, avatars.length)];
 
         models.Room.build({
                     name: req.body.room_name,
                     key: req.body.room_key,
                     public: room_type,
-                    avatar: room_avatar,
+                    avatar: avatars[getRandomInt(0, avatars.length)],
                     description: req.body.room_description,
                     owner: req.user.spotify_id,
                   }).save().then(room => {
@@ -133,10 +133,20 @@ exports.room_update_post = [
 ]
 
 exports.room_delete_get = function(req, res, next) {
-  res.send('TODO');
+  models.Room.findById(req.params.id).then(function(room) {
+    if (room) {
+      res.render('room_delete', { title: 'Delete Room', room: room });
+    } else {
+      res.redirect('/');
+    }
+  })
 }
 exports.room_delete_post = function(req, res, next) {
-  res.send('TODO');
+  models.Room.findById(req.params.id).then(function(room) {
+    return room.destroy();
+  }).then(() => {
+    res.redirect('/api/rooms');
+  })
 };
 
 function isOwner(room, user) {
