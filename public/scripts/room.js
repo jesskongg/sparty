@@ -33,26 +33,25 @@ $(function() {
             resp.forEach(function(ea) {
               // var newElement = $('<li></li>').addClass("list-group-item");
               $("#searchResults").append(`
-                <div class="row mx-auto user-list" >
-                  <div class="col-12 col-sm-6 col-md-4 col-lg-5 flex-fill m-auto user-item">
-                    <div class="user-container" id='${ea.id}search_song'>
-                      <a class="text-truncate user-avatar">
-                        <img class="rounded-circle img-fluid" src='${ea.image}' width="48" height="48">
-                      </a>
-                      <p class="user-name">
-                        <a>${ea.song}</a>
-                        <span>${ea.artist} </span>
-                        <span>${ea.album} </span>
-                      </p>
-                      <a id='${ea.id}' class="bg-primary user-delete">
-                        <span>+</span>
-                      </a>
-                    </div>
+                  <div class="row mx-auto user-list">
+                      <div class="col-12 col-sm-6 col-md-4 col-lg-5 flex-fill m-auto user-item">
+                          <a class="user-link" id='${ea.id}song'>
+                              <div class="user-container" id='${ea.id}search_song'>
+                                  <div class="user-avatar">
+                                    <img class="rounded-circle img-fluid" src='${ea.image}' alt="Song Cover" width="48" height="48">
+                                  </div>
+                                  <p class="user-name">
+                                    <strong>${ea.song}</strong>
+                                    <span>${ea.artist}</span>
+                                    <span>${ea.album}</span>
+                                  </p>
+                              </div>
+                          </a>
+                      </div>
                   </div>
-                </div>
                 `)
                 // $("#searchResults").append(newElement);
-                $(`#${ea.id}`).click(function() {
+                $(`#${ea.id}song`).click(function() {
                   $(`#${ea.id}search_song`).css('background-color', 'rgba(0,0,0,0.1)');
                   ea.vote = 1;
                   socket.emit('add_candidate', ea);
@@ -94,27 +93,28 @@ $(function() {
     $('#candidates').empty();
     for (var key in candidates) {
       let ea = candidates[key];
-      var newElement = $(`<a id='${ea.id}AddVote'></a>`);
-      newElement.append(`
+      $("#candidates").append(`
         <div class="row mx-auto user-list">
             <div class="col-12 col-sm-6 col-md-4 col-lg-5 flex-fill m-auto user-item">
-                <div class="user-container">
-                  <a href="#" class="user-avatar">
-                    <img class="rounded-circle img-fluid" src='${ea.image}' width="48" height="48">
-                  </a>
-                    <p class="user-name">
-                      <a href="#">${ea.song}</a>
-                      <span>${ea.artist} </span>
-                      <span>${ea.album} </span>
-                    </p>
-                    <a class="bg-primary user-delete" href="#"> <span>${ea.vote}</span>
-                    </a>
-                  </div>
+                <a class="user-link" id='${ea.id}candidate'>
+                    <div class="user-container" id='${ea.id}candidate-song'>
+                        <div class="user-avatar">
+                          <img class="rounded-circle img-fluid" src='${ea.image}' alt="Song Cover" width="48" height="48">
+                        </div>
+                        <p class="user-name">
+                          <strong>${ea.song}</strong>
+                          <span>${ea.artist}</span>
+                          <span>${ea.album}</span>
+                        </p>
+                        <p class="bg-primary user-delete">
+                          <span>${ea.vote}</span>
+                        </p>
+                    </div>
+                </a>
             </div>
         </div>
       `)
-      $("#candidates").append(newElement);
-      $(`#${ea.id}AddVote`).click(function() {
+      $(`#${ea.id}candidate`).click(function() {
         socket.emit('add_vote', ea);
       });
       $('#candidates').show();
