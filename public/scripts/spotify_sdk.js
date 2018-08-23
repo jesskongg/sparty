@@ -1,7 +1,6 @@
 var socket = io.connect('http://localhost:3000/api/rooms');
 
 window.onSpotifyWebPlaybackSDKReady = () => {
-  var playerId;
   var token = access_token;
   const player = new Spotify.Player({
     name: 'Welcome to Party Room ' + roomId,
@@ -20,7 +19,7 @@ window.onSpotifyWebPlaybackSDKReady = () => {
     if (state['paused'] === true && state['position'] === 0
       && state['restrictions']['disallow_pausing_reasons']
       && state['restrictions']['disallow_pausing_reasons'][0] === 'already_paused') {
-      socket.emit('get next song', 'data');
+      socket.emit('get next song', roomId);
     }
   });
 
@@ -71,12 +70,31 @@ window.onSpotifyWebPlaybackSDKReady = () => {
     });
   });
   $("#skip").click(function() {
-    // player.nextTrack().then(() => {
-    //   console.log('Set to next track.');
-    // });
-    socket.emit('get next song', 'data');
+    socket.emit('get next song', roomId);
   });
 
+
+  socket.on('get top song', function(track) {
+    if (track.uri) {
+      var dataObj = {
+        "uris": [track.uri]
+      };
+      $.ajax({
+        url: 'https://api.spotify.com/v1/me/player/play',
+        method: 'PUT',
+        data: JSON.stringify(dataObj),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${access_token}`
+        },
+      }).done(function() {
+        // this ajax call returns nothing
+        socket.emit('current song', roomId)
+      }).fail(function(err) {
+        console.log('cannot play song');
+      })
+    }
+  })
   // $("#template").click(function() {
   //   // TODO: currently test with hardcoded uri (success), need to send uri of top voted song
   //   // var dataObj = {

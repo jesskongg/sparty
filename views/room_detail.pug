@@ -1,58 +1,36 @@
 extend layout
 
 block content
-  br
-  h5 Welcome to #{room.name} (<span id='num_peope'></span>&nbsp;people in the room)
-  script.
-    var roomId = #{room.id}
+  main.page.lanidng-page
+    section.text-center
+      p You are in Room: #{room.name} with <span id='num_peope'></span> people.
+      #currentSong
     
-  <!-- Search -->
-  div(class="form-inline my-2 my-lg-0")
-    input#query(class="form-control mr-sm-2" type="search" placeholder="song name" name='query' aria-label="Search" value='')
-    <!-- Button trigger modal -->
-    button#search(class="btn btn-outline-success my-2 my-sm-0" data-toggle="modal" data-target="#searchModal" type="submit") Search
+    if (isOwner)
+      section.text-center
+        br
+        button#start.btn.btn-primary.center(type='button') Lets start the party
 
-  <!-- Modal -->
-  div(class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true")
-    div(class="modal-dialog" role="document")
-      div(class="modal-content")
-        div(class="modal-header")
-          h4(class="modal-title" id="exampleModalLongTitle")
-          button(class="close" data-dismiss="modal" aria-label="Close")
-            <span aria-hidden="true">&times;</span>
-        div(class="modal-body")
-          //- ...
-        div(class="modal-footer")
-          button#close(class="btn btn-secondary" data-dismiss="modal") Close
-  
-  div#candidates(class='container')
-  
-  if (isOwner)
-    button#start Let's start the party
-    
-    //- div(class='container')
-    //-   div(class="card bg-dark text-white")
-    //-     img(class="card-img" src="https://guardian.ng/wp-content/uploads/2017/09/Yung6ix-High-Star-ART.jpg" alt="Card image")
-    //-     div(class="card-img-overlay")
-    //-       h5(class="card-title") Card title
-    //-       p(class="card-text") This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer./p)
-    //-       p(class="card-text") Last updated 3 mins ago/p)
-    div#controller
-      div#play-controls
-        div(class="btn-group" role="group" aria-label="Basic example")
-          button(class='btn btn-secondary')#previous
-            span(class="fa fa-step-backward")
-          button(class='btn btn-secondary')#resume
-            span(class="fa fa-play")
-          button(class='btn btn-secondary')#pause
-            span(class="fa fa-stop")
-          button(class='btn btn-secondary')#skip
-            span(class='fa fa-step-forward')
-        //- button#skip-track Skip Track &gt;
+        .btn-group.mx-auto(role='group')
+          button#resume.btn.btn-primary.pull-right(type='button')
+            i.fa.fa-play
+          button#pause.btn.btn-primary.pull-right(type='button')
+            i.fa.fa-pause
+          button#skip.btn.btn-primary.pull-right(type='button')
+            i.fa.fa-step-forward
+    section.portfolio-block.block-intro
+      form.form-inline.mr-auto(target='_self')
+        .form-group.flex-fill
+          input#song_search.form-control.flex-fill.search-field(type='search' name='song_search' placeholder='search song')
+      #candidates
 
+      button#close.btn.btn-primary.center(type='button' style='display: none;') Close Search
+      #searchResults
 
   script(src='/socket.io/socket.io.js')
   script(src='/scripts/room.js')
+  script.
+    var roomId = #{room.id}
   if (isOwner)
     script(src='https://sdk.scdn.co/spotify-player.js')
     script(src='/scripts/spotify_sdk.js')
