@@ -18,4 +18,5 @@ block content
                 .card-body
                   h6
                     a(href=room.getUrl()) #{room.name}
-                  p.text-muted.card-text Description
+                  //- p.text-muted.card-text !{JSON.stringify(room.description)}
+                  p.text-muted.card-text #{room.description}
