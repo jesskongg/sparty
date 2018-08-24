@@ -10,7 +10,9 @@ const avatars = [ 'https://images.pexels.com/photos/342520/pexels-photo-342520.j
               ];
 
 exports.room_list = function(req, res, next) {
-  models.Room.findAll().then(rooms => {
+  models.Room.findAll({
+    attribute: ['id', 'name', 'public']
+  }).then(rooms => {
     res.render('room_list', { title: 'Room List', rooms: rooms });
   })
 };
@@ -56,6 +58,7 @@ exports.room_create_post = [
     else {
         // Data from form is valid.
         var room_type = true;
+        console.log(req.body);
         if (req.body.room_type) {
           room_type = false;
         }

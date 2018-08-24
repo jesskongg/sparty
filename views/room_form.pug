@@ -23,7 +23,7 @@ block content
               input#room_description.form-control(type='textarea', placeholder='brief description for your room' name='room_description' value=(undefined===room ? '' : room.description))
             .form-group
               .form-check
-                input#room_type.form-check-input(type='checkbox')
+                input#room_type.form-check-input(type='checkbox' name='room_type' value='true')
                 label.form-check-label(for='room_type') Private
             button.btn.btn-light(type='submit') #{title}
         .col-md-6

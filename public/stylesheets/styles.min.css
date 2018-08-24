@@ -115,3 +115,8 @@ footer {
 img#pallo.img-circle.img-responsive {
   padding:33px;
 }
+
+.modal {
+   position: absolute;
+   top: 200px;
+}

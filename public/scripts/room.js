@@ -27,14 +27,15 @@ $(function() {
             query: query,
           }, function(resp) {
             // $(".modal-title").text("Search for " + $("#song_search").val());
-            $("#searchResults").empty();
-            $("#close").show();
+            $(".modal-body").empty();
+            // $("#close").show();
+            $("#searchModal").modal("show");
             // var newElement = $('<a></a>');
             resp.forEach(function(ea) {
               // var newElement = $('<li></li>').addClass("list-group-item");
-              $("#searchResults").append(`
+              $(".modal-body").append(`
                   <div class="row mx-auto user-list">
-                      <div class="col-12 col-sm-6 col-md-4 col-lg-5 flex-fill m-auto user-item">
+                      <div class="col-12 col-sm-6 col-md-4 col-lg-12 flex-fill m-auto user-item">
                           <a class="user-link" id='${ea.id}song'>
                               <div class="user-container" id='${ea.id}search_song'>
                                   <div class="user-avatar">

@@ -17,6 +17,10 @@ block content
                   img.card-img-top.scale-on-hover(src=room.avatar alt='Card Image')
                 .card-body
                   h6
-                    a(href=room.getUrl()) #{room.name}
+                    a(href=room.getUrl()) #{room.name} 
+                    if (!room.public)
+                      | (
+                      i.fa.fa-lock )
+                    //- if (!room.public)
                   //- p.text-muted.card-text !{JSON.stringify(room.description)}
                   p.text-muted.card-text #{room.description}
