@@ -1,15 +1,17 @@
 extends layout
 
 block content
-  br
-  script.
-    var list_room = []
   main.page.lanidng-page
+    script.
+      var list_room = []
     div
     section.portfolio-block.block-intro
       form.form-inline.mr-auto(target='_self')
         .form-group.flex-fill
           input#search-field.form-control.flex-fill.search-field(type='search' name='search' placeholder='search room')
+    
+
+    
     section.portfolio-block.projects-cards
       .container
         .row
@@ -22,18 +24,14 @@ block content
                 a(id='room' + room.id)
                   img.card-img-top.scale-on-hover(src=room.avatar alt='Card Image')
                 .card-body
-                  h6
-                    a(href=room.getUrl()) #{room.name} 
+                  h6= room.name
                     if (!room.public)
                       | (
                       i.fa.fa-lock )
-                    //- if (!room.public)
-                  //- p.text-muted.card-text !{JSON.stringify(room.description)}
                   p.text-muted.card-text #{room.description}
-      form#enter_key_form(method='GET' action='' style='display: none;')
-        .form-group
-          label Room Key
-          input#room_key.form-control(type='text', placeholder='room key' name='room_key' require='true' value='')
-        button#enter_room.btn.btn-light(type='submit') Enter Room
+
+                  div(id='key_form' + room.id style='display:none;')
+                  
+
     script(src='/scripts/enter_room.js')
                 

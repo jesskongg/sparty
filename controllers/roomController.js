@@ -79,7 +79,7 @@ exports.room_create_post = [
                     description: req.body.room_description,
                     owner: req.user.spotify_id,
                   }).save().then(room => {
-                      res.redirect(room.getUrl());
+                      res.redirect(room.getUrl() + '?room_key=' + room.key);
                   }).catch(err => {
                       return next(err);
                   })
