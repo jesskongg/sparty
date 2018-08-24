@@ -1,6 +1,9 @@
 extends layout
 
 block content
+  br
+  script.
+    var list_room = []
   main.page.lanidng-page
     div
     section.portfolio-block.block-intro
@@ -11,9 +14,12 @@ block content
       .container
         .row
           each room in rooms
+            script.
+              list_room.push({#{room.id}: #{room.public}})
             .col-md-6.col-lg-4
               .card.border-0
-                a(href=room.getUrl())
+                //- a(href=room.getUrl())
+                a(id='room' + room.id)
                   img.card-img-top.scale-on-hover(src=room.avatar alt='Card Image')
                 .card-body
                   h6
@@ -24,3 +30,10 @@ block content
                     //- if (!room.public)
                   //- p.text-muted.card-text !{JSON.stringify(room.description)}
                   p.text-muted.card-text #{room.description}
+      form#enter_key_form(method='GET' action='' style='display: none;')
+        .form-group
+          label Room Key
+          input#room_key.form-control(type='text', placeholder='room key' name='room_key' require='true' value='')
+        button#enter_room.btn.btn-light(type='submit') Enter Room
+    script(src='/scripts/enter_room.js')
+                

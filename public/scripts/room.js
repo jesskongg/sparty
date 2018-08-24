@@ -35,7 +35,7 @@ $(function() {
               // var newElement = $('<li></li>').addClass("list-group-item");
               $(".modal-body").append(`
                   <div class="row mx-auto user-list">
-                      <div class="col-12 col-sm-6 col-md-4 col-lg-12 flex-fill m-auto user-item">
+                      <div class="col-12 col-sm-12 col-md-12 col-lg-12 flex-fill m-auto user-item">
                           <a class="user-link" id='${ea.id}song'>
                               <div class="user-container" id='${ea.id}search_song'>
                                   <div class="user-avatar">
@@ -64,11 +64,9 @@ $(function() {
     }, 300);
   });
 
-  $("#close").click(function() {
-    $("#song_search").val('');
-    $("#searchResults").empty();
-    $("#close").hide();
-    socket.emit('update_candidate_list', 'data');
+  $('#searchModal').on('hidden.bs.modal', function (e) {
+      $("#song_search").val('');
+      socket.emit('update_candidate_list', 'data');
   })
 
   // update number of people in the room
@@ -96,7 +94,7 @@ $(function() {
       let ea = candidates[key];
       $("#candidates").append(`
         <div class="row mx-auto user-list">
-            <div class="col-12 col-sm-6 col-md-4 col-lg-5 flex-fill m-auto user-item">
+            <div class="col-12 col-sm-6 col-md-10 col-lg-5 flex-fill m-auto user-item">
                 <a class="user-link" id='${ea.id}candidate'>
                     <div class="user-container" id='${ea.id}candidate-song'>
                         <div class="user-avatar">
