@@ -1,0 +1,29 @@
+extend layout
+
+block content
+  main.page.lanidng-page
+    section.portfolio-block.projects-cards
+      .container
+        .heading
+        .row
+          .col-md-6.col-lg-4
+            .card.border-0
+              a(href=room.getUrl())
+                img.card-img-top.scale-on-hover(src=room.avatar alt='Card Image')
+              .card-body
+                h6
+                  a(href=room.getUrl()) Room No.
+                p.text-muted.card-text Description
+              form#delete_form(method='POST' action='')
+                div.form-group
+                  input#roomId.form-control(type='hidden',name='roomId', required='true', value=room.id)
+                button.btn.btn-danger(type='submit') Delete
+          //- .col-md-6.col-lg-8
+          //-   .row.mx-auto.user-list
+          //-     .col-12.col-sm-6.col-md-4.col-lg-12.flex-fill.m-auto.user-item
+          //-       .user-container
+          //-         a.user-avatar
+          //-           img.rounded-circle.img-fluid(src='assets/img/avatar.jpg' alt='Profile of Mark Smith Peterson' width='48' height='48')
+          //-         p.text-truncate.user-name
+          //-           a(href='#') Mark Smith ffffffffff fdfdf
+          //-           span Last seen on 27th Sep 2014 

@@ -1,0 +1,35 @@
+extend layout
+
+block content
+  main.page.lanidng-page
+    div
+    section.portfolio-block.block-intro
+      #contact.row
+        .col-md-12
+          h1= title
+        .col-md-6
+          form(method='POST' action='')
+            .form-group
+              label Room Name
+              input#room_name.form-control(type='text', placeholder='room name' name='room_name' require='true' value=(undefined===room ? '' : room.name))
+            .form-group
+              label Room Key
+              input#room_key.form-control(type='text', placeholder='room key' name='room_key' require='true' value=(undefined===room ? '' : room.key))
+            //- .form-group
+            //-   label Room Avatar
+            //-   input#room_avatar.form-control(type='text', placeholder='photo url' name='room_avatar' value=(undefined===room ? '' : room.avatar))
+            .form-group
+              label Description
+              input#room_description.form-control(type='textarea', placeholder='brief description for your room' name='room_description' value=(undefined===room ? '' : room.description))
+            .form-group
+              .form-check
+                input#room_type.form-check-input(type='checkbox' name='room_type' value='true')
+                label.form-check-label(for='room_type') Private
+            button.btn.btn-light(type='submit') #{title}
+        .col-md-6
+          img#pallo.img-thumbnail.img-fluid(src=(undefined===room ? 'https://images.pexels.com/photos/342520/pexels-photo-342520.jpeg' : room.avatar))
+
+    if errors 
+      ul
+        for error in errors
+          li!= error.msg

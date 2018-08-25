@@ -1,0 +1,49 @@
+extend layout
+
+block content
+  main.page.lanidng-page
+    section.text-center
+      p You are in Room: #{room.name} with <span id='num_peope'></span> people.
+      #currentSong
+    
+    if (isOwner)
+      section.text-center
+        br
+        button#start.btn.btn-primary.center(type='button') Lets start the party
+
+        .btn-group.mx-auto(role='group')
+          button#resume.btn.btn-primary.pull-right(type='button')
+            i.fa.fa-play
+          button#pause.btn.btn-primary.pull-right(type='button')
+            i.fa.fa-pause
+          button#skip.btn.btn-primary.pull-right(type='button')
+            i.fa.fa-step-forward
+    section.portfolio-block.block-intro
+      form.form-inline.mr-auto(target='_self')
+        .form-group.flex-fill
+          input#song_search.form-control.flex-fill.search-field(type='search' name='song_search' placeholder='search song')
+      #candidates
+
+  #searchModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='searchModalTitle' aria-hidden='true')
+    .modal-dialog.modal-dialog-centered(role='document')
+      .modal-content
+        //- .modal-header
+        //-   //- h5#exampleModalLongTitle.modal-title Modal title
+        //-   button.close(type='button' data-dismiss='modal' aria-label='Close')
+        //-     span(aria-hidden='true') &times;
+        .modal-body
+        //- 
+        //- .modal-footer
+        //-   button.btn.btn-secondary(type='button' data-dismiss='modal') Close
+        //-   button.btn.btn-primary(type='button') Save changes  
+
+  script(src='/socket.io/socket.io.js')
+  script(src='/scripts/room.js')
+  script.
+    var roomId = #{room.id}
+  if (isOwner)
+    script(src='https://sdk.scdn.co/spotify-player.js')
+    script(src='/scripts/spotify_sdk.js')
+    script.
+      var access_token = !{JSON.stringify(token)}
+  
