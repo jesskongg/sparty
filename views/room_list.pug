@@ -2,20 +2,39 @@ extends layout
 
 block content
   main.page.lanidng-page
+    script.
+      var list_room = []
     div
     section.portfolio-block.block-intro
       form.form-inline.mr-auto(target='_self')
         .form-group.flex-fill
-          input#search-field.form-control.flex-fill.search-field(type='search' name='search' placeholder='search room')
+          input#room_search.form-control.flex-fill.search-field(type='search' name='room_search' placeholder='search room' val='')
+    
+        
+      #searchModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='searchModalTitle' aria-hidden='true')
+        .modal-dialog.modal-dialog-centered(role='document')
+          .modal-content
+            .modal-header
+            .modal-body
+            .modal-footer
+    
     section.portfolio-block.projects-cards
       .container
         .row
           each room in rooms
+            script.
+              list_room.push({#{room.id}: #{room.public}})
             .col-md-6.col-lg-4
               .card.border-0
-                a(href=room.getUrl())
+                a(id='room' + room.id)
                   img.card-img-top.scale-on-hover(src=room.avatar alt='Card Image')
                 .card-body
-                  h6
-                    a(href=room.getUrl()) #{room.name}
-                  p.text-muted.card-text Description
+                  h6= room.name
+                    if (!room.public)
+                      | (
+                      i.fa.fa-lock )
+                  p.text-muted.card-text #{room.description}
+                  div(id='key_form' + room.id style='display:none;')
+
+    script(src='/scripts/enter_room.js')
+                

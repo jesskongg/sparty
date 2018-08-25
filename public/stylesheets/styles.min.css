@@ -1,6 +1,71 @@
-img#pallo.img-circle.img-responsive{padding:33px}.user-item{padding:10px;position:relative}.user-item div.user-container{text-align:left;font:400 14px sans-serif;background-color:#f4f8fa;border:1px solid #dbe3e7;box-shadow:0 2px 3px #dbe3e7;padding-right:50px;overflow:hidden}.user-item a.user-avatar{float:left;padding:10px 15px}.user-item p.user-name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:19px 0 0}.user-item p.user-name a{color:#5d6569;text-decoration:none;font-weight:700}.user-item p.user-name span{display:block;font-size:11px;color:#808d93;padding-top:4px}.user-item a.user-delete{background-color:#de4a4a;border-radius:50%;color:#fff;font-size:10px;line-height:40px;width:35px;height:35px;position:absolute;top:0;right:5px;text-align:center;text-decoration:none}@media (min-width:768px){.portfolio-block{padding-bottom:20px;padding-top:20px}.portfolio-block form{padding:20px}}.portfolio-block{padding-bottom:0;padding-top:0}
+/* style for song item */
+.user-item {
+  padding:10px;
+  position:relative;
+}
 
+.user-item div.user-container {
+  text-align:left;
+  font:normal 14px sans-serif;
+  background-color:#f4f8fa;
+  border:1px solid #dbe3e7;
+  box-shadow:0 2px 3px #dbe3e7;
+  padding-right:50px;
+  overflow:hidden;
+}
 
+.user-item div.user-avatar {
+  float:left;
+  padding:10px 15px;
+}
+
+.user-item a.user-avatar {
+  float:left;
+  padding:10px 15px;
+}
+
+.user-item p.user-name {
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  margin:10px 0 0;
+}
+
+.user-item p.user-name a {
+  color:#5d6569;
+  text-decoration:none;
+  font-weight:bold;
+}
+
+.user-item p.user-name span {
+  display:block;
+  font-size:11px;
+  color:#808d93;
+  padding-top:4px;
+}
+
+/* TODO: rename class */
+.user-item p.user-delete {
+  background-color:#de4a4a;
+  border-radius:50%;
+  color:#fff;
+  font-size:10px;
+  line-height:40px;
+  width:35px;
+  height:35px;
+  position:absolute;
+  top:0;
+  right:5px;
+  text-align:center;
+  text-decoration:none;
+}
+
+.user-item a.user-link:hover {
+  color:#0075c1;
+  text-decoration:none;
+}
+
+/* style for footer */
 html {
   position: relative;
   min-height: 100%;
@@ -14,7 +79,55 @@ footer {
   bottom: 0;
   width: 100%;
   /* Set the fixed height of the footer here */
-  height: 60px;
-  line-height: 60px; /* Vertically center the text there */
+  height: 30px;
+  line-height: 30px; /* Vertically center the text there */
   /* background-color: #f5f5f5; */
+}
+
+#delete_form {
+  box-shadow: none;
+  padding: 0;
+}
+
+/* to keep all photos same size */
+.card-img-top {
+    height: 15rem;
+    object-fit: cover;
+}
+
+@media (min-width:768px) {
+  .portfolio-block {
+    padding-bottom:20px;
+    padding-top:20px;
+  }
+}
+
+@media (min-width:768px) {
+  .portfolio-block form {
+    padding:20px;
+  }
+}
+
+.portfolio-block {
+  padding-bottom:0;
+  padding-top:0;
+}
+
+img#pallo.img-circle.img-responsive {
+  padding:33px;
+}
+
+.modal {
+   /* position: absolute; */
+   padding-top: 180px;
+}
+
+/* Important part */
+.modal-dialog {
+    overflow-y: initial !important
+}
+
+.modal-body {
+    height: 500px;
+    overflow-y: auto;
 }

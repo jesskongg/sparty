@@ -20,6 +20,9 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: true,
       allowNull: false
     },
+    description: {
+      type: DataTypes.STRING,
+    }
   }, {});
   Room.associate = function(models) {
     // associations can be defined here

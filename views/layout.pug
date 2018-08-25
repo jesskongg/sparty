@@ -5,19 +5,19 @@ html
     meta(name='viewport', content='width=device-width, initial-scale=1')
     title= title
     
-    script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js')
     //- script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js')
-    script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js')
     //- link(rel="stylesheet", href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css")
     //- link(rel="stylesheet", href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css")
     //- link(rel='stylesheet', href='/stylesheets/style.css')
       
-    link(rel='stylesheet' href='/stylesheets/bootstrap.min.css')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js')
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js')
     link(rel='stylesheet' href='https://fonts.googleapis.com/css?family=Lato:300,400,700')
     link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
     link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css')
     link(rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,80')
     link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.6.1/css/pikaday.min.css')
+    link(rel='stylesheet' href='/stylesheets/bootstrap.min.css')
     link(rel='stylesheet' href='/stylesheets/styles.min.css')
     
   body
@@ -29,10 +29,11 @@ html
             span.sr-only Toggle navigation
             span.navbar-toggler-icon
           #navbarNav.collapse.navbar-collapse
-            form.form-inline.mr-auto(target='_self')
-              .form-group
-                label(for='search-field')
-                input#room_search.form-control.search-field(type='search' name='room_search' placeholder='search room')
+            if (room)
+              form.form-inline.mr-auto(target='_self')
+                .form-group
+                  label(for='search-field')
+                  input#room_search.form-control.search-field(type='search' name='room_search' placeholder='search room')
             ul.nav.navbar-nav.ml-auto
               li.nav-item(role='presentation')
                 a.nav-link.active(href='/') Home
@@ -47,6 +48,8 @@ html
               if (isOwner)
                 li.nav-item(role='presentation')
                   a.nav-link(href=room.getUrl() + '/update') Edit Room
+                li.nav-item(role='presentation')
+                  a.nav-link(href=room.getUrl() + '/delete') Delete Room
 
     block content
       
@@ -67,8 +70,6 @@ html
     script(src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.2/js/bootstrap.bundle.min.js')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.6.1/pikaday.min.js')
-    script(src="//cdnjs.cloudflare.com/ajax/libs/rxjs/2.3.0/rx.all.js")
-    script(src="https://rawgit.com/Reactive-Extensions/rxjs-jquery/master/rx.jquery.js")
     script(src='/scripts/script.min.js')
 
           

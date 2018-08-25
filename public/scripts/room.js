@@ -18,56 +18,55 @@ var delay = (function(){
 $(function() {
   $("#song_search").keyup(function() {
     delay(function() {
-      var query = $("#song_search").val();
-      if (query === '') {
-        query = 'hello';
-      }
+      var query = $("#song_search").val().trim();
       // ajax function to search song from spotify
-      $("#candidates").hide();
-      $.getJSON(
-        "/api/search", {
-          query: query,
-        }, function(resp) {
-          // $(".modal-title").text("Search for " + $("#song_search").val());
-          $("#searchResults").empty();
-          $("#close").show();
-          // var newElement = $('<a></a>');
-          resp.forEach(function(ea) {
-            // var newElement = $('<li></li>').addClass("list-group-item");
-            $("#searchResults").append(`
-              <div class="row mx-auto user-list">
-                <div class="col-12 col-sm-6 col-md-4 col-lg-5 flex-fill m-auto user-item">
-                  <div class="user-container">
-                    <a class="text-truncate user-avatar">
-                      <img class="rounded-circle img-fluid" src='${ea.image}' width="48" height="48">
-                    </a>
-                    <p class="user-name">
-                      <a>${ea.song}</a>
-                      <span>${ea.artist} </span>
-                      <span>${ea.album} </span>
-                    </p>
-                    <a id='${ea.id}' class="bg-primary user-delete" href="#">
-                      <span>+</span>
-                    </a>
+      if (query != '') {
+        $("#candidates").hide();
+        $.getJSON(
+          "/api/search", {
+            query: query,
+          }, function(resp) {
+            // $(".modal-title").text("Search for " + $("#song_search").val());
+            $(".modal-body").empty();
+            // $("#close").show();
+            $("#searchModal").modal("show");
+            // var newElement = $('<a></a>');
+            resp.forEach(function(ea) {
+              // var newElement = $('<li></li>').addClass("list-group-item");
+              $(".modal-body").append(`
+                  <div class="row mx-auto user-list">
+                      <div class="col-12 col-sm-12 col-md-12 col-lg-12 flex-fill m-auto user-item">
+                          <a class="user-link" id='${ea.id}song'>
+                              <div class="user-container" id='${ea.id}search_song'>
+                                  <div class="user-avatar">
+                                    <img class="rounded-circle img-fluid" src='${ea.image}' alt="Song Cover" width="48" height="48">
+                                  </div>
+                                  <p class="user-name">
+                                    <strong>${ea.song}</strong>
+                                    <span>${ea.artist}</span>
+                                    <span>${ea.album}</span>
+                                  </p>
+                              </div>
+                          </a>
+                      </div>
                   </div>
-                </div>
-              </div>
-              `)
-              // $("#searchResults").append(newElement);
-              $(`#${ea.id}`).click(function() {
-                ea.vote = 1;
-                socket.emit('add_candidate', ea);
+                `)
+                // $("#searchResults").append(newElement);
+                $(`#${ea.id}song`).click(function() {
+                  $(`#${ea.id}search_song`).css('background-color', 'rgba(0,0,0,0.1)');
+                  ea.vote = 1;
+                  socket.emit('add_candidate', ea);
+                })
               })
-            })
-          }
-        )
+            }
+          )
+      }
     }, 300);
   });
 
-  $("#close").click(function() {
-    $("#searchResults").hide();
-    $("#close").hide();
-    socket.emit('update_candidate_list', 'data');
+  $('#searchModal').on('hidden.bs.modal', function (e) {
+      $("#song_search").val('');
+      socket.emit('update_candidate_list', 'data');
   })
 
   // update number of people in the room
@@ -93,27 +92,28 @@ $(function() {
     $('#candidates').empty();
     for (var key in candidates) {
       let ea = candidates[key];
-      var newElement = $(`<a id='${ea.id}AddVote'></a>`);
-      newElement.append(`
+      $("#candidates").append(`
         <div class="row mx-auto user-list">
-            <div class="col-12 col-sm-6 col-md-4 col-lg-5 flex-fill m-auto user-item">
-                <div class="user-container">
-                  <a href="#" class="user-avatar">
-                    <img class="rounded-circle img-fluid" src='${ea.image}' width="48" height="48">
-                  </a>
-                    <p class="user-name">
-                      <a href="#">${ea.song}</a>
-                      <span>${ea.artist} </span>
-                      <span>${ea.album} </span>
-                    </p>
-                    <a class="bg-primary user-delete" href="#"> <span>${ea.vote}</span>
-                    </a>
-                  </div>
+            <div class="col-12 col-sm-6 col-md-10 col-lg-5 flex-fill m-auto user-item">
+                <a class="user-link" id='${ea.id}candidate'>
+                    <div class="user-container" id='${ea.id}candidate-song'>
+                        <div class="user-avatar">
+                          <img class="rounded-circle img-fluid" src='${ea.image}' alt="Song Cover" width="48" height="48">
+                        </div>
+                        <p class="user-name">
+                          <strong>${ea.song}</strong>
+                          <span>${ea.artist}</span>
+                          <span>${ea.album}</span>
+                        </p>
+                        <p class="bg-primary user-delete">
+                          <span>${ea.vote}</span>
+                        </p>
+                    </div>
+                </a>
             </div>
         </div>
       `)
-      $("#candidates").append(newElement);
-      $(`#${ea.id}AddVote`).click(function() {
+      $(`#${ea.id}candidate`).click(function() {
         socket.emit('add_vote', ea);
       });
       $('#candidates').show();
