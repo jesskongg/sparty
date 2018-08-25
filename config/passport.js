@@ -24,6 +24,7 @@ module.exports = function(passport) {
         clientID: '64e65c3badf846158593504b9b5ce162',
         clientSecret: 'e3426eb15a3b434ba3dd5176a152e62d',
         callbackURL: 'https://chardonnay.herokuapp.com/callback'
+        // callbackURL: 'http://localhost:3000/callback'
       },
       function(accessToken, refreshToken, expires_in, profile, done) {
         models.User.findOrCreate({

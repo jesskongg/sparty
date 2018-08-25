@@ -1,4 +1,4 @@
-var socket = io.connect('http://localhost:3000/api/rooms');
+var socket = io.connect('https://chardonnay.herokuapp.com/api/rooms');
 
 window.onSpotifyWebPlaybackSDKReady = () => {
   var token = access_token;
