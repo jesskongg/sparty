@@ -1,8 +1,12 @@
 {
   "name": "sparty",
   "version": "0.0.0",
+  "engines": {
+    "node": "10.9.0"
+  },
   "private": true,
   "scripts": {
+    "heroku-postbuild": "npm install --production",
     "start": "node ./bin/www",
     "devstart": "nodemon ./bin/www"
   },

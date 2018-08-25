@@ -14,10 +14,11 @@
     "dialect": "postgres"
   },
   "production": {
-    "username": "root",
-    "password": null,
+    "use_env_variable": "DATABASE_URL",
+    "username": "tudatn",
+    "password": "lenovo",
     "database": "sparty_production",
-    "host": "127.0.0.1",
+    "host": "https://chardonnay.herokuapp.com",
     "dialect": "postgres"
   }
 }
