@@ -1,12 +1,15 @@
+const Sequelize = require('sequelize');
+// const sequelize = new Sequelize();
+
 const { body,validationResult } = require('express-validator/check');
 const { sanitizeBody } = require('express-validator/filter');
 var async = require('async');
 var models = require('../models/');
 
-const avatars = [ 'https://images.pexels.com/photos/342520/pexels-photo-342520.jpeg',
-                'https://images.pexels.com/photos/683039/pexels-photo-683039.jpeg',
-                'https://images.pexels.com/photos/1071882/pexels-photo-1071882.jpeg',
-                'https://images.pexels.com/photos/1251089/pexels-photo-1251089.jpeg',
+const avatars = [ '/images/pexels-photo-534031.jpeg',
+                '/images/pexels-photo-605408.jpeg',
+                '/images/pexels-photo-796606.jpeg',
+                '/images/pexels-photo-1251089.jpeg',
               ];
 
 exports.room_list = function(req, res, next) {
@@ -28,10 +31,9 @@ exports.room_detail = function(req, res, next) {
         } else {
           res.render('room_detail', { room: room });
         }
-      } else {
-        res.redirect('/');
       }
     } else {
+      // everything wrong will lead to homepage
       res.redirect('/');
     }
   })
@@ -47,7 +49,7 @@ exports.room_create_post = [
   body('room_key').trim().isAlphanumeric().withMessage('Room key has non-alphanumeric characters.'),
 
   // Sanitize fields.
-
+  // TODO: this will change all input to html escape symbols: need to fix it
   sanitizeBody('*').trim().escape(),
 
   (req, res, next) => {
@@ -66,11 +68,7 @@ exports.room_create_post = [
         if (req.body.room_type) {
           room_type = false;
         }
-
         // Create a Room object with escaped and trimmed data.
-        // var room_avatar = (req.body.room_avatar === '') ? avatars[Math.floor(Math.random(1, avatars.length)) + 0] : req.body.room_avatar;
-        // var room_avatar = avatars[getRandomInt(0, avatars.length)];
-
         models.Room.build({
                     name: req.body.room_name,
                     key: req.body.room_key,
@@ -154,6 +152,23 @@ exports.room_delete_post = function(req, res, next) {
   }).then(() => {
     res.redirect('/api/rooms');
   })
+};
+
+// TODO: consider to send rooms just once to the client for efficient search
+// ref: https://stackoverflow.com/questions/42352090/sequelize-find-all-that-match-contains-case-insensitive
+exports.room_search = function(req, res, next) {
+  let lookupValue = req.query.query.toLowerCase();
+  models.Room.findAll({
+    attribute: ['id', 'name', 'public'],
+    limit: 10,
+    where: {
+        name: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('name')), 'LIKE', '%' + lookupValue + '%')
+    }
+  }).then(function(rooms){
+      res.json(rooms);
+  }).catch(function(error){
+      console.log(error);
+  });
 };
 
 function isOwner(room, user) {

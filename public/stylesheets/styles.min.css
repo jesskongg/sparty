@@ -89,6 +89,7 @@ footer {
   padding: 0;
 }
 
+/* to keep all photos same size */
 .card-img-top {
     height: 15rem;
     object-fit: cover;
