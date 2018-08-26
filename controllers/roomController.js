@@ -31,6 +31,8 @@ exports.room_detail = function(req, res, next) {
         } else {
           res.render('room_detail', { room: room });
         }
+      } else {
+        res.redirect('/');
       }
     } else {
       // everything wrong will lead to homepage
