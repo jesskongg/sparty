@@ -1,4 +1,27 @@
-/* style for song item */
+
+/* style for footer */
+/* ref: https://css-tricks.com/couple-takes-sticky-footer/ */
+html {
+  height:100%;
+}
+
+body {
+  display:flex;
+  height:100vh;
+  flex-direction:column;
+  /*padding-top:5rem;*/
+}
+
+.content {
+  padding-top:3rem;
+  flex:1 0 auto;
+}
+
+footer {
+  flex-shrink:0;
+  padding:20px;
+}
+
 .user-item {
   padding:10px;
   position:relative;
@@ -19,22 +42,11 @@
   padding:10px 15px;
 }
 
-.user-item a.user-avatar {
-  float:left;
-  padding:10px 15px;
-}
-
 .user-item p.user-name {
   white-space:nowrap;
   overflow:hidden;
   text-overflow:ellipsis;
   margin:10px 0 0;
-}
-
-.user-item p.user-name a {
-  color:#5d6569;
-  text-decoration:none;
-  font-weight:bold;
 }
 
 .user-item p.user-name span {
@@ -44,7 +56,6 @@
   padding-top:4px;
 }
 
-/* TODO: rename class */
 .user-item p.user-delete {
   background-color:#de4a4a;
   border-radius:50%;
@@ -55,34 +66,33 @@
   height:35px;
   position:absolute;
   top:0;
-  right:5px;
+  right:0px;
   text-align:center;
   text-decoration:none;
 }
 
-.user-item a.user-link:hover {
-  color:#0075c1;
-  text-decoration:none;
+.search-container {
+  display:flex;
+  font-size:14px;
+  margin:25px 0px;
 }
 
-/* style for footer */
-/* ref: https://css-tricks.com/couple-takes-sticky-footer/ */
-html {
-  height: 100%;
-}
-body {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
+.search-input {
+  border:1px solid #ddd;
+  border-radius:5px;
+  padding:10px;
+  /*border-right:none;*/
+  width:100%;
 }
 
-.content {
-  flex: 1 0 auto;
-}
-
-.page-footer {
-  flex-shrink: 0;
-  padding: 20px;
+.btn.btn-default.search-btn {
+  border:1px solid #ddd;
+  background-color:#FFFFFF !important;
+  border-radius:0 5px 5px 0;
+  border-left:none;
+  background-image:none;
+  box-shadow:none;
+  color:#919693;
 }
 
 #delete_form {
@@ -94,41 +104,4 @@ body {
 .card-img-top {
     height: 15rem;
     object-fit: cover;
-}
-
-@media (min-width:768px) {
-  .portfolio-block {
-    padding-bottom:20px;
-    padding-top:20px;
-  }
-}
-
-@media (min-width:768px) {
-  .portfolio-block form {
-    padding:20px;
-  }
-}
-
-.portfolio-block {
-  padding-bottom:0;
-  padding-top:0;
-}
-
-img#pallo.img-circle.img-responsive {
-  padding:33px;
-}
-
-.modal {
-   /* position: absolute; */
-   padding-top: 180px;
-}
-
-/* Important part */
-.modal-dialog {
-    overflow-y: initial !important
-}
-
-.modal-body {
-    height: 500px;
-    overflow-y: auto;
 }

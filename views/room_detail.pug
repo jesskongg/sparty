@@ -1,42 +1,60 @@
 extend layout
 
 block content
-  main.page.lanidng-page
-    section.text-center
-      p You are in Room: #{room.name} with <span id='num_peope'></span> people.
-      #currentSong
-    
-    if (isOwner)
-      section.text-center
-        br
-        button#start.btn.btn-primary.center(type='button') Lets start the party
+  #content.content.container
+    #roomDetailContent.row.justify-content-center.text-center
+      #welcome.col-lg-7.col-md-7.col-sm-12
+        p You are in Room: #{room.name} with <span id='num_peope'></span> people.
+      #currentSong.col-lg-7.col-md-7.col-sm-12
+        //- .row.no-gutters.mx-auto.user-list
+        //-   .col.flex-fill.m-auto.user-item
+        //-     .user-container
+        //-       .user-avatar
+        //-         img.rounded-circle.img-fluid(src='assets/img/avatar.jpg' alt='Profile of Mark Smith Peterson' width='48' height='48')
+        //-       p.user-name
+        //-         strong Title
+        //-         span Last seen on 27th Sep 2014 
+        //-         span Last seen on 27th Sep 2014 
+        //-       a.bg-primary.user-delete(href='#')
+        //-         span 12345
+      if (isOwner)
+        #playerController.col-lg-7.col-md-7.col-sm-12.text-center
+          .btn-group(role='group')
+            button#start.btn.btn-primary.pull-right(type='button') Lets start the party
+          .btn-group.mx-auto(role='group')
+            button#resume.btn.btn-primary.pull-right(type='button')
+              i.fa.fa-play
+            button#pause.btn.btn-primary.pull-right(type='button')
+              i.fa.fa-pause
+            button#skip.btn.btn-primary.pull-right(type='button')
+              i.fa.fa-step-forward
 
-        .btn-group.mx-auto(role='group')
-          button#resume.btn.btn-primary.pull-right(type='button')
-            i.fa.fa-play
-          button#pause.btn.btn-primary.pull-right(type='button')
-            i.fa.fa-pause
-          button#skip.btn.btn-primary.pull-right(type='button')
-            i.fa.fa-step-forward
-    section.portfolio-block.block-intro
-      form.form-inline.mr-auto(target='_self')
-        .form-group.flex-fill
-          input#song_search.form-control.flex-fill.search-field(type='search' name='song_search' placeholder='search song')
-      #candidates
-
-  #searchModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='searchModalTitle' aria-hidden='true')
-    .modal-dialog.modal-dialog-centered(role='document')
-      .modal-content
-        //- .modal-header
-        //-   //- h5#exampleModalLongTitle.modal-title Modal title
-        //-   button.close(type='button' data-dismiss='modal' aria-label='Close')
-        //-     span(aria-hidden='true') &times;
-        .modal-body
-        //- 
-        //- .modal-footer
-        //-   button.btn.btn-secondary(type='button' data-dismiss='modal') Close
-        //-   button.btn.btn-primary(type='button') Save changes  
-
+      #searchSong.col-lg-7.col-md-7.col-sm-12
+        .search-container
+          input#song_search.search-input(type='text' name='song_search' placeholder='Search song')
+        #searchResult
+          //- .row.no-gutters.mx-auto.user-list
+          //-   .col.flex-fill.m-auto.user-item
+          //-     .user-container
+          //-       .user-avatar
+          //-         img.rounded-circle.img-fluid(src='assets/img/avatar.jpg' alt='Profile of Mark Smith Peterson' width='48' height='48')
+          //-       p.user-name
+          //-         strong Title
+          //-         span Last seen on 27th Sep 2014 
+          //-         span Last seen on 27th Sep 2014 
+      #candidates.col-lg-7.col-md-7.col-sm-12
+        //- .row.no-gutters.mx-auto.user-list
+        //-   .col.flex-fill.m-auto.user-item
+        //-     .user-container
+        //-       .user-avatar
+        //-         img.rounded-circle.img-fluid(src='assets/img/avatar.jpg' alt='Profile of Mark Smith Peterson' width='48' height='48')
+        //-       p.user-name
+        //-         strong Title
+        //-         span Last seen on 27th Sep 2014 
+        //-         span Last seen on 27th Sep 2014 
+        //-       a.bg-primary.user-delete(href='#')
+        //-         span 12345
+  
   script(src='/socket.io/socket.io.js')
   script(src='/scripts/room.js')
   script.

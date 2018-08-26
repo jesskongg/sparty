@@ -88,7 +88,7 @@ function enterRoom(objectId, formId, roomId) {
   $(`#${formId}`).append(`
     <form id="enter_key_form" method="GET" action="/api/room/${roomId}">
       <div class="form-group">
-        <input class="form-control" placeholder="room key" name="room_key" require="true" value="" type="text">
+        <input class="form-control" placeholder="room key" name="room_key" require="true" value="" type="password">
       </div>
       <button class="btn btn-light" type="submit">Enter Room</button>
     </form>
