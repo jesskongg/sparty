@@ -1,6 +1,7 @@
 var socket = io.connect('https://chardonnay.herokuapp.com/api/rooms');
 
 window.onSpotifyWebPlaybackSDKReady = () => {
+  console.log(access_token);
   var token = access_token;
   const player = new Spotify.Player({
     name: 'Welcome to Party Room ' + roomId,
