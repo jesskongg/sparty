@@ -137,15 +137,16 @@ $(function() {
           <div id="song">
               <div class="row no-gutters mx-auto user-list">
                   <div class="col flex-fill m-auto user-item">
-                    <a class="user-link" id='${ea.id}song'>
-                      <div class="user-container" id='${ea.id}search_song'>
+                    <p> You're listening </p>
+                    <a class="user-link">
+                      <div class="user-container">
                           <div class="user-avatar">
-                            <img class="rounded-circle img-fluid" src='${ea.image}' alt="Song Cover" width="48" height="48">
+                            <img class="rounded-circle img-fluid" src='${track.image}' alt="Song Cover" width="48" height="48">
                           </div>
                           <p class="user-name">
-                            <strong>${ea.song}</strong>
-                            <span>${ea.artist}</span>
-                            <span>${ea.album}</span>
+                            <strong>${track.song}</strong>
+                            <span>${track.artist}</span>
+                            <span>${track.album}</span>
                           </p>
                       </div>
                   </div>

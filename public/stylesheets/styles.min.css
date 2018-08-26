@@ -105,3 +105,12 @@ footer {
     height: 15rem;
     object-fit: cover;
 }
+
+#searchResult {
+  margin-top: -25px;
+}
+
+/* #searchSong {
+  border:1px solid #dbe3e7;
+  box-shadow:0 2px 3px #dbe3e7;
+} */

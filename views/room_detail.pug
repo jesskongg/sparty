@@ -6,17 +6,7 @@ block content
       #welcome.col-lg-7.col-md-7.col-sm-12
         p You are in Room: #{room.name} with <span id='num_peope'></span> people.
       #currentSong.col-lg-7.col-md-7.col-sm-12
-        //- .row.no-gutters.mx-auto.user-list
-        //-   .col.flex-fill.m-auto.user-item
-        //-     .user-container
-        //-       .user-avatar
-        //-         img.rounded-circle.img-fluid(src='assets/img/avatar.jpg' alt='Profile of Mark Smith Peterson' width='48' height='48')
-        //-       p.user-name
-        //-         strong Title
-        //-         span Last seen on 27th Sep 2014 
-        //-         span Last seen on 27th Sep 2014 
-        //-       a.bg-primary.user-delete(href='#')
-        //-         span 12345
+
       if (isOwner)
         #playerController.col-lg-7.col-md-7.col-sm-12.text-center
           .btn-group(role='group')
@@ -32,28 +22,9 @@ block content
       #searchSong.col-lg-7.col-md-7.col-sm-12
         .search-container
           input#song_search.search-input(type='text' name='song_search' placeholder='Search song')
-        #searchResult
-          //- .row.no-gutters.mx-auto.user-list
-          //-   .col.flex-fill.m-auto.user-item
-          //-     .user-container
-          //-       .user-avatar
-          //-         img.rounded-circle.img-fluid(src='assets/img/avatar.jpg' alt='Profile of Mark Smith Peterson' width='48' height='48')
-          //-       p.user-name
-          //-         strong Title
-          //-         span Last seen on 27th Sep 2014 
-          //-         span Last seen on 27th Sep 2014 
+        #searchResult(style='display:none;')
+
       #candidates.col-lg-7.col-md-7.col-sm-12
-        //- .row.no-gutters.mx-auto.user-list
-        //-   .col.flex-fill.m-auto.user-item
-        //-     .user-container
-        //-       .user-avatar
-        //-         img.rounded-circle.img-fluid(src='assets/img/avatar.jpg' alt='Profile of Mark Smith Peterson' width='48' height='48')
-        //-       p.user-name
-        //-         strong Title
-        //-         span Last seen on 27th Sep 2014 
-        //-         span Last seen on 27th Sep 2014 
-        //-       a.bg-primary.user-delete(href='#')
-        //-         span 12345
   
   script(src='/socket.io/socket.io.js')
   script(src='/scripts/room.js')
