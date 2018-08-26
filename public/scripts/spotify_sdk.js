@@ -1,6 +1,7 @@
 var socket = io.connect('http://localhost:3000/api/rooms');
 
 window.onSpotifyWebPlaybackSDKReady = () => {
+  console.log(access_token);
   var token = access_token;
   const player = new Spotify.Player({
     name: 'Welcome to Party Room ' + roomId,

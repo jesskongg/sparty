@@ -27,16 +27,17 @@ $(function() {
             query: query,
           }, function(resp) {
             // $(".modal-title").text("Search for " + $("#song_search").val());
-            $(".modal-body").empty();
+            $("#searchResult").empty();
             // $("#close").show();
-            $("#searchModal").modal("show");
+            $("#searchResult").show();
             // var newElement = $('<a></a>');
             resp.forEach(function(ea) {
               // var newElement = $('<li></li>').addClass("list-group-item");
-              $(".modal-body").append(`
-                  <div class="row mx-auto user-list">
-                      <div class="col-12 col-sm-12 col-md-12 col-lg-12 flex-fill m-auto user-item">
-                          <a class="user-link" id='${ea.id}song'>
+              $("#searchResult").append(`
+                  <div id="song">
+                      <div class="row no-gutters mx-auto user-list">
+                          <div class="col flex-fill m-auto user-item">
+                            <a class="user-link" id='${ea.id}song'>
                               <div class="user-container" id='${ea.id}search_song'>
                                   <div class="user-avatar">
                                     <img class="rounded-circle img-fluid" src='${ea.image}' alt="Song Cover" width="48" height="48">
@@ -47,12 +48,13 @@ $(function() {
                                     <span>${ea.album}</span>
                                   </p>
                               </div>
-                          </a>
+                          </div>
                       </div>
                   </div>
                 `)
                 // $("#searchResults").append(newElement);
-                $(`#${ea.id}song`).click(function() {
+                $(`#${ea.id}song`).click(function(event) {
+                  event.stopImmediatePropagation();
                   $(`#${ea.id}search_song`).css('background-color', 'rgba(0,0,0,0.1)');
                   ea.vote = 1;
                   socket.emit('add_candidate', ea);
@@ -64,9 +66,12 @@ $(function() {
     }, 300);
   });
 
-  $('#searchModal').on('hidden.bs.modal', function (e) {
+  $(document).click(function () {
+    if ($("#searchResult").contents().length) {
+      $("#searchResult").hide();
       $("#song_search").val('');
       socket.emit('update_candidate_list', 'data');
+    }
   })
 
   // update number of people in the room
@@ -93,23 +98,23 @@ $(function() {
     for (var key in candidates) {
       let ea = candidates[key];
       $("#candidates").append(`
-        <div class="row mx-auto user-list">
-            <div class="col-12 col-sm-6 col-md-10 col-lg-5 flex-fill m-auto user-item">
-                <a class="user-link" id='${ea.id}candidate'>
-                    <div class="user-container" id='${ea.id}candidate-song'>
-                        <div class="user-avatar">
-                          <img class="rounded-circle img-fluid" src='${ea.image}' alt="Song Cover" width="48" height="48">
-                        </div>
-                        <p class="user-name">
-                          <strong>${ea.song}</strong>
-                          <span>${ea.artist}</span>
-                          <span>${ea.album}</span>
-                        </p>
-                        <p class="bg-primary user-delete">
-                          <span>${ea.vote}</span>
-                        </p>
+        <div class="row no-gutters mx-auto user-list">
+            <div class="col flex-fill m-auto user-item">
+              <a class="user-link" id='${ea.id}candidate'>
+                <div class="user-container" id='${ea.id}candidate-song'>
+                    <div class="user-avatar">
+                      <img class="rounded-circle img-fluid" src='${ea.image}' alt="Song Cover" width="48" height="48">
                     </div>
-                </a>
+                    <p class="user-name">
+                      <strong>${ea.song}</strong>
+                      <span>${ea.artist}</span>
+                      <span>${ea.album}</span>
+                    </p>
+                    <p class="bg-primary user-delete">
+                      <span>${ea.vote}</span>
+                    </p>
+                </div>
+              </a>
             </div>
         </div>
       `)
@@ -129,21 +134,24 @@ $(function() {
     if (track.uri) {
       $("#currentSong").empty();
       $("#currentSong").append(`
-        <div class="row mx-auto user-list">
-          <div class="col-12 col-sm-6 col-md-4 col-lg-5 flex-fill m-auto user-item">
-          <p>You are listening</p>
-            <div class="user-container">
-              <a class="text-truncate user-avatar">
-                <img class="rounded-circle img-fluid" src='${track.image}' width="48" height="48">
-              </a>
-              <p class="user-name">
-                <a>${track.song}</a>
-                <span>${track.artist} </span>
-                <span>${track.album} </span>
-              </p>
-            </div>
+          <div id="song">
+              <div class="row no-gutters mx-auto user-list">
+                  <div class="col flex-fill m-auto user-item">
+                    <p> You're listening </p>
+                    <a class="user-link">
+                      <div class="user-container">
+                          <div class="user-avatar">
+                            <img class="rounded-circle img-fluid" src='${track.image}' alt="Song Cover" width="48" height="48">
+                          </div>
+                          <p class="user-name">
+                            <strong>${track.song}</strong>
+                            <span>${track.artist}</span>
+                            <span>${track.album}</span>
+                          </p>
+                      </div>
+                  </div>
+              </div>
           </div>
-        </div>
         `)
       }
   });
