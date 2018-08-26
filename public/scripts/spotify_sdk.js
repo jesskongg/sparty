@@ -1,7 +1,7 @@
 var socket = io.connect('http://localhost:3000/api/rooms');
 
 window.onSpotifyWebPlaybackSDKReady = () => {
-  console.log(access_token);
+  var isPartyOn = false;
   var token = access_token;
   const player = new Spotify.Player({
     name: 'Welcome to Party Room ' + roomId,
@@ -20,7 +20,11 @@ window.onSpotifyWebPlaybackSDKReady = () => {
     if (state['paused'] === true && state['position'] === 0
       && state['restrictions']['disallow_pausing_reasons']
       && state['restrictions']['disallow_pausing_reasons'][0] === 'already_paused') {
-      socket.emit('get next song', roomId);
+      if (isPartyOn) {
+        socket.emit('get next song', roomId);
+      } else {
+        isPartyOn = true;
+      }
     }
   });
 
