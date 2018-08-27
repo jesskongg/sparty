@@ -126,11 +126,6 @@ $(function() {
     }
   });
 
-  $("#start").click(function() {
-      $("#start").hide();
-      socket.emit('get next song', roomId);
-  });
-
   socket.on('update current song', function(track) {
     if (track.uri) {
       $("#currentSong").empty();
