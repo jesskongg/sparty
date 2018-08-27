@@ -31,6 +31,8 @@ exports.room_detail = function(req, res, next) {
         } else {
           res.render('room_detail', { room: room });
         }
+      } else {
+        res.redirect('/');
       }
     } else {
       // everything wrong will lead to homepage
@@ -46,7 +48,7 @@ exports.room_create_get = function(req, res, next) {
 exports.room_create_post = [
   // Validate fields.
   body('room_name').isLength({ min: 1 }).trim().withMessage('Room name must be specified.'),
-  body('room_key').trim().isAlphanumeric().withMessage('Room key has non-alphanumeric characters.'),
+  // body('room_key').trim().isAlphanumeric().withMessage('Room key has non-alphanumeric characters.'),
 
   // Sanitize fields.
   // TODO: this will change all input to html escape symbols: need to fix it
@@ -56,27 +58,31 @@ exports.room_create_post = [
     // Extract the validation errors from a request.
     const errors = validationResult(req);
 
+    // build a new room with req.body data
+    var room_type = true;
+    if (req.body.room_type) {
+      room_type = false;
+    }
+
+    var newRoom = models.Room.build({
+      name: req.body.room_name,
+      key: req.body.room_key,
+      public: room_type,
+      avatar: avatars[getRandomInt(0, avatars.length)],
+      description: req.body.room_description,
+      owner: req.user.spotify_id,
+    })
+
     if (!errors.isEmpty()) {
         // There are errors. Render form again with sanitized values/errors messages.
-        res.render('room_form', { title: 'Create Room', room: req.body, errors: errors.array() });
+        res.render('room_form', { title: 'Create Room', room: newRoom, errors: errors.array() });
         return;
     }
     else {
         // Data from form is valid.
-        var room_type = true;
-        console.log(req.body);
-        if (req.body.room_type) {
-          room_type = false;
-        }
+
         // Create a Room object with escaped and trimmed data.
-        models.Room.build({
-                    name: req.body.room_name,
-                    key: req.body.room_key,
-                    public: room_type,
-                    avatar: avatars[getRandomInt(0, avatars.length)],
-                    description: req.body.room_description,
-                    owner: req.user.spotify_id,
-                  }).save().then(room => {
+        newRoom.save().then(room => {
                       res.redirect(room.getUrl() + '?room_key=' + room.key);
                   }).catch(err => {
                       return next(err);

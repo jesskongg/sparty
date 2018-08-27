@@ -37,6 +37,7 @@ var candidates = {};
 var nextSong = {}; // default song
 // define namespace on server
 var nsp = io.of('/api/rooms');
+
 nsp.on('connection', function (socket) {
   socket.on('room', function(room) {
     socket.room = room;

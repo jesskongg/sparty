@@ -35,6 +35,7 @@ $(function() {
           }, function(resp) {
                 if (resp.length) {
                   $(".modal-body").empty();
+                  $(".modal-header").text('Room with ' + query);
                   $("#searchModal").modal("show");
                   // var newElement = $('<a></a>');
                   resp.forEach(function(ea) {
@@ -44,7 +45,7 @@ $(function() {
                                 <a class="user-link" id='search_room${ea.id}'>
                                     <div class="user-container">
                                         <div class="user-avatar">
-                                          <img class="rounded-circle img-fluid" src='${ea.avatar}' alt="Song Cover" width="48" height="48">
+                                          <img class="img-fluid" src='${ea.avatar}' alt="Song Cover" width="48" height="48">
                                         </div>
                                         <p class="user-name">
                                           <strong>${ea.name}</strong>
@@ -67,13 +68,12 @@ $(function() {
                           enterRoom(objectId, formId, roomId);
                         }
                       })
-
                     })
                 }
             }
           )
       }
-    }, 200);
+    }, 300);
   });
 
 })
@@ -88,7 +88,7 @@ function enterRoom(objectId, formId, roomId) {
   $(`#${formId}`).append(`
     <form id="enter_key_form" method="GET" action="/api/room/${roomId}">
       <div class="form-group">
-        <input class="form-control" placeholder="room key" name="room_key" require="true" value="" type="text">
+        <input class="form-control" placeholder="room key" name="room_key" require="true" value="" type="password">
       </div>
       <button class="btn btn-light" type="submit">Enter Room</button>
     </form>
