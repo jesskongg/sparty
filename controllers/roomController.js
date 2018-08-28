@@ -42,13 +42,17 @@ exports.room_detail = function(req, res, next) {
 };
 
 exports.room_create_get = function(req, res, next) {
-  res.render('room_form', { title: 'Create Room' });
+  if (isLogin(req.user)) {
+    res.render('room_form', { title: 'Create Room' });
+  } else {
+    res.redirect('/');
+  }
 };
 
 exports.room_create_post = [
   // Validate fields.
   body('room_name').isLength({ min: 1 }).trim().withMessage('Room name must be specified.'),
-  // body('room_key').trim().isAlphanumeric().withMessage('Room key has non-alphanumeric characters.'),
+  body('room_key').trim().isAlphanumeric().withMessage('Room key has non-alphanumeric characters.'),
 
   // Sanitize fields.
   // TODO: this will change all input to html escape symbols: need to fix it
@@ -93,7 +97,7 @@ exports.room_create_post = [
 
 exports.room_update_get = function(req, res, next) {
   models.Room.findById(req.params.id).then(function(room) {
-    if (room) {
+    if (room && isOwner(room, req.user)) {
       res.render('room_form', { title: 'Update Room', room: room });
     } else {
       res.redirect('/');
@@ -147,7 +151,7 @@ exports.room_update_post = [
 
 exports.room_delete_get = function(req, res, next) {
   models.Room.findById(req.params.id).then(function(room) {
-    if (room) {
+    if (room && isOwner(room, req.user)) {
       res.render('room_delete', { title: 'Delete Room', room: room });
     } else {
       res.redirect('/');
@@ -184,6 +188,14 @@ function isOwner(room, user) {
     return room.owner === user.spotify_id;
   }
   return false;
+}
+
+function isLogin(user) {
+  if (user) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 // ref: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
