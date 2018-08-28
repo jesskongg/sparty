@@ -124,15 +124,17 @@ exports.room_update_post = [
           room_type = false;
         }
 
+        var newRoom = {
+          name: req.body.room_name,
+          key: req.body.room_key,
+          public: room_type,
+          description: req.body.room_description,
+        }
+
         // Create a Room object with escaped and trimmed data.
         // TODO: implement upload photo feature for room's avatar
         models.Room.findById(req.params.id).then(function(room) {
-          room.update({
-            name: req.body.room_name,
-            key: req.body.room_key,
-            public: room_type,
-            description: req.body.room_description,
-          }).then(() => {
+          room.update(newRoom).then(() => {
             console.log('successfully updated');
             res.redirect(room.getUrl());
           }).catch(function(err) {

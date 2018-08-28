@@ -22,7 +22,10 @@ block content
 
           .form-group
             .form-check
-              input#room_type.form-check-input(type='checkbox' name='room_type' value='true')
+              if room && !room.public
+                input#room_type.form-check-input(type='checkbox' checked name='room_type' value='true')
+              else
+                input#room_type.form-check-input(type='checkbox' name='room_type' value='true')
               label.form-check-label(for='room_type') Private
           button.btn.btn-light(type='submit') #{title}
     .col-md-6

@@ -39,15 +39,16 @@ $(function() {
                           <div class="col flex-fill m-auto user-item">
                             <a class="user-link" id='${ea.id}song'>
                               <div class="user-container" id='${ea.id}search_song'>
-                                  <div class="user-avatar">
-                                    <img class="rounded-circle img-fluid" src='${ea.image}' alt="Song Cover" width="48" height="48">
-                                  </div>
-                                  <p class="user-name">
-                                    <strong>${ea.song}</strong>
-                                    <span>${ea.artist}</span>
-                                    <span>${ea.album}</span>
-                                  </p>
+                                <div class="user-avatar">
+                                  <img class="rounded-circle img-fluid" src='${ea.image}' alt="Song Cover" width="48" height="48">
+                                </div>
+                                <p class="user-name">
+                                  <strong>${ea.song}</strong>
+                                  <span>${ea.artist}</span>
+                                  <span>${ea.album}</span>
+                                </p>
                               </div>
+                            </a>
                           </div>
                       </div>
                   </div>
@@ -149,6 +150,7 @@ $(function() {
                             <span>${track.album}</span>
                           </p>
                       </div>
+                    </a>
                   </div>
               </div>
           </div>
