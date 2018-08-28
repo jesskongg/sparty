@@ -40,7 +40,7 @@ $(function() {
                             <a class="user-link" id='${ea.id}song'>
                               <div class="user-container" id='${ea.id}search_song'>
                                 <div class="user-avatar">
-                                  <img class="rounded-circle img-fluid" src='${ea.image}' alt="Song Cover" width="48" height="48">
+                                  <img class="rounded-circle img-fluid" src='${ea.image}' alt="Cover" width="48" height="48">
                                 </div>
                                 <p class="user-name">
                                   <strong>${ea.song}</strong>
@@ -104,7 +104,7 @@ $(function() {
               <a class="user-link" id='${ea.id}candidate'>
                 <div class="user-container" id='${ea.id}candidate-song'>
                     <div class="user-avatar">
-                      <img class="rounded-circle img-fluid" src='${ea.image}' alt="Song Cover" width="48" height="48">
+                      <img class="rounded-circle img-fluid" src='${ea.image}' alt="Cover" width="48" height="48">
                     </div>
                     <p class="user-name">
                       <strong>${ea.song}</strong>
@@ -126,11 +126,6 @@ $(function() {
     }
   });
 
-  $("#start").click(function() {
-      $("#start").hide();
-      socket.emit('get next song', roomId);
-  });
-
   socket.on('update current song', function(track) {
     if (track.uri) {
       $("#currentSong").empty();
@@ -142,7 +137,7 @@ $(function() {
                     <a class="user-link">
                       <div class="user-container">
                           <div class="user-avatar">
-                            <img class="rounded-circle img-fluid" src='${track.image}' alt="Song Cover" width="48" height="48">
+                            <img class="rounded-circle img-fluid" src='${track.image}' alt="Cover" width="48" height="48">
                           </div>
                           <p class="user-name">
                             <strong>${track.song}</strong>

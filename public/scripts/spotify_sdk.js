@@ -78,6 +78,11 @@ window.onSpotifyWebPlaybackSDKReady = () => {
     socket.emit('get next song', roomId);
   });
 
+  $("#start").click(function() {
+      $("#start").hide();
+      isPartyOn = true;
+      socket.emit('get next song', roomId);
+  });
 
   socket.on('get top song', function(track) {
     if (track.uri) {
