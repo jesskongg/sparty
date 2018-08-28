@@ -21,8 +21,8 @@ module.exports = function(passport) {
   passport.use(
     new SpotifyStrategy(
       {
-        clientID: '64e65c3badf846158593504b9b5ce162',
-        clientSecret: 'e3426eb15a3b434ba3dd5176a152e62d',
+        clientID: process.env.CLIENT_ID,
+        clientSecret: process.env.CLIENT_SECRET,
         callbackURL: 'http://localhost:3000/callback'
       },
       function(accessToken, refreshToken, expires_in, profile, done) {

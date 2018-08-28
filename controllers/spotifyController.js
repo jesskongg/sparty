@@ -6,8 +6,8 @@ var SpotifyWebApi = require('spotify-web-api-node');
 var passport = require('passport');
 
 var credentials = {
-  clientId: '64e65c3badf846158593504b9b5ce162',
-  clientSecret: 'e3426eb15a3b434ba3dd5176a152e62d',
+  clientId: process.env.CLIENT_ID,
+  clientSecret: process.env.CLIENT_SECRET,
   redirectUri: 'http://localhost:3000/playback'
 };
 
