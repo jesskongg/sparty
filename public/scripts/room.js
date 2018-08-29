@@ -1,9 +1,7 @@
 // match the namespace defined on server
 var socket = io.connect('http://localhost:3000/api/rooms');
 
-socket.on('connect', function(data) {
-  socket.emit('room', roomId);
-});
+
 // function to delay ms before execute
 // ref: https://stackoverflow.com/questions/1909441/how-to-delay-the-keyup-handler-until-the-user-stops-typing
 var delay = (function(){
@@ -16,6 +14,11 @@ var delay = (function(){
 
 // Shorthand for $( document ).ready()
 $(function() {
+
+  socket.on('connect', function(data) {
+    socket.emit('room', roomId);
+  });
+  
   $("#song_search").keyup(function() {
     delay(function() {
       var query = $("#song_search").val().trim();
@@ -40,7 +43,7 @@ $(function() {
                             <a class="user-link" id='${ea.id}song'>
                               <div class="user-container" id='${ea.id}search_song'>
                                 <div class="user-avatar">
-                                  <img class="rounded-circle img-fluid" src='${ea.image}' alt="Song Cover" width="48" height="48">
+                                  <img class="rounded-circle img-fluid" src='${ea.image}' alt="Cover" width="48" height="48">
                                 </div>
                                 <p class="user-name">
                                   <strong>${ea.song}</strong>
@@ -104,7 +107,7 @@ $(function() {
               <a class="user-link" id='${ea.id}candidate'>
                 <div class="user-container" id='${ea.id}candidate-song'>
                     <div class="user-avatar">
-                      <img class="rounded-circle img-fluid" src='${ea.image}' alt="Song Cover" width="48" height="48">
+                      <img class="rounded-circle img-fluid" src='${ea.image}' alt="Cover" width="48" height="48">
                     </div>
                     <p class="user-name">
                       <strong>${ea.song}</strong>
@@ -126,11 +129,6 @@ $(function() {
     }
   });
 
-  $("#start").click(function() {
-      $("#start").hide();
-      socket.emit('get next song', roomId);
-  });
-
   socket.on('update current song', function(track) {
     if (track.uri) {
       $("#currentSong").empty();
@@ -142,7 +140,7 @@ $(function() {
                     <a class="user-link">
                       <div class="user-container">
                           <div class="user-avatar">
-                            <img class="rounded-circle img-fluid" src='${track.image}' alt="Song Cover" width="48" height="48">
+                            <img class="rounded-circle img-fluid" src='${track.image}' alt="Cover" width="48" height="48">
                           </div>
                           <p class="user-name">
                             <strong>${track.song}</strong>

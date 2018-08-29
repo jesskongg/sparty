@@ -11,7 +11,7 @@ block content
         #playerController.col-lg-7.col-md-7.col-sm-12.text-center
           .btn-group(role='group')
             button#start.btn.btn-primary.pull-right(type='button') Lets start the party
-          .btn-group.mx-auto(role='group')
+          #controller.btn-group.mx-auto(role='group', style='display:none')
             button#resume.btn.btn-primary.pull-right(type='button')
               i.fa.fa-play
             button#pause.btn.btn-primary.pull-right(type='button')
@@ -33,6 +33,4 @@ block content
   if (isOwner)
     script(src='https://sdk.scdn.co/spotify-player.js')
     script(src='/scripts/spotify_sdk.js')
-    script.
-      var access_token = !{JSON.stringify(token)}
   

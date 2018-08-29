@@ -51,7 +51,7 @@ nsp.on('connection', function (socket) {
   })
 
   socket.on('disconnect', function() {
-    nsp.clients((error, clients) => {
+    nsp.in(socket.room).clients((error, clients) => {
       if (error) throw error;
       nsp.to(socket.room).emit('people_left', clients.length);
     })

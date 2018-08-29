@@ -24,31 +24,29 @@ exports.room_detail = function(req, res, next) {
   models.Room.findById(req.params.id).then(room => {
     if (room) {
       res.locals.isOwner = isOwner(room, req.user);
-      if (room.public || (!room.public && req.query.room_key === room.key)) {
-        if (isOwner(room, req.user) === true) {
-          // TODO: should not send the access key to client
-          res.render('room_detail', { room: room, token: req.user.access_token })
-        } else {
-          res.render('room_detail', { room: room });
-        }
+      if (room.public || req.query.room_key === room.key) {
+        res.render('room_detail', { room: room })
       } else {
         res.redirect('/');
       }
     } else {
-      // everything wrong will lead to homepage
       res.redirect('/');
     }
   })
 };
 
 exports.room_create_get = function(req, res, next) {
-  res.render('room_form', { title: 'Create Room' });
+  if (isLogin(req.user)) {
+    res.render('room_form', { title: 'Create Room' });
+  } else {
+    res.redirect('/');
+  }
 };
 
 exports.room_create_post = [
   // Validate fields.
   body('room_name').isLength({ min: 1 }).trim().withMessage('Room name must be specified.'),
-  // body('room_key').trim().isAlphanumeric().withMessage('Room key has non-alphanumeric characters.'),
+  body('room_key').trim().isAlphanumeric().withMessage('Room key has non-alphanumeric characters.'),
 
   // Sanitize fields.
   // TODO: this will change all input to html escape symbols: need to fix it
@@ -93,7 +91,7 @@ exports.room_create_post = [
 
 exports.room_update_get = function(req, res, next) {
   models.Room.findById(req.params.id).then(function(room) {
-    if (room) {
+    if (room && isOwner(room, req.user)) {
       res.render('room_form', { title: 'Update Room', room: room });
     } else {
       res.redirect('/');
@@ -147,7 +145,7 @@ exports.room_update_post = [
 
 exports.room_delete_get = function(req, res, next) {
   models.Room.findById(req.params.id).then(function(room) {
-    if (room) {
+    if (room && isOwner(room, req.user)) {
       res.render('room_delete', { title: 'Delete Room', room: room });
     } else {
       res.redirect('/');
@@ -184,6 +182,14 @@ function isOwner(room, user) {
     return room.owner === user.spotify_id;
   }
   return false;
+}
+
+function isLogin(user) {
+  if (user) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 // ref: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
