@@ -75,6 +75,14 @@ $(function() {
     }
   })
 
+  $('#song_search').on('focus', function(){
+    // replace CSS font-size with 16px to disable auto zoom on iOS
+    $(this).data('fontSize', $(this).css('font-size')).css('font-size', '16px');
+  }).on('blur', function(){
+    // put back the CSS font-size
+    $(this).css('font-size', $(this).data('fontSize'));
+  });
+
   // update number of people in the room
   socket.on('people_join', function(data) {
     $("#num_peope").text(data);

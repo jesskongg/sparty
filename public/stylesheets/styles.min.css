@@ -3,6 +3,7 @@
 /* ref: https://css-tricks.com/couple-takes-sticky-footer/ */
 html {
   height:100%;
+  cursor: pointer;
 }
 
 body {
