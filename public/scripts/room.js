@@ -1,9 +1,7 @@
 // match the namespace defined on server
 var socket = io.connect('http://localhost:3000/api/rooms');
 
-socket.on('connect', function(data) {
-  socket.emit('room', roomId);
-});
+
 // function to delay ms before execute
 // ref: https://stackoverflow.com/questions/1909441/how-to-delay-the-keyup-handler-until-the-user-stops-typing
 var delay = (function(){
@@ -16,6 +14,11 @@ var delay = (function(){
 
 // Shorthand for $( document ).ready()
 $(function() {
+
+  socket.on('connect', function(data) {
+    socket.emit('room', roomId);
+  });
+  
   $("#song_search").keyup(function() {
     delay(function() {
       var query = $("#song_search").val().trim();
@@ -74,14 +77,6 @@ $(function() {
       socket.emit('update_candidate_list', 'data');
     }
   })
-
-  $('#song_search').on('focus', function(){
-    // replace CSS font-size with 16px to disable auto zoom on iOS
-    $(this).data('fontSize', $(this).css('font-size')).css('font-size', '16px');
-  }).on('blur', function(){
-    // put back the CSS font-size
-    $(this).css('font-size', $(this).data('fontSize'));
-  });
 
   // update number of people in the room
   socket.on('people_join', function(data) {

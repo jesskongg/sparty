@@ -50,10 +50,8 @@ nsp.on('connection', function (socket) {
     nsp.to(socket.room).emit('update current song', nextSong);
   })
 
-  // DEBUG: clients.length not change on disconnect
   socket.on('disconnect', function() {
-    nsp.clients((error, clients) => {
-      console.log(clients.length);
+    nsp.in(socket.room).clients((error, clients) => {
       if (error) throw error;
       nsp.to(socket.room).emit('people_left', clients.length);
     })
