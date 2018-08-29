@@ -2,12 +2,19 @@
 var Spotify = require('node-spotify-api');
 var passport = require('passport');
 var http = require('http');
+var SpotifyWebApi = require('spotify-web-api-node');
+
 
 //Import our Keys File
 var keys = require('../routes/key');
 
 //Create a Spotify Client
 var spotify = new Spotify(keys.spotifyKeys);
+var spotifyApi = new SpotifyWebApi({
+  clientId: process.env.CLIENT_ID,
+  clientSecret: process.env.CLIENT_SECRET,
+  // redirectUri: 'http://localhost:3000/callback'
+});
 
 exports.spotify_search = function(req, res, next) {
   //Set the type of query: track
@@ -50,10 +57,31 @@ exports.spotify_login = passport.authenticate('spotify', {
     showDialog: true
 });
 
-exports.spotify_callback = passport.authenticate('spotify', {
-  successRedirect: '/',
-  failureRedirect: '/login',
-});
+exports.spotify_callback = function(req, res, next) {
+  passport.authenticate('spotify', function(err, user, info) {
+    if (err) { return next(err); }
+    if (!user) { return res.redirect('/'); }
+    req.logIn(user, function(err) {
+      if (err) { return next(err); }
+      spotifyApi.setAccessToken(user.access_token);
+      spotifyApi.setRefreshToken(user.refresh_token);
+      return res.redirect('/');
+    })
+  }) (req, res, next);
+};
+
+exports.spotify_get_access_token = function(req, res, next) {
+  spotifyApi.refreshAccessToken()
+  .then(function(data) {
+        console.log('The access token has been refreshed!');
+        // Save the access token so that it's used in future calls
+        spotifyApi.setAccessToken(data.body['access_token']);
+        res.send(data.body['access_token']);
+      }, function(err) {
+        console.log('Could not refresh access token', err);
+    }
+  )
+};
 
 exports.spotify_logout = function(req, res) {
   req.logout();

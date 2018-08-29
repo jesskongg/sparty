@@ -11,6 +11,8 @@ router.get('/auth/login', spotify_controller.spotify_login);
 
 router.get('/auth/logout', spotify_controller.spotify_logout);
 
+router.get('/auth/access_token', spotify_controller.spotify_get_access_token);
+
 router.get('/room/create', room_controller.room_create_get);
 
 router.post('/room/create', room_controller.room_create_post);
