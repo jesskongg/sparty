@@ -24,18 +24,12 @@ exports.room_detail = function(req, res, next) {
   models.Room.findById(req.params.id).then(room => {
     if (room) {
       res.locals.isOwner = isOwner(room, req.user);
-      if (room.public || (!room.public && req.query.room_key === room.key)) {
-        if (isOwner(room, req.user) === true) {
-          // TODO: should not send the access key to client
-          res.render('room_detail', { room: room, token: req.user.access_token })
-        } else {
-          res.render('room_detail', { room: room });
-        }
+      if (room.public || req.query.room_key === room.key) {
+        res.render('room_detail', { room: room })
       } else {
         res.redirect('/');
       }
     } else {
-      // everything wrong will lead to homepage
       res.redirect('/');
     }
   })

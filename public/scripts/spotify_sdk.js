@@ -2,11 +2,14 @@ var socket = io.connect('http://localhost:3000/api/rooms');
 
 window.onSpotifyWebPlaybackSDKReady = () => {
   var isPartyOn = false;
+  var access_token;
   const player = new Spotify.Player({
     name: 'Welcome to Party Room ' + roomId,
     getOAuthToken: callback => {
       // Run code to get a fresh access token
-      $.get('/api/auth/access_token', function(token) {
+      $.get('/api/auth/access_token')
+      .then(token => {
+        access_token = token;
         callback(token);
       })
     }
@@ -82,6 +85,7 @@ window.onSpotifyWebPlaybackSDKReady = () => {
 
   $("#start").click(function() {
       $("#start").hide();
+      $("#controller").show();
       isPartyOn = true;
       socket.emit('get next song', roomId);
   });
