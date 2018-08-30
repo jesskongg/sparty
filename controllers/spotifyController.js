@@ -5,7 +5,7 @@ var passport = require('passport');
 var credentials = {
   clientId: process.env.CLIENT_ID,
   clientSecret: process.env.CLIENT_SECRET,
-  redirectUri: 'http://localhost:3000/playback'
+  redirectUri: 'https://chardonnay.herokuapp.com/callback'
 };
 
 var http = require('http');
