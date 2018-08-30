@@ -23,11 +23,13 @@ window.onSpotifyWebPlaybackSDKReady = () => {
 
   // Playback status updates
   player.addListener('player_state_changed', state => {
-    if (state['paused'] === true && state['position'] === 0
+    if (state) {
+      if (state['paused'] === true && state['position'] === 0
       && state['restrictions']['disallow_pausing_reasons']
       && state['restrictions']['disallow_pausing_reasons'][0] === 'already_paused') {
-      if (isPartyOn) {
-        socket.emit('get next song', roomId);
+        if (isPartyOn) {
+          socket.emit('get next song', roomId);
+        }
       }
     }
   });

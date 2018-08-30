@@ -107,8 +107,11 @@ footer {
     object-fit: cover;
 }
 
-#searchResult {
+#searchResult, #topCandidates {
   margin-top: -25px;
+  border-radius:5px;
+  border:1px solid #928FEB;
+  box-shadow:0 2px 3px #928FEB;
 }
 
 /* #searchSong {
