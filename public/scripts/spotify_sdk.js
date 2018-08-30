@@ -23,7 +23,6 @@ window.onSpotifyWebPlaybackSDKReady = () => {
 
   // Playback status updates
   player.addListener('player_state_changed', state => {
-    console.log(state);
     if (state['paused'] === true && state['position'] === 0
       && state['restrictions']['disallow_pausing_reasons']
       && state['restrictions']['disallow_pausing_reasons'][0] === 'already_paused') {
@@ -52,7 +51,7 @@ window.onSpotifyWebPlaybackSDKReady = () => {
     }).done(function(data) {
         console.log('Transfer the device');
     }).fail(function(err) {
-        console.log('cannot transfer');
+        console.log('cannot transfer to your device');
     })
   });
 

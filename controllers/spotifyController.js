@@ -31,7 +31,7 @@ exports.spotify_search = function(req, res, next) {
           var album_cover = (ea.album.images.length) ? ea.album.images[0].url : '';
           results.push({
                         artist: ea.artists[0].name,
-                        song: ea.name,
+                        name: ea.name,
                         id: ea.id,
                         album: ea.album.name,
                         image: album_cover,

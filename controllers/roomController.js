@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
 // const sequelize = new Sequelize();
+const Op = Sequelize.Op;
 
 const { body,validationResult } = require('express-validator/check');
 const { sanitizeBody } = require('express-validator/filter');
@@ -177,6 +178,7 @@ exports.room_search = function(req, res, next) {
   });
 };
 
+// add song to Room: when a top song is picked
 exports.room_add_song = function(song, roomId) {
   var songData = {
     id: song.id,
@@ -202,6 +204,29 @@ exports.room_add_song = function(song, roomId) {
     })
   })
 }
+
+exports.room_candidate_suggestion_get = function(req, res, next) {
+    models.RoomSong.findAll({
+      attributes: ['songId', [Sequelize.fn('sum', Sequelize.col('vote')), 'total_vote']
+      ],
+      group: ['songId'],
+      order: [[Sequelize.fn('sum', Sequelize.col('vote')), 'DESC']],
+      limit: 10, // top ten songs with highest #vote_count
+      raw: true,
+  }).then((candidates) => {
+      var songIdArray = candidates.map(function(el) { return el.songId; })
+      models.Song.findAll({
+          where: {
+              id: {
+                  [Op.or]: songIdArray
+              }
+          }
+      }).then((songs) => {
+          res.json(songs);
+      })
+  })
+}
+
 
 function isOwner(room, user) {
   if (user) {
