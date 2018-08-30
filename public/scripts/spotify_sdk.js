@@ -2,10 +2,17 @@ var socket = io.connect('https://chardonnay.herokuapp.com/api/rooms');
 
 window.onSpotifyWebPlaybackSDKReady = () => {
   var isPartyOn = false;
-  var token = access_token;
+  var access_token;
   const player = new Spotify.Player({
     name: 'Welcome to Party Room ' + roomId,
-    getOAuthToken: cb => { cb(token); }
+    getOAuthToken: callback => {
+      // Run code to get a fresh access token
+      $.get('/api/auth/access_token')
+      .then(token => {
+        access_token = token;
+        callback(token);
+      })
+    }
   });
 
   // Error handling
@@ -16,14 +23,13 @@ window.onSpotifyWebPlaybackSDKReady = () => {
 
   // Playback status updates
   player.addListener('player_state_changed', state => {
-    console.log(state);
-    if (state['paused'] === true && state['position'] === 0
+    if (state) {
+      if (state['paused'] === true && state['position'] === 0
       && state['restrictions']['disallow_pausing_reasons']
       && state['restrictions']['disallow_pausing_reasons'][0] === 'already_paused') {
-      if (isPartyOn) {
-        socket.emit('get next song', roomId);
-      } else {
-        isPartyOn = true;
+        if (isPartyOn) {
+          socket.emit('get next song', roomId);
+        }
       }
     }
   });
@@ -47,7 +53,7 @@ window.onSpotifyWebPlaybackSDKReady = () => {
     }).done(function(data) {
         console.log('Transfer the device');
     }).fail(function(err) {
-        console.log('cannot transfer');
+        console.log('cannot transfer to your device');
     })
   });
 
@@ -84,6 +90,12 @@ window.onSpotifyWebPlaybackSDKReady = () => {
     socket.emit('get next song', roomId);
   });
 
+  $("#start").click(function() {
+      $("#start").hide();
+      $("#controller").show();
+      isPartyOn = true;
+      socket.emit('get next song', roomId);
+  });
 
   socket.on('get top song', function(track) {
     if (track.uri) {
