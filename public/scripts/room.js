@@ -25,13 +25,25 @@ $(function() {
     delay(function() {
       var query = $("#song_search").val().trim();
       // ajax function to search song from spotify
-      if (query != '') {
+      if (query === '') {
+        $("#searchResult").hide();
+      } else {
         $("#candidates").hide();
         $.getJSON(
           "/api/search", {
             query: query,
           }, function(resp) {
-            getSong('searchResult', resp);
+            $("#searchResult").empty();
+            $("#searchResult").show();
+            resp.forEach(function(ea) {
+              createSongDiv('#searchResult', ea, 'song', 'search_song', 'none');
+              $(`#${ea.id}song`).click(function(event) {
+                event.stopImmediatePropagation();
+                $(`#${ea.id}search_song`).css('background-color', 'rgba(0,0,0,0.1)');
+                ea.vote = 1;
+                socket.emit('add_candidate', ea);
+              })
+            })
           }
         )
       }
@@ -41,14 +53,22 @@ $(function() {
   $("#getCandidates").click(function() {
     url = '/api/room/' + roomId + '/getCandidates'
     $.getJSON(url, function(topCandidates) {
-      getSong('topCandidates', topCandidates);
+      $(".modal-body").empty();
+      topCandidates.forEach(function(ea) {
+        createSongDiv('.modal-body', ea, 'suggestion', 'suggestion_song', 'none');
+        $(`#${ea.id}suggestion`).click(function(event) {
+          event.stopImmediatePropagation(); // to prevent closing modal
+          $(`#${ea.id}suggestion_song`).css('background-color', 'rgba(0,0,0,0.1)');
+          ea.vote = 1;
+          socket.emit('add_candidate', ea);
+        })
+      })
     })
   })
 
   $(document).click(function () {
-    if ($("#searchResult").contents().length || $("#topCandidates").contents().length) {
+    if ($("#searchResult").contents().length) {
       $("#searchResult").hide();
-      $("#topCandidates").hide();
       $("#song_search").val('');
       socket.emit('update_candidate_list', 'data');
     }
@@ -73,31 +93,10 @@ $(function() {
       })
       nextSong = candidates[0];
     }
-
     $('#candidates').empty();
     for (var key in candidates) {
       let ea = candidates[key];
-      $("#candidates").append(`
-        <div class="row no-gutters mx-auto user-list">
-            <div class="col flex-fill m-auto user-item">
-              <a class="user-link" id='${ea.id}candidate'>
-                <div class="user-container" id='${ea.id}candidate-song'>
-                    <div class="user-avatar">
-                      <img class="rounded-circle img-fluid" src='${ea.image}' alt="Cover" width="48" height="48">
-                    </div>
-                    <p class="user-name">
-                      <strong>${ea.name}</strong>
-                      <span>${ea.artist}</span>
-                      <span>${ea.album}</span>
-                    </p>
-                    <p class="bg-primary user-delete">
-                      <span>${ea.vote}</span>
-                    </p>
-                </div>
-              </a>
-            </div>
-        </div>
-      `)
+      createSongDiv('#candidates', ea, 'candidate', 'candidate-song', '');
       $(`#${ea.id}candidate`).click(function() {
         socket.emit('add_vote', ea);
       });
@@ -108,66 +107,43 @@ $(function() {
   socket.on('update current song', function(track) {
     if (track.uri) {
       $("#currentSong").empty();
-      $("#currentSong").append(`
-          <div id="song">
-              <div class="row no-gutters mx-auto user-list">
-                  <div class="col flex-fill m-auto user-item">
-                    <p> You're listening </p>
-                    <a class="user-link">
-                      <div class="user-container">
-                          <div class="user-avatar">
-                            <img class="rounded-circle img-fluid" src='${track.image}' alt="Cover" width="48" height="48">
-                          </div>
-                          <p class="user-name">
-                            <strong>${track.name}</strong>
-                            <span>${track.artist}</span>
-                            <span>${track.album}</span>
-                          </p>
-                      </div>
-                    </a>
-                  </div>
-              </div>
-          </div>
-        `)
+      $("#currentSong").append('<p>You are listening</p>');
+      createSongDiv('#currentSong', track, '', '', 'none');
       }
   });
 
 });
 
-function getSong(elementId, data) {
-  let element = '#' + elementId;
-  $(element).empty();
-  // $("#close").show();
-  $(element).show();
-  // var newElement = $('<a></a>');
-  data.forEach(function(ea) {
-    // var newElement = $('<li></li>').addClass("list-group-item");
-    $(element).append(`
-        <div id="song">
-            <div class="row no-gutters mx-auto user-list">
-                <div class="col flex-fill m-auto user-item">
-                  <a class="user-link" id='${ea.id}song'>
-                    <div class="user-container" id='${ea.id}search_song'>
-                      <div class="user-avatar">
-                        <img class="rounded-circle img-fluid" src='${ea.image}' alt="Cover" width="48" height="48">
-                      </div>
-                      <p class="user-name">
-                        <strong>${ea.name}</strong>
-                        <span>${ea.artist}</span>
-                        <span>${ea.album}</span>
-                      </p>
-                    </div>
-                  </a>
+
+/* convenient to create a song element
+  element: jquery element to append song elements
+  ea: song data
+  id1: <a id=id1> for selection
+  id2: <div id=id2> for css when id1 is on click
+  style: 'none' or '' for showing #vote el
+*/
+function createSongDiv(element, ea, id1, id2, style) {
+  $(element).append(`
+    <div id="song">
+        <div class="row no-gutters mx-auto user-list">
+            <div class="col flex-fill m-auto user-item">
+              <a class="user-link" id='${ea.id}${id1}'>
+                <div class="user-container" id='${ea.id}${id2}'>
+                  <div class="user-avatar">
+                    <img class="rounded-circle img-fluid" src='${ea.image}' alt="Cover" width="48" height="48">
+                  </div>
+                  <p class="user-name">
+                    <strong>${ea.name}</strong>
+                    <span>${ea.artist}</span>
+                    <span>${ea.album}</span>
+                  </p>
+                  <p class="bg-primary user-delete" style="display: ${style}">
+                    <span>${ea.vote}</span>
+                  </p>
                 </div>
+              </a>
             </div>
         </div>
-      `)
-      // $("#searchResults").append(newElement);
-    $(`#${ea.id}song`).click(function(event) {
-      event.stopImmediatePropagation();
-      $(`#${ea.id}search_song`).css('background-color', 'rgba(0,0,0,0.1)');
-      ea.vote = 1;
-      socket.emit('add_candidate', ea);
-    })
-  })
+    </div>
+  `)
 }

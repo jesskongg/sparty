@@ -10,10 +10,21 @@ block content
       if (isOwner)
         #playerController.col-lg-7.col-md-7.col-sm-12.text-center
           .btn-group(role='group')
-            button#getCandidates.btn.btn-primary.pull-right(type='button') Get top 10 songs
+            button#getCandidates.btn.btn-primary(type='button' data-toggle='modal' data-target='#topCandidates') Get top 10 songs
           <span> </span>
           .btn-group(role='group')
             button#start.btn.btn-primary.pull-right(type='button') Start the party
+          
+          #topCandidates.modal.fade(tabindex='-1' role='dialog' aria-labelledby='topCandidatesTitle' aria-hidden='true')
+            .modal-dialog.modal-dialog-centered(role='document')
+              .modal-content
+                .modal-header
+                  h5#topCandidatesTitle.modal-title Top songs
+                  button.close(type='button' data-dismiss='modal' aria-label='Close')
+                    span(aria-hidden='true') &times;
+                .modal-body
+                .modal-footer
+                  button.btn.btn-secondary(type='button' data-dismiss='modal') Close
 
           #controller.btn-group.mx-auto(role='group', style='display:none')
             button#resume.btn.btn-primary.pull-right(type='button')
@@ -26,9 +37,8 @@ block content
       #searchSong.col-lg-7.col-md-7.col-sm-12
         .search-container
           input#song_search.search-input(type='text' name='song_search' placeholder='Search song')
-        #searchResult(style='display:none;')
+        #searchResult.col-12(style='display:none;')
 
-      #topCandidates.col-lg-7.col-md-7.col-sm-12
 
       #candidates.col-lg-7.col-md-7.col-sm-12
   
