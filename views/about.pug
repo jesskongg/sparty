@@ -1,0 +1,104 @@
+extend layout
+
+block content
+  main.page.cv-page
+  section.portfolio-block.block-intro.border-bottom
+    .container
+      .avatar(style='background-image:url("/images/author.jpg");')
+      .about-me
+        p
+          | Hello! I am 
+          strong Tu Dat Nguyen
+          | . I am a computer science student at Simon Fraser University. My free time is for web apps.
+        a.btn.btn-outline-primary(role='button' href='/api/contact') Contact me
+  section.portfolio-block.cv
+    .container
+      .work-experience.group
+        .heading
+          h2.text-center Work Experience
+        .item
+          .row
+            .col-md-6
+              h3 Coop QA Analyst
+              h4.organization PNI Digital Media
+            .col-md-6
+              span.period 9/2018 - current
+      .education.group
+        .heading
+          h2.text-center Education
+        .item
+          .row
+            .col-md-6
+              h3 Computer Science
+              h4.organization Simon Fraser University
+            .col-6
+              span.period 09/2016 - 09/2019
+        .heading
+          h2.text-center AwarDs
+        .item
+          .row
+            .col-md-6
+              h3 SFU Alumni Scholarship
+              h4.organization Simon Fraser University
+            .col-6
+              span.period Fall 2017, Spring - Fall 2018
+        .item
+          .row
+            .col-md-6
+              h3 Dean&apos;s Honour Roll
+              h4.organization Simon Fraser University
+            .col-6
+              span.period Fall 2017, Spring 2018
+        .group
+          .row
+            .col-md-6
+              .skills.portfolio-info-card
+                h2 Skills
+                h3 C/ C++
+                .progress
+                  .progress-bar(aria-valuenow='90' aria-valuemin='0' aria-valuemax='100' style='width: 90%;')
+                    span.sr-only 90%
+                h3 JavaScript
+                .progress
+                  .progress-bar(aria-valuenow='90' aria-valuemin='0' aria-valuemax='100' style='width: 90%;')
+                    span.sr-only 90%
+                h3 Python
+                .progress
+                  .progress-bar(aria-valuenow='80' aria-valuemin='0' aria-valuemax='100' style='width: 80%;')
+                    span.sr-only 80%
+                h3 Express JS
+                .progress
+                  .progress-bar(aria-valuenow='80' aria-valuemin='0' aria-valuemax='100' style='width: 80%;')
+                    span.sr-only 80%
+                h3 Django
+                .progress
+                  .progress-bar(aria-valuenow='30' aria-valuemin='0' aria-valuemax='100' style='width: 30%;')
+                    span.sr-only 50%
+                h3 ASP.NET Core
+                .progress
+                  .progress-bar(aria-valuenow='30' aria-valuemin='0' aria-valuemax='100' style='width: 30%;')
+                    span.sr-only 30%
+            .col-md-6
+              .contact-info.portfolio-info-card
+                h2 Contact Info
+                .row
+                  .col-1
+                    i.icon.ion-person.icon
+                  .col-9
+                    span Tu Dat Nguyen
+                .row
+                  .col-1
+                    i.icon.ion-ios-telephone.icon
+                  .col-9
+                    span +204 998 3840
+                .row
+                  .col-1
+                    i.icon.ion-at.icon
+                  .col-9
+                    span nguyentudat@gmail.com
+      .hobbies.group
+        .heading
+          h2.text-center Hobbies
+        p.text-center.text-muted Write blog about SFU CMPT courses. Play soccer. Take photos.
+
+  

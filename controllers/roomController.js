@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
 // const sequelize = new Sequelize();
+const Op = Sequelize.Op;
 
 const { body,validationResult } = require('express-validator/check');
 const { sanitizeBody } = require('express-validator/filter');
@@ -24,31 +25,29 @@ exports.room_detail = function(req, res, next) {
   models.Room.findById(req.params.id).then(room => {
     if (room) {
       res.locals.isOwner = isOwner(room, req.user);
-      if (room.public || (!room.public && req.query.room_key === room.key)) {
-        if (isOwner(room, req.user) === true) {
-          // TODO: should not send the access key to client
-          res.render('room_detail', { room: room, token: req.user.access_token })
-        } else {
-          res.render('room_detail', { room: room });
-        }
+      if (room.public || req.query.room_key === room.key) {
+        res.render('room_detail', { room: room })
       } else {
         res.redirect('/');
       }
     } else {
-      // everything wrong will lead to homepage
       res.redirect('/');
     }
   })
 };
 
 exports.room_create_get = function(req, res, next) {
-  res.render('room_form', { title: 'Create Room' });
+  if (isLogin(req.user)) {
+    res.render('room_form', { title: 'Create Room' });
+  } else {
+    res.redirect('/');
+  }
 };
 
 exports.room_create_post = [
   // Validate fields.
   body('room_name').isLength({ min: 1 }).trim().withMessage('Room name must be specified.'),
-  // body('room_key').trim().isAlphanumeric().withMessage('Room key has non-alphanumeric characters.'),
+  body('room_key').trim().isAlphanumeric().withMessage('Room key has non-alphanumeric characters.'),
 
   // Sanitize fields.
   // TODO: this will change all input to html escape symbols: need to fix it
@@ -93,7 +92,7 @@ exports.room_create_post = [
 
 exports.room_update_get = function(req, res, next) {
   models.Room.findById(req.params.id).then(function(room) {
-    if (room) {
+    if (room && isOwner(room, req.user)) {
       res.render('room_form', { title: 'Update Room', room: room });
     } else {
       res.redirect('/');
@@ -124,15 +123,17 @@ exports.room_update_post = [
           room_type = false;
         }
 
+        var newRoom = {
+          name: req.body.room_name,
+          key: req.body.room_key,
+          public: room_type,
+          description: req.body.room_description,
+        }
+
         // Create a Room object with escaped and trimmed data.
         // TODO: implement upload photo feature for room's avatar
         models.Room.findById(req.params.id).then(function(room) {
-          room.update({
-            name: req.body.room_name,
-            key: req.body.room_key,
-            public: room_type,
-            description: req.body.room_description,
-          }).then(() => {
+          room.update(newRoom).then(() => {
             console.log('successfully updated');
             res.redirect(room.getUrl());
           }).catch(function(err) {
@@ -145,7 +146,7 @@ exports.room_update_post = [
 
 exports.room_delete_get = function(req, res, next) {
   models.Room.findById(req.params.id).then(function(room) {
-    if (room) {
+    if (room && isOwner(room, req.user)) {
       res.render('room_delete', { title: 'Delete Room', room: room });
     } else {
       res.redirect('/');
@@ -177,11 +178,69 @@ exports.room_search = function(req, res, next) {
   });
 };
 
+// add song to Room: when a top song is picked
+exports.room_add_song = function(song, roomId) {
+  var songData = {
+    id: song.id,
+    name: song.song,
+    album: song.album,
+    artist: song.artist,
+    image: song.image,
+    uri: song.uri
+  }
+  var noOfVoteForSong = song.vote;
+  models.Song.findOrCreate({
+    where: { id: song.id },
+    defaults: songData
+  }).spread((newSong, created) => {
+    // check if the room already has the song
+    models.RoomSong.findOne({ where: { roomId: roomId, songId: newSong.get({ plain: true}).id } }).then(result => {
+      if (result) {
+        noOfVoteForSong = result.vote + noOfVoteForSong;
+      }
+      models.Room.findById(roomId).then(room => {
+        room.addSong(newSong, { through: { vote: noOfVoteForSong }})
+      })
+    })
+  })
+}
+
+exports.room_candidate_suggestion_get = function(req, res, next) {
+    models.RoomSong.findAll({
+      attributes: ['songId', [Sequelize.fn('sum', Sequelize.col('vote')), 'total_vote']
+      ],
+      group: ['songId'],
+      order: [[Sequelize.fn('sum', Sequelize.col('vote')), 'DESC']],
+      limit: 10, // top ten songs with highest #vote_count
+      raw: true,
+  }).then((candidates) => {
+      var songIdArray = candidates.map(function(el) { return el.songId; })
+      models.Song.findAll({
+          where: {
+              id: {
+                  [Op.or]: songIdArray
+              }
+          }
+      }).then((songs) => {
+          res.json(songs);
+      })
+  })
+}
+
+
 function isOwner(room, user) {
   if (user) {
     return room.owner === user.spotify_id;
   }
   return false;
+}
+
+function isLogin(user) {
+  if (user) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 // ref: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
