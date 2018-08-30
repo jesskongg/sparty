@@ -177,6 +177,32 @@ exports.room_search = function(req, res, next) {
   });
 };
 
+exports.room_add_song = function(song, roomId) {
+  var songData = {
+    id: song.id,
+    name: song.song,
+    album: song.album,
+    artist: song.artist,
+    image: song.image,
+    uri: song.uri
+  }
+  var noOfVoteForSong = song.vote;
+  models.Song.findOrCreate({
+    where: { id: song.id },
+    defaults: songData
+  }).spread((newSong, created) => {
+    // check if the room already has the song
+    models.RoomSong.findOne({ where: { roomId: roomId, songId: newSong.get({ plain: true}).id } }).then(result => {
+      if (result) {
+        noOfVoteForSong = result.vote + noOfVoteForSong;
+      }
+      models.Room.findById(roomId).then(room => {
+        room.addSong(newSong, { through: { vote: noOfVoteForSong }})
+      })
+    })
+  })
+}
+
 function isOwner(room, user) {
   if (user) {
     return room.owner === user.spotify_id;

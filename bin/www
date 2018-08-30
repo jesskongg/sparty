@@ -4,6 +4,8 @@
  * Module dependencies.
  */
 
+var room_controller = require('../controllers/roomController');
+
 var app = require('../app');
 var debug = require('debug')('sparty:server');
 var http = require('http');
@@ -89,10 +91,13 @@ nsp.on('connection', function (socket) {
       })
       // update top song
       nextSong = topTracks[0];
-      // TODO: save the top track to database
+      // save the top song to database
+      room_controller.room_add_song(nextSong, roomId);
+
       candidates[roomId][topTracks[0].id].vote = 0;
       nsp.to(roomId).emit('show_list', candidates[roomId]);
     }
+
     // send top track to Client
     nsp.to(roomId).emit('get top song', nextSong);
   })
