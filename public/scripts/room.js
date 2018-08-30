@@ -12,13 +12,15 @@ var delay = (function(){
   };
 })();
 
+// TODO: refactor search function
+
 // Shorthand for $( document ).ready()
 $(function() {
 
   socket.on('connect', function(data) {
     socket.emit('room', roomId);
   });
-  
+
   $("#song_search").keyup(function() {
     delay(function() {
       var query = $("#song_search").val().trim();
@@ -29,50 +31,24 @@ $(function() {
           "/api/search", {
             query: query,
           }, function(resp) {
-            // $(".modal-title").text("Search for " + $("#song_search").val());
-            $("#searchResult").empty();
-            // $("#close").show();
-            $("#searchResult").show();
-            // var newElement = $('<a></a>');
-            resp.forEach(function(ea) {
-              // var newElement = $('<li></li>').addClass("list-group-item");
-              $("#searchResult").append(`
-                  <div id="song">
-                      <div class="row no-gutters mx-auto user-list">
-                          <div class="col flex-fill m-auto user-item">
-                            <a class="user-link" id='${ea.id}song'>
-                              <div class="user-container" id='${ea.id}search_song'>
-                                <div class="user-avatar">
-                                  <img class="rounded-circle img-fluid" src='${ea.image}' alt="Cover" width="48" height="48">
-                                </div>
-                                <p class="user-name">
-                                  <strong>${ea.song}</strong>
-                                  <span>${ea.artist}</span>
-                                  <span>${ea.album}</span>
-                                </p>
-                              </div>
-                            </a>
-                          </div>
-                      </div>
-                  </div>
-                `)
-                // $("#searchResults").append(newElement);
-                $(`#${ea.id}song`).click(function(event) {
-                  event.stopImmediatePropagation();
-                  $(`#${ea.id}search_song`).css('background-color', 'rgba(0,0,0,0.1)');
-                  ea.vote = 1;
-                  socket.emit('add_candidate', ea);
-                })
-              })
-            }
-          )
+            getSong('searchResult', resp);
+          }
+        )
       }
     }, 300);
   });
 
+  $("#getCandidates").click(function() {
+    url = '/api/room/' + roomId + '/getCandidates'
+    $.getJSON(url, function(topCandidates) {
+      getSong('topCandidates', topCandidates);
+    })
+  })
+
   $(document).click(function () {
-    if ($("#searchResult").contents().length) {
+    if ($("#searchResult").contents().length || $("#topCandidates").contents().length) {
       $("#searchResult").hide();
+      $("#topCandidates").hide();
       $("#song_search").val('');
       socket.emit('update_candidate_list', 'data');
     }
@@ -110,7 +86,7 @@ $(function() {
                       <img class="rounded-circle img-fluid" src='${ea.image}' alt="Cover" width="48" height="48">
                     </div>
                     <p class="user-name">
-                      <strong>${ea.song}</strong>
+                      <strong>${ea.name}</strong>
                       <span>${ea.artist}</span>
                       <span>${ea.album}</span>
                     </p>
@@ -143,7 +119,7 @@ $(function() {
                             <img class="rounded-circle img-fluid" src='${track.image}' alt="Cover" width="48" height="48">
                           </div>
                           <p class="user-name">
-                            <strong>${track.song}</strong>
+                            <strong>${track.name}</strong>
                             <span>${track.artist}</span>
                             <span>${track.album}</span>
                           </p>
@@ -157,3 +133,41 @@ $(function() {
   });
 
 });
+
+function getSong(elementId, data) {
+  let element = '#' + elementId;
+  $(element).empty();
+  // $("#close").show();
+  $(element).show();
+  // var newElement = $('<a></a>');
+  data.forEach(function(ea) {
+    // var newElement = $('<li></li>').addClass("list-group-item");
+    $(element).append(`
+        <div id="song">
+            <div class="row no-gutters mx-auto user-list">
+                <div class="col flex-fill m-auto user-item">
+                  <a class="user-link" id='${ea.id}song'>
+                    <div class="user-container" id='${ea.id}search_song'>
+                      <div class="user-avatar">
+                        <img class="rounded-circle img-fluid" src='${ea.image}' alt="Cover" width="48" height="48">
+                      </div>
+                      <p class="user-name">
+                        <strong>${ea.name}</strong>
+                        <span>${ea.artist}</span>
+                        <span>${ea.album}</span>
+                      </p>
+                    </div>
+                  </a>
+                </div>
+            </div>
+        </div>
+      `)
+      // $("#searchResults").append(newElement);
+    $(`#${ea.id}song`).click(function(event) {
+      event.stopImmediatePropagation();
+      $(`#${ea.id}search_song`).css('background-color', 'rgba(0,0,0,0.1)');
+      ea.vote = 1;
+      socket.emit('add_candidate', ea);
+    })
+  })
+}

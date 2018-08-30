@@ -31,4 +31,6 @@ router.get('/room/:id/delete', room_controller.room_delete_get);
 
 router.post('/room/:id/delete', room_controller.room_delete_post);
 
+router.get('/room/:id/getCandidates', room_controller.room_candidate_suggestion_get);
+
 module.exports = router;
