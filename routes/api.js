@@ -5,6 +5,18 @@ var router = express.Router();
 var spotify_controller = require('../controllers/spotifyController');
 var room_controller = require('../controllers/roomController');
 
+router.get('/about', function (req, res) {
+  res.render('about');
+});
+
+router.get('/contact', function (req, res) {
+  res.render('contact');
+});
+
+router.get('/guide', function (req, res) {
+  res.render('guide');
+});
+
 router.get('/search', spotify_controller.spotify_search);
 
 router.get('/auth/login', spotify_controller.spotify_login);
