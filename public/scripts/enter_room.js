@@ -94,7 +94,6 @@ function enterRoom(objectId, formId, roomId) {
     </form>
   `)
   $(`#${formId}`).toggle();
-  console.log($(`#${objectId}`).offset());
   $('body, html').animate({ scrollTop: $(`#${objectId}`).offset().top }, 10);
   if ($(`#${formId}`)) {
     $(`#${formId}`).find("input").focus();

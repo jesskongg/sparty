@@ -2,12 +2,12 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('RoomSongs', {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: Sequelize.INTEGER
-      },
+      // id: {
+      //   allowNull: false,
+      //   autoIncrement: true,
+      //   primaryKey: true,
+      //   type: Sequelize.INTEGER
+      // },
       vote: {
         type: Sequelize.INTEGER,
         defaultValue: 0
@@ -38,6 +38,11 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       }
+    }).then(() => {
+      return queryInterface.addConstraint('RoomSongs', ['roomId', 'songId'], {
+        type: 'primary key',
+        name: 'roomsongs_pkey'
+      });
     });
   },
   down: (queryInterface, Sequelize) => {
