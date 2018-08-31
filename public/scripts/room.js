@@ -75,6 +75,10 @@ $(function() {
     }
   })
 
+  $('#topCandidates').on('hidden.bs.modal', function (e) {
+    socket.emit('update_candidate_list', 'data');
+  })
+
   // update number of people in the room
   socket.on('people_join', function(data) {
     $("#num_peope").text(data);
@@ -125,26 +129,24 @@ $(function() {
 */
 function createSongDiv(element, ea, id1, id2, style) {
   $(element).append(`
-    <div id="song">
-        <div class="row no-gutters mx-auto user-list">
-            <div class="col flex-fill m-auto user-item">
-              <a class="user-link" id='${ea.id}${id1}'>
-                <div class="user-container" id='${ea.id}${id2}'>
-                  <div class="user-avatar">
-                    <img class="rounded-circle img-fluid" src='${ea.image}' alt="Cover" width="48" height="48">
-                  </div>
-                  <p class="user-name">
-                    <strong>${ea.name}</strong>
-                    <span>${ea.artist}</span>
-                    <span>${ea.album}</span>
-                  </p>
-                  <p class="bg-primary user-delete" style="display: ${style}">
-                    <span>${ea.vote}</span>
-                  </p>
+      <div class="row no-gutters mx-auto user-list">
+          <div class="col flex-fill m-auto user-item">
+            <a class="user-link" id='${ea.id}${id1}'>
+              <div class="user-container" id='${ea.id}${id2}'>
+                <div class="user-avatar">
+                  <img class="rounded-circle img-fluid" src='${ea.image}' alt="Cover" width="48" height="48">
                 </div>
-              </a>
-            </div>
-        </div>
-    </div>
+                <p class="user-name">
+                  <strong>${ea.name}</strong>
+                  <span>${ea.artist}</span>
+                  <span>${ea.album}</span>
+                </p>
+                <p class="bg-primary user-delete" style="display: ${style}">
+                  <span>${ea.vote}</span>
+                </p>
+              </div>
+            </a>
+          </div>
+      </div>
   `)
 }

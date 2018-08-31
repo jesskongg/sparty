@@ -3,19 +3,33 @@
 /* ref: https://css-tricks.com/couple-takes-sticky-footer/ */
 html {
   height:100%;
-  cursor: pointer;
+  /* cursor: pointer; */
 }
 
 body {
   display:flex;
-  height:100vh;
+  height:100%;
   flex-direction:column;
   /*padding-top:5rem;*/
 }
 
 .content {
-  padding-top:40px;
+  /* padding-top:40px; */
   flex:1 0 auto;
+}
+
+.subcontent {
+  margin-top: 80px;
+  padding: 15px;
+}
+
+@media screen and (max-width: 480px) {
+  .subcontent {
+    margin-top: 60px;
+  }
+  html {
+    cursor: pointer;
+  }
 }
 
 footer {
@@ -36,6 +50,10 @@ footer {
   box-shadow:0 2px 3px #dbe3e7;
   padding-right:50px;
   overflow:hidden;
+}
+
+.user-item div.user-container:hover {
+  background-color: rgba(0,0,0,0.1);
 }
 
 .user-item div.user-avatar {
