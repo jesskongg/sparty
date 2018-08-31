@@ -182,7 +182,7 @@ exports.room_search = function(req, res, next) {
 exports.room_add_song = function(song, roomId) {
   var songData = {
     id: song.id,
-    name: song.song,
+    name: song.name,
     album: song.album,
     artist: song.artist,
     image: song.image,
@@ -215,15 +215,19 @@ exports.room_candidate_suggestion_get = function(req, res, next) {
       raw: true,
   }).then((candidates) => {
       var songIdArray = candidates.map(function(el) { return el.songId; })
-      models.Song.findAll({
+      if (songIdArray.length === 0) {
+        res.json();
+      } else {
+        models.Song.findAll({
           where: {
-              id: {
-                  [Op.or]: songIdArray
-              }
+            id: {
+              [Op.or]: [songIdArray]
+            }
           }
-      }).then((songs) => {
+        }).then((songs) => {
           res.json(songs);
-      })
+        })
+      }
   })
 }
 
