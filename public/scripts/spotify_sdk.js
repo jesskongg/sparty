@@ -29,6 +29,7 @@ window.onSpotifyWebPlaybackSDKReady = () => {
       && state['restrictions']['disallow_pausing_reasons']
       && state['restrictions']['disallow_pausing_reasons'][0] === 'already_paused') {
         if (isPartyOn) {
+          console.log('get next song');
           socket.emit('get next song', roomId);
         }
       }
