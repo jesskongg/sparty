@@ -74,6 +74,10 @@ $(function() {
     }
   })
 
+  $('#topCandidates').on('hidden.bs.modal', function (e) {
+    socket.emit('update_candidate_list', 'data');
+  })
+
   // update number of people in the room
   socket.on('people_join', function(data) {
     $("#num_peope").text(data);
