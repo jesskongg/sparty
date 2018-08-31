@@ -15,8 +15,8 @@
   },
   "production": {
     "use_env_variable": "DATABASE_URL",
-    "username": "tudatn",
-    "password": "lenovo",
+    "username": "username",
+    "password": "password",
     "database": "sparty_production",
     "host": "https://chardonnay.herokuapp.com",
     "dialect": "postgres"
