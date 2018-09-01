@@ -62,13 +62,19 @@ nsp.on('connection', function (socket) {
   socket.on('add_candidate', function(ea) {
     if (socket.room in candidates) {
       if (candidates[socket.room][ea.id]) {
-        candidates[socket.room][ea.id].vote++;
+        if (!candidates[socket.room][ea.id].remoteAddress.includes(socket.request.connection.remoteAddress)) {
+          candidates[socket.room][ea.id].vote++;
+        }
       } else {
         candidates[socket.room][ea.id] = ea;
+        candidates[socket.room][ea.id].remoteAddress = [];
+        candidates[socket.room][ea.id].remoteAddress.push(socket.request.connection.remoteAddress);
       }
     } else {
       candidates[socket.room] = {};
       candidates[socket.room][ea.id] = ea;
+      candidates[socket.room][ea.id].remoteAddress = [];
+      candidates[socket.room][ea.id].remoteAddress.push(socket.request.connection.remoteAddress);
     }
   });
 
@@ -77,8 +83,10 @@ nsp.on('connection', function (socket) {
   })
 
   socket.on('add_vote', function(ea) {
-    candidates[socket.room][ea.id].vote++;
-    nsp.to(socket.room).emit('show_list', candidates[socket.room]);
+    if (!candidates[socket.room][ea.id].remoteAddress.includes(socket.request.connection.remoteAddress)) {
+      candidates[socket.room][ea.id].vote++;
+      nsp.to(socket.room).emit('show_list', candidates[socket.room]);
+    }
   })
 
   socket.on('get next song', function(roomId) {
