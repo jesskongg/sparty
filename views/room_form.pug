@@ -12,7 +12,7 @@ block content
             input#room_name.form-control(type='text', placeholder='room name' name='room_name' require='true' value=(undefined===room ? '' : room.name))
           .form-group
             label Room Key
-            input#room_key.form-control(type='text', placeholder='room key (default: abc)' name='room_key' require='true' value=(undefined===room ? '' : room.key))
+            input#room_key.form-control(type='text', placeholder='room key' name='room_key' require='true' value=(undefined===room ? '' : room.key))
           //- .form-group
           //-   label Room Avatar
           //-   input#room_avatar.form-control(type='text', placeholder='photo url' name='room_avatar' value=(undefined===room ? '' : room.avatar))
@@ -27,7 +27,7 @@ block content
               else
                 input#room_type.form-check-input(type='checkbox' name='room_type' value='true')
               label.form-check-label(for='room_type') Private
-          button.btn.btn-light(type='submit') #{title}
+          button.btn.btn-primary(type='submit') #{title}
     .col-md-6
       if errors 
         ul
