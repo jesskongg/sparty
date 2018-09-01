@@ -85,6 +85,7 @@ nsp.on('connection', function (socket) {
   socket.on('add_vote', function(ea) {
     if (!candidates[socket.room][ea.id].remoteAddress.includes(socket.request.connection.remoteAddress)) {
       candidates[socket.room][ea.id].vote++;
+      candidates[socket.room][ea.id].remoteAddress.push(socket.request.connection.remoteAddress);
       nsp.to(socket.room).emit('show_list', candidates[socket.room]);
     }
   })
