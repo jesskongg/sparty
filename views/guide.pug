@@ -1,10 +1,40 @@
 extend layout
 
 block content
-  main.page.guide-page
-  section.portfolio-block.guide
+  main.page.projects-page
+  section.portfolio-block.projects-cards
     .container
       .heading
-        p A good application will not need documents. Just kidding, Please comeback later.
+        h5 Parties need music. Just with some simple steps, you are free to enjoy the party with music on.
+      .row.justify-content-center
+        .col-md-6.col-lg-6
+          .card.border-0
+            a(href='#')
+              img.guide.card-img-top(src='/images/guide_login.gif' alt='Card Image')
+            .card-body
+              h6
+                a(href='#') Login
+              p.text-muted.card-text The authentication is done with Spotify. The application only saves your access_token to serve your needs. You can withdraw these rights with Spotify application.
+        .col-md-6.col-lg-6
+          .card.border-0
+            a(href='#')
+              img.guide.card-img-top(src='/images/guide_createroom.gif' alt='Card Image')
+            .card-body
+              h6
+                a(href='#') Create Room and Start the party
+              p.text-muted.card-text You can load top 10 songs (in real time) from all other rooms or search for songs (from Spotify) as suggestion for your party. Click Start the party then Enjoy the music.
+      
+      .heading  
+        h6 Wait. How about your friends? It's time for them to vote.
+      .row.justify-content-center
+        .col-md-6.col-lg-6
+          .card.border-0
+            a(href='#')
+              img.guide.card-img-top(src='/images/guide_users.gif' alt='Card Image')
+            .card-body
+              h6
+                a(href='#') Vote for songs you like.
+              p.text-muted.card-text Your friends access the website, enter your room, search and vote for songs.
+        
 
-  
+        
