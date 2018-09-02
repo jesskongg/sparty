@@ -41,15 +41,20 @@ var nextSong = {}; // default song
 var nsp = io.of('/api/rooms');
 
 nsp.on('connection', function (socket) {
-  socket.on('room', function(room) {
-    socket.room = room;
-    socket.join(room);
-    nsp.in(room).clients((error, clients) => {
+  socket.on('room', function(roomId) {
+    socket.room = roomId;
+    socket.join(roomId);
+    // initialize candidate list and next song for the roomId
+    if (!(roomId in candidates)) {
+      candidates[roomId] = {};
+      nextSong[roomId] = {};
+    }
+    nsp.in(roomId).clients((error, clients) => {
       if (error) throw error;
-      nsp.to(room).emit('people_join', clients.length)
+      nsp.to(roomId).emit('people_join', clients.length)
     })
-    nsp.to(socket.room).emit('show_list', candidates[socket.room]);
-    nsp.to(socket.room).emit('update current song', nextSong);
+    nsp.to(roomId).emit('show_list', candidates[roomId]);
+    nsp.to(roomId).emit('update current song', nextSong[roomId]);
   })
 
   socket.on('disconnect', function() {
@@ -60,14 +65,11 @@ nsp.on('connection', function (socket) {
   })
 
   socket.on('add_candidate', function(ea) {
-    if ((socket.room in candidates) && candidates[socket.room][ea.id]) {
+    if (candidates[socket.room][ea.id]) {
       if (!candidates[socket.room][ea.id].remoteAddress.includes(socket.request.connection.remoteAddress)) {
         candidates[socket.room][ea.id].vote++;
       }
     } else {
-      if (!(socket.room in candidates)) {
-        candidates[socket.room] = {};
-      }
       candidates[socket.room][ea.id] = ea;
       candidates[socket.room][ea.id].remoteAddress = [];
       candidates[socket.room][ea.id].remoteAddress.push(socket.request.connection.remoteAddress);
@@ -88,29 +90,24 @@ nsp.on('connection', function (socket) {
 
   socket.on('get next song', function(roomId) {
     // TODO: improve finding the top track
-    var topTracks = candidates[roomId];
-    if (topTracks) {
-      topTracks = Object.values(topTracks);
-      topTracks.sort(function(a, b) {
-        return b.vote - a.vote;
+    var topTracks = Object.values(candidates[roomId]);
+    if (topTracks.length) {
+      nextSong[roomId] = topTracks.reduce(function(prev, current) {
+        return (prev.vote > current.vote) ? prev : current
       })
-      // update top song
-      nextSong = topTracks[0];
       // save the top song to database
-      room_controller.room_add_song(nextSong, roomId);
-
-      candidates[roomId][topTracks[0].id].vote = 0;
-      candidates[roomId][topTracks[0].id].remoteAddress = [];
+      room_controller.room_add_song(nextSong[roomId], roomId);
+      
+      candidates[roomId][nextSong[roomId].id].vote = 0;
+      candidates[roomId][nextSong[roomId].id].remoteAddress = [];
       nsp.to(roomId).emit('show_list', candidates[roomId]);
+      nsp.to(roomId).emit('get top song', nextSong[roomId]);
     }
-
-    // send top track to Client
-    nsp.to(roomId).emit('get top song', nextSong);
   })
 
   // update current playing song
-  socket.on('current song', function(room) {
-    nsp.to(room).emit('update current song', nextSong);
+  socket.on('current song', function(roomId) {
+    nsp.to(roomId).emit('update current song', nextSong[roomId]);
   })
 
 });

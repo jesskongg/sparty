@@ -180,29 +180,31 @@ exports.room_search = function(req, res, next) {
 
 // add song to Room: when a top song is picked
 exports.room_add_song = function(song, roomId) {
-  var songData = {
-    id: song.id,
-    name: song.name,
-    album: song.album,
-    artist: song.artist,
-    image: song.image,
-    uri: song.uri
-  }
-  var noOfVoteForSong = song.vote;
-  models.Song.findOrCreate({
-    where: { id: song.id },
-    defaults: songData
-  }).spread((newSong, created) => {
-    // check if the room already has the song
-    models.RoomSong.findOne({ where: { roomId: roomId, songId: newSong.get({ plain: true}).id } }).then(result => {
-      if (result) {
-        noOfVoteForSong = result.vote + noOfVoteForSong;
-      }
-      models.Room.findById(roomId).then(room => {
-        room.addSong(newSong, { through: { vote: noOfVoteForSong }})
+  if (song) {
+    var songData = {
+      id: song.id,
+      name: song.name,
+      album: song.album,
+      artist: song.artist,
+      image: song.image,
+      uri: song.uri
+    }
+    var noOfVoteForSong = song.vote;
+    models.Song.findOrCreate({
+      where: { id: song.id },
+      defaults: songData
+    }).spread((newSong, created) => {
+      // check if the room already has the song
+      models.RoomSong.findOne({ where: { roomId: roomId, songId: newSong.get({ plain: true}).id } }).then(result => {
+        if (result) {
+          noOfVoteForSong = result.vote + noOfVoteForSong;
+        }
+        models.Room.findById(roomId).then(room => {
+          room.addSong(newSong, { through: { vote: noOfVoteForSong }})
+        })
       })
     })
-  })
+  }
 }
 
 exports.room_candidate_suggestion_get = function(req, res, next) {
