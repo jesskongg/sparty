@@ -13,8 +13,6 @@ var delay = (function(){
   };
 })();
 
-// TODO: refactor search function
-
 // Shorthand for $( document ).ready()
 $(function() {
 
