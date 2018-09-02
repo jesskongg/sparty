@@ -100,6 +100,7 @@ nsp.on('connection', function (socket) {
       room_controller.room_add_song(nextSong, roomId);
 
       candidates[roomId][topTracks[0].id].vote = 0;
+      candidates[roomId][topTracks[0].id].remoteAddress = [];
       nsp.to(roomId).emit('show_list', candidates[roomId]);
     }
 
