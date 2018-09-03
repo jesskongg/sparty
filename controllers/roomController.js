@@ -2,10 +2,12 @@ const Sequelize = require('sequelize');
 // const sequelize = new Sequelize();
 const Op = Sequelize.Op;
 
-const { body,validationResult } = require('express-validator/check');
+const { body, validationResult } = require('express-validator/check');
 const { sanitizeBody } = require('express-validator/filter');
 var async = require('async');
 var models = require('../models/');
+
+var date = require('date-and-time');
 
 const avatars = [ '/images/pexels-photo-534031.jpeg',
                 '/images/pexels-photo-605408.jpeg',
@@ -48,10 +50,24 @@ exports.room_create_post = [
   // Validate fields.
   body('room_name').isLength({ min: 1 }).trim().withMessage('Room name must be specified.'),
   body('room_key').trim().isAlphanumeric().withMessage('Room key has non-alphanumeric characters.'),
-
+  // body('room_expired', 'Invalid date').optional({checkFalsy: true}).isISO8601(),
+  // TODO: consider allow user to select expired date
+  // body('room_expired').optional({checkFalsy: true}).isISO8601().withMessage('Invalid date').toDate().custom(value => {
+  //   var today = new Date();
+  //   var msPerDay = 24 * 60 * 60 * 1000;
+  //   period = Math.round((value.getTime() - today.getTime())/msPerDay);
+  //   if (period > 7) {
+  //     return Promise.reject('Expired date must be within 7 days');
+  //   } else {
+  //     return value;
+  //   }
+  // }),
   // Sanitize fields.
   // TODO: this will change all input to html escape symbols: need to fix it
-  sanitizeBody('*').trim().escape(),
+  sanitizeBody('room_name').trim().escape(),
+  sanitizeBody('room_key').trim().escape(),
+  sanitizeBody('room_description').trim().escape(),
+  sanitizeBody('room_expired').toDate(),
 
   (req, res, next) => {
     // Extract the validation errors from a request.
@@ -63,11 +79,15 @@ exports.room_create_post = [
       room_type = false;
     }
 
+    var expired = new Date();
+    expired = date.addDays(expired, 7);
+
     var newRoom = models.Room.build({
       name: req.body.room_name,
       key: req.body.room_key,
       public: room_type,
       avatar: avatars[getRandomInt(0, avatars.length)],
+      expired: expired,
       description: req.body.room_description,
       owner: req.user.spotify_id,
     })

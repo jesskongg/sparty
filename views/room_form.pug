@@ -19,6 +19,10 @@ block content
           .form-group
             label Description
             input#room_description.form-control(type='textarea', placeholder='brief description for your room' name='room_description' value=(undefined===room ? '' : room.description))
+          
+          //- .form-group
+          //-   label Expired
+          //-   input#room_expired.form-control(type='datetime-local', placeholder='yyyy-mm-dd' name='room_expired' value=(undefined===room ? '' : room.expired))
 
           .form-group
             .form-check
