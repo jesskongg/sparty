@@ -50,7 +50,6 @@ exports.room_create_post = [
   // Validate fields.
   body('room_name').isLength({ min: 1 }).trim().withMessage('Room name must be specified.'),
   body('room_key').trim().isAlphanumeric().withMessage('Room key has non-alphanumeric characters.'),
-  // body('room_expired', 'Invalid date').optional({checkFalsy: true}).isISO8601(),
   // TODO: consider allow user to select expired date
   // body('room_expired').optional({checkFalsy: true}).isISO8601().withMessage('Invalid date').toDate().custom(value => {
   //   var today = new Date();
@@ -67,7 +66,7 @@ exports.room_create_post = [
   sanitizeBody('room_name').trim().escape(),
   sanitizeBody('room_key').trim().escape(),
   sanitizeBody('room_description').trim().escape(),
-  sanitizeBody('room_expired').toDate(),
+  // sanitizeBody('room_expired').toDate(),
 
   (req, res, next) => {
     // Extract the validation errors from a request.
@@ -225,6 +224,17 @@ exports.room_add_song = function(song, roomId) {
       })
     })
   }
+}
+
+exports.room_cleanup = function() {
+  var current = new Date();
+  models.Room.findAll().then(rooms => {
+    rooms.forEach(function(room) {
+      if (room.expired.getTime() < current.getTime()) {
+        room.destroy();
+      }
+    })
+  })
 }
 
 exports.room_candidate_suggestion_get = function(req, res, next) {
