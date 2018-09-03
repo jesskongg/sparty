@@ -112,6 +112,7 @@ nsp.on('connection', function (socket) {
 
 });
 
+// check every hour if there is a room is expired
 setInterval(room_controller.room_cleanup, 60 * 60 * 1000);
 
 /**
