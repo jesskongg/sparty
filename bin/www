@@ -97,7 +97,7 @@ nsp.on('connection', function (socket) {
       })
       // save the top song to database
       room_controller.room_add_song(nextSong[roomId], roomId);
-      
+
       candidates[roomId][nextSong[roomId].id].vote = 0;
       candidates[roomId][nextSong[roomId].id].remoteAddress = [];
       nsp.to(roomId).emit('show_list', candidates[roomId]);
@@ -112,6 +112,7 @@ nsp.on('connection', function (socket) {
 
 });
 
+setInterval(room_controller.room_cleanup, 60 * 60 * 1000);
 
 /**
  * Normalize a port into a number, string, or false.

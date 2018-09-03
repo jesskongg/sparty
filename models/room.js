@@ -20,6 +20,10 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: true,
       allowNull: false
     },
+    expired: {
+      type: DataTypes.DATE,
+      allowNull: false
+    },
     description: {
       type: DataTypes.STRING,
     }

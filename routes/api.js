@@ -17,6 +17,10 @@ router.get('/guide', function (req, res) {
   res.render('guide');
 });
 
+router.get('/credit', function (req, res) {
+  res.render('credit');
+});
+
 router.get('/search', spotify_controller.spotify_search);
 
 router.get('/auth/login', spotify_controller.spotify_login);
