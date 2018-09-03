@@ -1,9 +1,17 @@
 // Import the Spotify API
 var Spotify = require('node-spotify-api');
 var passport = require('passport');
+
+var credentials = {
+  clientId: process.env.CLIENT_ID,
+  clientSecret: process.env.CLIENT_SECRET,
+  redirectUri: 'https://chardonnay.herokuapp.com/callback'
+};
+
 var http = require('http');
 var SpotifyWebApi = require('spotify-web-api-node');
 
+var spotifyApi = new SpotifyWebApi(credentials);
 
 //Import our Keys File
 var keys = require('../routes/key');

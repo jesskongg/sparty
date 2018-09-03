@@ -1,19 +1,25 @@
 {
   "name": "sparty",
   "version": "0.0.0",
+  "engines": {
+    "node": "10.9.0"
+  },
   "private": true,
   "scripts": {
+    "heroku-postbuild": "npm install --production",
     "start": "node ./bin/www",
     "devstart": "nodemon ./bin/www"
   },
   "dependencies": {
     "async": "^2.6.1",
+    "compression": "^1.7.3",
     "cookie-parser": "~1.4.3",
     "date-and-time": "^0.6.2",
     "debug": "~2.6.9",
     "express": "~4.16.0",
     "express-session": "^1.15.6",
     "express-validator": "^5.3.0",
+    "helmet": "^3.13.0",
     "http-errors": "~1.6.2",
     "morgan": "~1.9.0",
     "node-spotify-api": "^1.0.7",
