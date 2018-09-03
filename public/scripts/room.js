@@ -1,6 +1,6 @@
 // match the namespace defined on server
-var socket = io.connect('http://localhost:3000/api/rooms');
-// var socket = io.connect('https://chardonnay.herokuapp.com/api/rooms');
+// var socket = io.connect('http://localhost:3000/api/rooms');
+var socket = io.connect('https://chardonnay.herokuapp.com/api/rooms');
 
 
 // function to delay ms before execute
