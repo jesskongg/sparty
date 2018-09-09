@@ -1,5 +1,6 @@
+var socket = io.connect('http://www.spartyfy.me/api/rooms');
 // var socket = io.connect('https://chardonnay.herokuapp.com/api/rooms');
-var socket = io.connect('http://localhost:3000/api/rooms');
+// var socket = io.connect('http://localhost:3000/api/rooms');
 
 window.onSpotifyWebPlaybackSDKReady = () => {
   var isPartyOn = false;

@@ -23,8 +23,9 @@ module.exports = function(passport) {
       {
         clientID: process.env.CLIENT_ID,
         clientSecret: process.env.CLIENT_SECRET,
+        callbackURL: 'http://www.spartyfy.me'
         // callbackURL: 'https://chardonnay.herokuapp.com/callback'
-        callbackURL: 'http://localhost:3000/callback'
+        // callbackURL: 'http://localhost:3000/callback'
       },
       function(accessToken, refreshToken, expires_in, profile, done) {
         models.User.findOrCreate({
