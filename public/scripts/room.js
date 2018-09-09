@@ -49,32 +49,35 @@ $(function() {
     }, 300);
   });
 
+  var topSongs = {};
+
   $("#getCandidates").click(function() {
-    url = '/api/room/' + roomId + '/getCandidates'
+    let url = '/api/room/' + roomId + '/getCandidates';
     $.getJSON(url, function(topCandidates) {
+      topSongs = topCandidates;
       $(".modal-body").empty();
       topCandidates.forEach(function(ea) {
         createSongDiv('.modal-body', ea, 'suggestion', 'suggestion_song', 'none');
         $(`#${ea.id}suggestion`).click(function(event) {
-          event.stopImmediatePropagation(); // to prevent closing modal
+          // event.stopImmediatePropagation(); // to prevent closing modal
           $(`#${ea.id}suggestion_song`).css('background-color', 'rgba(0,0,0,0.1)');
           ea.vote = 1;
           socket.emit('add_candidate', ea);
         })
       })
-      // add all suggestion songs
-      $("#addAll").click(function() {
-        topCandidates.forEach(function(ea) {
-          ea.vote = 1;
-          socket.emit('add-candidate', ea);
-        })
-      })
+    })
+  })
+
+  $("#addAll").click(function() {
+    topSongs.forEach(function(ea) {
+      ea.vote = 1;
+      socket.emit('add_candidate', ea);
     })
   })
 
 
 
-  $(document).click(function () {
+  $(document).click(function() {
     if ($("#searchResult").contents().length) {
       $("#searchResult").hide();
       $("#song_search").val('');
@@ -82,7 +85,7 @@ $(function() {
     }
   })
 
-  $('#topCandidates').on('hidden.bs.modal', function (e) {
+  $('#topCandidates').on('hidden.bs.modal', function() {
     socket.emit('update_candidate_list', 'data');
   })
 
