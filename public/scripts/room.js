@@ -76,8 +76,6 @@ $(function() {
     })
   })
 
-
-
   $(document).click(function() {
     if ($("#searchResult").contents().length) {
       $("#searchResult").hide();

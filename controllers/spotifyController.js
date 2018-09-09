@@ -5,8 +5,6 @@ var passport = require('passport');
 var http = require('http');
 var SpotifyWebApi = require('spotify-web-api-node');
 
-var spotifyApi = new SpotifyWebApi(credentials);
-
 //Import our Keys File
 var keys = require('../routes/key');
 
@@ -15,7 +13,7 @@ var spotify = new Spotify(keys.spotifyKeys);
 var spotifyApi = new SpotifyWebApi({
   clientId: process.env.CLIENT_ID,
   clientSecret: process.env.CLIENT_SECRET,
-  // redirectUri: 'http://localhost:3000/callback'
+  redirectUri: 'http://www.spartyfy.me/callback'
 });
 
 exports.spotify_search = function(req, res, next) {
