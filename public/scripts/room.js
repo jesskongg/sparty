@@ -62,8 +62,17 @@ $(function() {
           socket.emit('add_candidate', ea);
         })
       })
+      // add all suggestion songs
+      $("#addAll").click(function() {
+        topCandidates.forEach(function(ea) {
+          ea.vote = 1;
+          socket.emit('add-candidate', ea);
+        })
+      })
     })
   })
+
+
 
   $(document).click(function () {
     if ($("#searchResult").contents().length) {
