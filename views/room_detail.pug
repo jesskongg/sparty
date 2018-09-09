@@ -4,7 +4,9 @@ block content
   #content.subcontent.container
     #roomDetailContent.row.justify-content-center.text-center
       #welcome.col-lg-7.col-md-7.col-sm-12
-        p You are in Room: #{room.name} with <span id='num_peope'></span> people.
+        p(style='font-weight: bold;') Room: #{room.name} (
+          i#num_peope
+          i.fa.fa-user )
       #currentSong.col-lg-7.col-md-7.col-sm-12
 
       if (isOwner)
