@@ -27,11 +27,21 @@ exports.room_detail = function(req, res, next) {
   models.Room.findById(req.params.id).then(room => {
     if (room) {
       res.locals.isOwner = isOwner(room, req.user);
-      if (room.public || req.query.room_key === room.key) {
-        res.render('room_detail', { room: room })
-      } else {
-        res.redirect('/');
-      }
+      res.render('room_detail', { room: room })
+    } else {
+      res.redirect('/');
+    }
+  })
+};
+
+// get private room detail
+exports.room_detail_post = function(req, res, next) {
+  // console.log(req.room_key);
+  console.log(req);
+  models.Room.findById(req.params.id).then(room => {
+    if (room && req.body.room_key === room.key) {
+      res.locals.isOwner = isOwner(room, req.user);
+      res.render('room_detail', { room: room })
     } else {
       res.redirect('/');
     }
