@@ -36,10 +36,10 @@ $(function() {
             $("#searchResult").empty();
             $("#searchResult").show();
             resp.forEach(function(ea) {
-              createSongDiv('#searchResult', ea, 'song', 'search_song', 'none');
+              createSongDiv('#searchResult', ea, 'song', 'search-song', 'none');
               $(`#${ea.id}song`).click(function(event) {
                 event.stopImmediatePropagation();
-                $(`#${ea.id}search_song`).css('background-color', 'rgba(0,0,0,0.1)');
+                $(`#${ea.id}search-song`).css('background-color', 'rgba(0,0,0,0.1)');
                 ea.vote = 1;
                 socket.emit('add_candidate', ea);
               })
@@ -58,10 +58,10 @@ $(function() {
       topSongs = topCandidates;
       $(".modal-body").empty();
       topCandidates.forEach(function(ea) {
-        createSongDiv('.modal-body', ea, 'suggestion', 'suggestion_song', 'none');
+        createSongDiv('.modal-body', ea, 'suggestion', 'suggestion-song', 'none');
         $(`#${ea.id}suggestion`).click(function(event) {
           // event.stopImmediatePropagation(); // to prevent closing modal
-          $(`#${ea.id}suggestion_song`).css('background-color', 'rgba(0,0,0,0.1)');
+          $(`#${ea.id}suggestion-song`).css('background-color', 'rgba(0,0,0,0.1)');
           ea.vote = 1;
           socket.emit('add_candidate', ea);
         })
@@ -76,6 +76,7 @@ $(function() {
     })
   })
 
+  // click outside to close the search box
   $(document).click(function() {
     if ($("#searchResult").contents().length) {
       $("#searchResult").hide();
@@ -84,6 +85,7 @@ $(function() {
     }
   })
 
+  // close top 10 songs modal
   $('#topCandidates').on('hidden.bs.modal', function() {
     socket.emit('update_candidate_list', 'data');
   })
@@ -105,7 +107,7 @@ $(function() {
       candidates.sort(function(a, b) {
         return b.vote - a.vote;
       })
-      nextSong = candidates[0];
+      // nextSong = candidates[0];
     }
     $('#candidates').empty();
     for (var key in candidates) {
@@ -114,16 +116,16 @@ $(function() {
       $(`#${ea.id}candidate`).click(function() {
         socket.emit('add_vote', ea);
       });
-      $('#candidates').show();
     }
+    $('#candidates').show();
   });
 
   socket.on('update current song', function(track) {
     if (track.uri) {
       $("#currentSong").empty();
-      $("#currentSong").append('<p>You are listening</p>');
+      $("#currentSong").append('<p>Playing</p>');
       createSongDiv('#currentSong', track, '', '', 'none');
-      }
+    }
   });
 
 });
