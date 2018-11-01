@@ -31,7 +31,7 @@ block content
                     if (!room.public)
                       | (
                       i.fa.fa-lock )
-                  p.text-muted.card-text #{room.description}
+                  p.text-muted.card-text !{room.description}
                   div(id='key_form' + room.id style='display:none;')
 
     script(src='/scripts/enter_room.js')

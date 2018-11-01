@@ -86,11 +86,11 @@ function enterRoom(objectId, formId, roomId) {
   // var formId = 'key_form' + roomId;
   $(`#${formId}`).empty();
   $(`#${formId}`).append(`
-    <form id="enter_key_form" method="GET" action="/api/room/${roomId}">
+    <form id="enter_key_form" method="POST" action="/api/room/${roomId}">
       <div class="form-group">
         <input class="form-control" placeholder="room key" name="room_key" require="true" value="" type="password">
       </div>
-      <button class="btn btn-light" type="submit">Enter Room</button>
+      <button class="btn btn-primary" type="submit">Enter Room</button>
     </form>
   `)
   $(`#${formId}`).toggle();

@@ -39,6 +39,8 @@ router.get('/rooms', room_controller.room_list);
 
 router.get('/room/:id', room_controller.room_detail);
 
+router.post('/room/:id', room_controller.room_detail_post);
+
 router.get('/room/:id/update', room_controller.room_update_get);
 
 router.post('/room/:id/update', room_controller.room_update_post);

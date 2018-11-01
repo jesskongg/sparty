@@ -20,5 +20,5 @@ Sparty is a web application that provides real-time jukebox rooms where a user c
 
 
 #### Original idea
-This is the final project idea for the CMPT470 course (SFU). The project was not successful due to disagreement in implementation. I redesigned and implemnented all features to serve my own need.
+Based on the general idea of the author's group project of the CMPT470 course at SFU, the author redesigned (completely), developed and implemented all features.
 

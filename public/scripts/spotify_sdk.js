@@ -1,4 +1,5 @@
-var socket = io.connect('https://chardonnay.herokuapp.com/api/rooms');
+// var socket = io.connect('https://chardonnay.herokuapp.com/api/rooms');
+var socket = io.connect('http://localhost:3000/api/rooms');
 
 window.onSpotifyWebPlaybackSDKReady = () => {
   var isPartyOn = false;
@@ -23,7 +24,6 @@ window.onSpotifyWebPlaybackSDKReady = () => {
 
   // Playback status updates
   player.addListener('player_state_changed', state => {
-    console.log(state);
     if (state) {
       if (state['paused'] === true && state['position'] === 0
       && state['restrictions']['disallow_pausing_reasons']
@@ -61,12 +61,6 @@ window.onSpotifyWebPlaybackSDKReady = () => {
   // Not Ready
   player.addListener('not_ready', ({ device_id }) => {
     console.log('Device ID has gone offline', device_id);
-  });
-
-  $("#start").click(function() {
-      $("#start").hide();
-      isPartyOn = true;
-      socket.emit('get next song', roomId);
   });
 
   // Connect to the player!
