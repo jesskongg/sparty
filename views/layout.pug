@@ -28,6 +28,8 @@ html
               ul.nav.navbar-nav.ml-auto
                 li.nav-item(role='presentation')
                   a.nav-link.active(href='/') Home
+                li.nav-item(role='presentation')
+                  a.nav-link.active(href='/api/guide') About
                 if (!loggedIn)
                   li.nav-item(role='presentation')
                     a.nav-link(href='/api/auth/login') Login
@@ -47,16 +49,16 @@ html
     block footer
       footer(class="page-footer")
         div.container
-          div(class="links")
-            a(href="/api/about") Author
+          //- div(class="links")
+            //- a(href="/api/about") Author
             a(href="/api/guide") About
-            a(href="/api/credit") Credit
+            //- a(href="/api/credit") Credit
           div(class="social-icons")
-            a(href="https://www.linkedin.com/in/tudatnguyen")
+            a(href="https://www.linkedin.com/in/tudatnguyen" target="_blank")
               i(class="icon ion-social-linkedin")
-            a(href="https://tudatn.github.io")
+            a(href="https://tudatn.github.io" target="_blank")
               i(class="icon ion-social-github")
-            a(href="https://twitter.com/nguyentudat")
+            a(href="https://twitter.com/nguyentudat" target="_blank")
               i(class="icon ion-social-twitter")
     script(src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.2/js/bootstrap.bundle.min.js')
