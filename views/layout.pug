@@ -8,7 +8,8 @@ html
     script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js')
     script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js')
     link(rel='stylesheet' href='https://fonts.googleapis.com/css?family=Lato:300,400,700')
-    link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
+    //- link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
+    link(rel="stylesheet" href='https://use.fontawesome.com/releases/v5.4.2/css/all.css')
     link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css')
     link(rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,80')
     link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.6.1/css/pikaday.min.css')
@@ -29,20 +30,20 @@ html
                 li.nav-item(role='presentation')
                   a.nav-link.active(href='/') Home
                 li.nav-item(role='presentation')
-                  a.nav-link.active(href='/api/guide') About
+                  a.nav-link.active(href='/api/guide') Help
                 if (!loggedIn)
                   li.nav-item(role='presentation')
                     a.nav-link(href='/api/auth/login') Login
                 else
                   li.nav-item(role='presentation')
-                    a.nav-link(href='/api/auth/logout') Logout
-                  li.nav-item(role='presentation')
                     a.nav-link(href='/api/room/create') Create Room
-                if (isOwner)
+                  if (isOwner)
+                    li.nav-item(role='presentation')
+                      a.nav-link(href=room.getUrl() + '/update') Edit Room
+                      li.nav-item(role='presentation')
+                        a.nav-link(href=room.getUrl() + '/delete') Delete Room
                   li.nav-item(role='presentation')
-                    a.nav-link(href=room.getUrl() + '/update') Edit Room
-                  li.nav-item(role='presentation')
-                    a.nav-link(href=room.getUrl() + '/delete') Delete Room
+                    a.nav-link(href='/api/auth/logout') Logout
 
       block content
       
