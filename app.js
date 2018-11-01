@@ -10,14 +10,14 @@ var apiRouter = require('./routes/api');
 var session = require('express-session');
 var passport = require('passport');
 
-// var compression = require('compression');
-// var helmet = require('helmet');
+var compression = require('compression');
+var helmet = require('helmet');
 
 require('./config/passport.js')(passport);
 
 var app = express();
 
-// app.use(helmet());
+app.use(helmet());
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
@@ -37,7 +37,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-// app.use(compression()); //Compress all routes
+app.use(compression()); //Compress all routes
 
 app.use(express.static(path.join(__dirname, 'public')));
 
