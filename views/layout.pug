@@ -8,7 +8,8 @@ html
     script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js')
     script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js')
     link(rel='stylesheet' href='https://fonts.googleapis.com/css?family=Lato:300,400,700')
-    link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
+    //- link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
+    link(rel="stylesheet" href='https://use.fontawesome.com/releases/v5.4.2/css/all.css')
     link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css')
     link(rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,80')
     link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.6.1/css/pikaday.min.css')
@@ -28,35 +29,37 @@ html
               ul.nav.navbar-nav.ml-auto
                 li.nav-item(role='presentation')
                   a.nav-link.active(href='/') Home
+                li.nav-item(role='presentation')
+                  a.nav-link.active(href='/api/guide') Help
                 if (!loggedIn)
                   li.nav-item(role='presentation')
                     a.nav-link(href='/api/auth/login') Login
                 else
                   li.nav-item(role='presentation')
-                    a.nav-link(href='/api/auth/logout') Logout
-                  li.nav-item(role='presentation')
                     a.nav-link(href='/api/room/create') Create Room
-                if (isOwner)
+                  if (isOwner)
+                    li.nav-item(role='presentation')
+                      a.nav-link(href=room.getUrl() + '/update') Edit Room
+                      li.nav-item(role='presentation')
+                        a.nav-link(href=room.getUrl() + '/delete') Delete Room
                   li.nav-item(role='presentation')
-                    a.nav-link(href=room.getUrl() + '/update') Edit Room
-                  li.nav-item(role='presentation')
-                    a.nav-link(href=room.getUrl() + '/delete') Delete Room
+                    a.nav-link(href='/api/auth/logout') Logout
 
       block content
       
     block footer
       footer(class="page-footer")
         div.container
-          div(class="links")
-            a(href="/api/about") Author
+          //- div(class="links")
+            //- a(href="/api/about") Author
             a(href="/api/guide") About
-            a(href="/api/credit") Credit
+            //- a(href="/api/credit") Credit
           div(class="social-icons")
-            a(href="https://www.linkedin.com/in/tudatnguyen")
+            a(href="https://www.linkedin.com/in/tudatnguyen" target="_blank")
               i(class="icon ion-social-linkedin")
-            a(href="https://tudatn.github.io")
+            a(href="https://tudatn.github.io" target="_blank")
               i(class="icon ion-social-github")
-            a(href="https://twitter.com/nguyentudat")
+            a(href="https://twitter.com/nguyentudat" target="_blank")
               i(class="icon ion-social-twitter")
     script(src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.2/js/bootstrap.bundle.min.js')
