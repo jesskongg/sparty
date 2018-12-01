@@ -147,7 +147,6 @@ footer {
   box-shadow:0 2px 3px #928FEB;
 }
 
-/* #searchSong {
-  border:1px solid #dbe3e7;
-  box-shadow:0 2px 3px #dbe3e7;
-} */
+#searchSong {
+  margin: 10px 0;
+}
