@@ -39,8 +39,12 @@ block content
               i.fa.fa-step-forward
 
       #searchSong.col-lg-7.col-md-7.col-sm-12
-        .search-container
-          input#song_search.search-input(type='text' name='song_search' placeholder='Search song')
+        //- .search-container
+        //-   input#song_search.search-input(type='text' name='song_search' placeholder='Search song')
+        .input-group.mb-3
+          input#song_search.form-control(type='text' name='song_search' placeholder="Search song")
+          .input-group-append
+            button#seach_button.btn.btn-default.search-btn(type='button') <i class="fas fa-search"></i>
         #searchResult.col-12(style='display:none;')
 
 
