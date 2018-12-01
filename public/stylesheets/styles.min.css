@@ -108,6 +108,11 @@ footer {
   width:100%;
 }
 
+#song_search, #room_search {
+  /* border-radius:5px; */
+  padding:10px;
+}
+
 .btn.btn-default.search-btn {
   border:1px solid #ddd;
   background-color:#FFFFFF !important;
@@ -136,7 +141,7 @@ footer {
 }
 
 #searchResult, #topCandidates {
-  margin-top: -25px;
+  margin-top: -16px;
   border-radius:5px;
   border:1px solid #928FEB;
   box-shadow:0 2px 3px #928FEB;
