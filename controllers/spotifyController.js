@@ -13,7 +13,9 @@ var spotify = new Spotify(keys.spotifyKeys);
 var spotifyApi = new SpotifyWebApi({
   clientId: process.env.CLIENT_ID,
   clientSecret: process.env.CLIENT_SECRET,
-  redirectUri: 'http://www.spartyfy.me/callback'
+  // redirectUri: 'http://www.spartyfy.me/callback'
+  redirectUri: 'https://chardonnay.herokuapp.com/callback'
+
 });
 
 exports.spotify_search = function(req, res, next) {

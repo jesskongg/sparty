@@ -1,5 +1,5 @@
-var socket = io.connect('https://www.spartyfy.me/api/rooms');
-// var socket = io.connect('https://chardonnay.herokuapp.com/api/rooms');
+// var socket = io.connect('https://www.spartyfy.me/api/rooms');
+var socket = io.connect('https://chardonnay.herokuapp.com/api/rooms');
 // var socket = io.connect('http://localhost:3000/api/rooms');
 
 window.onSpotifyWebPlaybackSDKReady = () => {
@@ -114,28 +114,4 @@ window.onSpotifyWebPlaybackSDKReady = () => {
       })
     }
   })
-  // $("#template").click(function() {
-  //   // TODO: currently test with hardcoded uri (success), need to send uri of top voted song
-  //   // var dataObj = {
-  //   //   "context_uri": "spotify:album:5ht7ItJgpBH7W6vJ5BqpPr",
-  //   //   "offset": {
-  //   //     "position": 5
-  //   //   }
-  //   // };
-  //   $.ajax({
-  //     url: 'https://api.spotify.com/v1/me/player/play?device_id=' + id,
-  //     method: 'PUT',
-  //     // data: JSON.stringify(dataObj),
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //       'Authorization': `Bearer ${access_token}`
-  //     },
-  //   }).done(function(data) {
-  //     console.log('You start the party');
-  //   }).fail(function(err) {
-  //     console.log('not good');
-  //   })
-  // });
 };
-
-// playback
