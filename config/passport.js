@@ -18,14 +18,15 @@ module.exports = function(passport) {
     });
   });
 
+  var callbackURL = process.env.NODE_ENV === 'production' ? 'https://chardonnay.herokuapp.com/callback' : 'http://localhost:3000/callback';
+
   passport.use(
     new SpotifyStrategy(
       {
         clientID: process.env.CLIENT_ID,
         clientSecret: process.env.CLIENT_SECRET,
         // callbackURL: 'https://www.spartyfy.me/callback'
-        callbackURL: 'https://chardonnay.herokuapp.com/callback'
-        // callbackURL: 'http://localhost:3000/callback'
+        callbackURL: callbackURL
       },
       function(accessToken, refreshToken, expires_in, profile, done) {
         models.User.findOrCreate({
