@@ -80,7 +80,7 @@ exports.room_create_post = [
       avatar: avatars[getRandomInt(0, avatars.length)],
       expired: expired,
       description: req.body.room_description,
-      owner: req.userId,
+      owner: req.user,
     })
 
     if (!errors.isEmpty()) {
@@ -97,43 +97,44 @@ exports.room_create_post = [
   }
 ];
 
+// API: update a room
+// owner authorization is required
+// return room's detail
 exports.room_update_get = function(req, res, next) {
   models.Room.findById(req.params.id).then(function(room) {
     if (room && isOwner(room, req.user)) {
-      res.render('room_form', { title: 'Update Room', room: room });
+      return res.status(200).json(room);
     } else {
-      res.redirect('/');
+      return res.status(400).json({error: 'Bad request'});
     }
   })
 }
+
+// API: update a room
+// owner authorization is required
 exports.room_update_post = [
   // sanitize input
   body('room_name').isLength({ min: 1 }).trim().withMessage('Room name must be specified.'),
   body('room_key').trim().isAlphanumeric().withMessage('Room key has non-alphanumeric characters.'),
+  body('room_type').isBoolean().withMessage('Room must be public or private'),
 
   // Sanitize fields.
   sanitizeBody('*').trim().escape(),
 
-  (req, res, next) => {
+  (req, res) => {
     // Extract the validation errors from a request.
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
         // There are errors. Render form again with sanitized values/errors messages.
-        res.render('room_form', { title: 'Update Room', room: req.body, errors: errors.array() });
-        return;
+        return res.status(400).json({error: 'Bad request'});
     }
     else {
         // Data from form is valid.
-        var room_type = true;
-        if (req.body.room_type) {
-          room_type = false;
-        }
-
         var newRoom = {
           name: req.body.room_name,
           key: req.body.room_key,
-          public: room_type,
+          public: req.body.room_type,
           description: req.body.room_description,
         }
 
@@ -141,10 +142,9 @@ exports.room_update_post = [
         // TODO: implement upload photo feature for room's avatar
         models.Room.findById(req.params.id).then(function(room) {
           room.update(newRoom).then(() => {
-            console.log('successfully updated');
-            res.redirect(room.getUrl());
+            return res.status(200).json({message: 'Updated successfully'});
           }).catch(function(err) {
-            res.render('room_form', { title: 'Update Room', room: req.body, error: err })
+            return res.status(400).json({error: 'Bad request'});
           })
         })
     }
@@ -254,7 +254,7 @@ exports.room_candidate_suggestion_get = function(req, res, next) {
 
 function isOwner(room, user) {
   if (user) {
-    return room.owner === user.spotify_id;
+    return room.owner === user;
   }
   return false;
 }
