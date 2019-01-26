@@ -56,37 +56,19 @@ exports.room_create_get = function(req, res, next) {
   }
 };
 
+// API: create a new room
 exports.room_create_post = [
   // Validate fields.
   body('room_name').isLength({ min: 1 }).trim().withMessage('Room name must be specified.'),
   body('room_key').trim().isAlphanumeric().withMessage('Room key has non-alphanumeric characters.'),
-  // TODO: consider allow user to select expired date
-  // body('room_expired').optional({checkFalsy: true}).isISO8601().withMessage('Invalid date').toDate().custom(value => {
-  //   var today = new Date();
-  //   var msPerDay = 24 * 60 * 60 * 1000;
-  //   period = Math.round((value.getTime() - today.getTime())/msPerDay);
-  //   if (period > 7) {
-  //     return Promise.reject('Expired date must be within 7 days');
-  //   } else {
-  //     return value;
-  //   }
-  // }),
-  // Sanitize fields.
-  // TODO: this will change all input to html escape symbols: need to fix it
+  body('room_type').isBoolean().withMessage('Room must be public or private'),
   sanitizeBody('room_name').trim().escape(),
   sanitizeBody('room_key').trim().escape(),
   sanitizeBody('room_description').trim().escape(),
-  // sanitizeBody('room_expired').toDate(),
 
-  (req, res, next) => {
+  (req, res) => {
     // Extract the validation errors from a request.
     const errors = validationResult(req);
-
-    // build a new room with req.body data
-    var room_type = true;
-    if (req.body.room_type) {
-      room_type = false;
-    }
 
     var expired = new Date();
     expired = date.addDays(expired, 7);
@@ -94,26 +76,22 @@ exports.room_create_post = [
     var newRoom = models.Room.build({
       name: req.body.room_name,
       key: req.body.room_key,
-      public: room_type,
+      public: req.body.room_type,
       avatar: avatars[getRandomInt(0, avatars.length)],
       expired: expired,
       description: req.body.room_description,
-      owner: req.user.spotify_id,
+      owner: req.userId,
     })
 
     if (!errors.isEmpty()) {
-        // There are errors. Render form again with sanitized values/errors messages.
-        res.render('room_form', { title: 'Create Room', room: newRoom, errors: errors.array() });
-        return;
+      return res.status(400).json({error: 'Invalid Data'});
     }
     else {
-        // Data from form is valid.
-
-        // Create a Room object with escaped and trimmed data.
-        newRoom.save().then(room => {
-                      res.redirect(room.getUrl() + '?room_key=' + room.key);
+      // Create a Room object with escaped and trimmed data.
+      newRoom.save().then(room => {
+                      return res.status(200).json({message: 'Room created successfully'});
                   }).catch(err => {
-                      return next(err);
+                      return res.status(500).json({error: 'Internal Server Error'});
                   })
     }
   }
