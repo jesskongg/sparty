@@ -91,7 +91,7 @@ exports.spotify_logout = function(req, res) {
 };
 
 exports.isAuthenticate = function(req, res, next) {
-  if (req.user && req.user.authenticated) {
+  if (req.isAuthenticated()) {
     return next();
   }
   res.redirect('/');
