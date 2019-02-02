@@ -2,6 +2,8 @@
 var passport = require('passport');
 var jwt = require('jsonwebtoken');
 var SpotifyWebApi = require('spotify-web-api-node');
+var authenticate = require('./authController');
+var models = require('../models/');
 
 //Create a Spotify Client
 var spotifyApi = new SpotifyWebApi({
@@ -19,7 +21,7 @@ spotifyApi.clientCredentialsGrant().then(
   }
 );
 
-exports.spotify_search = function(req, res, next) {
+exports.spotify_search = function(req, res) {
   //Set the type of query: track
   var type = 'track';
   var query = req.query.query;
@@ -28,7 +30,6 @@ exports.spotify_search = function(req, res, next) {
 
   spotifyApi.searchTracks(query)
   .then(function(spotRes) {
-    console.log(spotRes);
       spotRes.body.tracks.items.forEach(function(ea){
         var album_cover = (ea.album.images.length) ? ea.album.images[0].url : '';
         results.push({
@@ -40,9 +41,9 @@ exports.spotify_search = function(req, res, next) {
                       uri: ea.uri,
           });
       });
-      res.json(results);
+      return res.status(200).json(results);
   }, function(err) {
-    console.error(err);
+      return res.status(500).json(err);
   })
 };
 
@@ -58,27 +59,18 @@ exports.spotify_login = passport.authenticate('spotify', {
 });
 
 exports.spotify_callback = function(req, res) {
-  res.render('authentication', {token: generateJwt(req.user)});
+  res.render('authentication', {token: authenticate.generateToken(req.user)});
 }
 
-exports.spotify_get_access_token = function(req, res, next) {
-  spotifyApi.refreshAccessToken()
-  .then(function(data) {
-        console.log('The access token has been refreshed!');
-        // Save the access token so that it's used in future calls
-        spotifyApi.setAccessToken(data.body['access_token']);
-        res.send(data.body['access_token']);
-      }, function(err) {
-        console.log('Could not refresh access token', err);
-    }
-  )
+// API: get new access token
+exports.spotify_get_access_token = function(req, res) {
+  models.User.findById(req.user).then(user => {
+    spotifyApi.setRefreshToken(user.refresh_token);
+    spotifyApi.refreshAccessToken()
+    .then(function(data) {
+      return res.status(200).json({accessToken: data.body.access_token});
+    }, function(err) {
+      return res.status(400).json({error: 'Cannot refresh token'});
+    })
+  })
 };
-
-exports.spotify_logout = function(req, res) {
-  req.logout();
-  res.redirect('/');
-};
-
-function generateJwt(user) {
-  return jwt.sign({user: user.spotify_id}, process.env.JWT_TOKEN);
-}
