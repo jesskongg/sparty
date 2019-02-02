@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var passport = require('passport');
 
 // Require controller modules.
 var spotify_controller = require('../controllers/spotifyController');
@@ -27,7 +28,7 @@ router.get('/auth/login', spotify_controller.spotify_login);
 
 router.get('/auth/logout', spotify_controller.spotify_logout);
 
-router.get('/auth/access_token', spotify_controller.spotify_get_access_token);
+router.get('/auth/access_token', spotify_controller.isAuthenticate, spotify_controller.spotify_get_access_token);
 
 router.get('/room/create', room_controller.room_create_get);
 

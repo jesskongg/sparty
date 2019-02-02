@@ -62,17 +62,17 @@ exports.spotify_login = passport.authenticate('spotify', {
 exports.spotify_callback = function(req, res, next) {
   passport.authenticate('spotify', function(err, user, info) {
     if (err) { return next(err); }
-    if (!user) { return res.redirect('/'); }
+    if (!user) { return res.redirect('/login'); }
     req.logIn(user, function(err) {
       if (err) { return next(err); }
       spotifyApi.setAccessToken(user.access_token);
-      spotifyApi.setRefreshToken(user.refresh_token);
-      return res.redirect('/');
+      return res.redirect('/login');
     })
   }) (req, res, next);
 };
 
 exports.spotify_get_access_token = function(req, res, next) {
+  spotifyApi.setRefreshToken(req.user.refresh_token);
   spotifyApi.refreshAccessToken()
   .then(function(data) {
         console.log('The access token has been refreshed!');
@@ -89,3 +89,10 @@ exports.spotify_logout = function(req, res) {
   req.logout();
   res.redirect('/');
 };
+
+exports.isAuthenticate = function(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  res.redirect('/');
+}

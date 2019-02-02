@@ -17,7 +17,7 @@ const avatars = [ '/images/pexels-photo-534031.jpeg',
 
 exports.room_list = function(req, res, next) {
   models.Room.findAll({
-    attribute: ['id', 'name', 'public']
+    attributes: ['id', 'name', 'public', 'avatar']
   }).then(rooms => {
     res.render('room_list', { title: 'Room List', rooms: rooms });
   })
@@ -25,7 +25,7 @@ exports.room_list = function(req, res, next) {
 
 exports.room_detail = function(req, res, next) {
   models.Room.findById(req.params.id).then(room => {
-    if (room) {
+    if (room && room.public) {
       res.locals.isOwner = isOwner(room, req.user);
       res.render('room_detail', { room: room })
     } else {
@@ -36,8 +36,6 @@ exports.room_detail = function(req, res, next) {
 
 // get private room detail
 exports.room_detail_post = function(req, res, next) {
-  // console.log(req.room_key);
-  console.log(req);
   models.Room.findById(req.params.id).then(room => {
     if (room && req.body.room_key === room.key) {
       res.locals.isOwner = isOwner(room, req.user);

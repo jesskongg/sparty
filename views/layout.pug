@@ -33,7 +33,7 @@ html
                   a.nav-link.active(href='/api/guide') Help
                 if (!loggedIn)
                   li.nav-item(role='presentation')
-                    a.nav-link(href='/api/auth/login') Login
+                    a#login.nav-link() Login
                 else
                   li.nav-item(role='presentation')
                     a.nav-link(href='/api/room/create') Create Room
