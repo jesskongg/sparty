@@ -1,0 +1,12 @@
+doctype html
+html
+  head
+    title= Authentication
+  body
+    p Successfully authentication.
+    p #{token}
+    script.
+      window.opener.authCallback('#{token}')
+      window.close()
+
+          

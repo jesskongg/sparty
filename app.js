@@ -22,27 +22,18 @@ var app = express();
 app.use(helmet());
 app.use(serveStatic(path.join(__dirname, 'vue-client/dist')));
 // view engine setup
-// app.set('views', path.join(__dirname, 'views'));
-// app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'pug');
 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-
-app.use(session({
-  secret: 'keyboard cat',
-  resave: false,
-  // saveUninitialized: false,
-  // cookie: { secure: true }
-}));
 
 app.use(passport.initialize());
-app.use(passport.session());
 
 app.use(compression()); //Compress all routes
 
-// app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(function (req, res, next) {
   res.locals = {
@@ -61,6 +52,12 @@ app.use(function (req, res, next) {
 //     }
 //   })
 // }
+
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+  next();
+});
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
