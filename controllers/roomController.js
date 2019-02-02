@@ -7,6 +7,8 @@ const { sanitizeBody } = require('express-validator/filter');
 var async = require('async');
 var models = require('../models/');
 
+const serverBaseUrl = process.env.NODE_ENV === 'production' ? 'https://chardonnay.herokuapp.com' : 'http://localhost:3000';
+
 var date = require('date-and-time');
 
 const avatars = [ '/images/pexels-photo-534031.jpeg',
@@ -15,45 +17,33 @@ const avatars = [ '/images/pexels-photo-534031.jpeg',
                 '/images/pexels-photo-1251089.jpeg',
               ];
 
-exports.room_list = function(req, res, next) {
+// API: get list of rooms
+exports.room_list = function(req, res) {
   models.Room.findAll({
-    attribute: ['id', 'name', 'public']
+    attributes: ['name', 'avatar', 'public', 'id', 'description']
   }).then(rooms => {
-    res.render('room_list', { title: 'Room List', rooms: rooms });
+    // add server address to host photos
+    for (var i = 0; i < rooms.length; i++)
+      rooms[i].avatar = serverBaseUrl + rooms[i].avatar;
+    return res.status(200).json(rooms);
   })
 };
 
-exports.room_detail = function(req, res, next) {
+// API: get room's details
+exports.room_detail = function(req, res) {
   models.Room.findById(req.params.id).then(room => {
-    if (room) {
-      res.locals.isOwner = isOwner(room, req.user);
-      res.render('room_detail', { room: room })
-    } else {
-      res.redirect('/');
+    if (room && room.public) {
+      return res.status(200).json(room);
     }
-  })
-};
-
-// get private room detail
-exports.room_detail_post = function(req, res, next) {
-  // console.log(req.room_key);
-  console.log(req);
-  models.Room.findById(req.params.id).then(room => {
-    if (room && req.body.room_key === room.key) {
-      res.locals.isOwner = isOwner(room, req.user);
-      res.render('room_detail', { room: room })
-    } else {
-      res.redirect('/');
+    if (!room) {
+      return res.status(400).json({error: 'Not Found'});
     }
+    if (!room.public && req.query.room_key === room.key) {
+      console.log(req.params.room_key);
+      return res.status(200).json(room);
+    }
+    return res.status(401).json({error: 'Unauthorized Access'})
   })
-};
-
-exports.room_create_get = function(req, res, next) {
-  if (isLogin(req.user)) {
-    res.render('room_form', { title: 'Create Room' });
-  } else {
-    res.redirect('/');
-  }
 };
 
 // API: create a new room
@@ -84,31 +74,18 @@ exports.room_create_post = [
     })
 
     if (!errors.isEmpty()) {
-      return res.status(400).json({error: 'Invalid Data'});
+      return res.status(400).json(errors.array());
     }
     else {
       // Create a Room object with escaped and trimmed data.
       newRoom.save().then(room => {
-                      return res.status(200).json({message: 'Room created successfully'});
+                      return res.status(200);
                   }).catch(err => {
-                      return res.status(500).json({error: 'Internal Server Error'});
+                      return res.status(500);
                   })
     }
   }
 ];
-
-// API: update a room
-// owner authorization is required
-// return room's detail
-exports.room_update_get = function(req, res, next) {
-  models.Room.findById(req.params.id).then(function(room) {
-    if (room && isOwner(room, req.user)) {
-      return res.status(200).json(room);
-    } else {
-      return res.status(400).json({error: 'Bad request'});
-    }
-  })
-}
 
 // API: update a room
 // owner authorization is required
@@ -127,7 +104,7 @@ exports.room_update_post = [
 
     if (!errors.isEmpty()) {
         // There are errors. Render form again with sanitized values/errors messages.
-        return res.status(400).json({error: 'Bad request'});
+        return res.status(400);
     }
     else {
         // Data from form is valid.
@@ -142,29 +119,24 @@ exports.room_update_post = [
         // TODO: implement upload photo feature for room's avatar
         models.Room.findById(req.params.id).then(function(room) {
           room.update(newRoom).then(() => {
-            return res.status(200).json({message: 'Updated successfully'});
+            return res.status(200);
           }).catch(function(err) {
-            return res.status(400).json({error: 'Bad request'});
+            return res.status(400);
           })
         })
     }
   }
 ]
 
-exports.room_delete_get = function(req, res, next) {
-  models.Room.findById(req.params.id).then(function(room) {
-    if (room && isOwner(room, req.user)) {
-      res.render('room_delete', { title: 'Delete Room', room: room });
-    } else {
-      res.redirect('/');
-    }
-  })
-}
+// API: delete room
 exports.room_delete_post = function(req, res, next) {
   models.Room.findById(req.params.id).then(function(room) {
-    return room.destroy();
-  }).then(() => {
-    res.redirect('/api/rooms');
+    if (room && isOwner(room, req.user)) {
+      room.destroy();
+      return res.status(200);
+    }
+    if (!room) return res.status(404);
+    else return res.status(401);
   })
 };
 
@@ -257,14 +229,6 @@ function isOwner(room, user) {
     return room.owner === user;
   }
   return false;
-}
-
-function isLogin(user) {
-  if (user) {
-    return true;
-  } else {
-    return false;
-  }
 }
 
 // ref: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
