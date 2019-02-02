@@ -1,40 +1,31 @@
 <template>
   <b-container>
-    <search-bar placeholder="search room"/>
-    <b-card-group deck>
-      <room
-        v-for = "room in rooms"
-        v-bind:key="room.id"
-        :id="room.id"
-        :name="room.name"
-        :avatar="room.avatar"
-        :description="room.description"
-        :public="room.public"
-      ></room>
-    </b-card-group>
+    <h5>Welcome to {{room.name}}
+      (<font-awesome-icon icon="lock" />)
+    </h5>
+    <search-bar placeholder="search song"/>
   </b-container>
 </template>
 
 <script>
   // @ is an alias to /src
-  import Room from '@/components/Room'
   import SearchBar from '@/components/SearchBar'
   import {HTTP} from '@/http-common'
 
   export default {
-    name: 'home',
+    name: 'RoomDetail',
+    props: ['id'],
     data: function() {
-      return { rooms: [], errors: [] }
+      return { room: {}, errors: [] }
     },
     components: {
-      Room,
       SearchBar
     },
     created: function() {
       // get rooms from API
-      HTTP.get(`rooms`)
+      HTTP.get('room/' + this.id)
       .then(res => {
-        this.rooms = res.data;
+        this.room = res.data;
       })
       .catch(err => {
         this.errors.push(err);
@@ -50,5 +41,6 @@
 
   .container {
     margin-top: 15px;
+    text-align: center;
   }
 </style>
