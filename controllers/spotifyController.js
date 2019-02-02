@@ -62,11 +62,11 @@ exports.spotify_login = passport.authenticate('spotify', {
 exports.spotify_callback = function(req, res, next) {
   passport.authenticate('spotify', function(err, user, info) {
     if (err) { return next(err); }
-    if (!user) { return res.redirect('/'); }
+    if (!user) { return res.redirect('/login'); }
     req.logIn(user, function(err) {
       if (err) { return next(err); }
       spotifyApi.setAccessToken(user.access_token);
-      return res.redirect('/');
+      return res.redirect('/login');
     })
   }) (req, res, next);
 };

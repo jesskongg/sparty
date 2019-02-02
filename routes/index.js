@@ -9,4 +9,8 @@ router.get('/', function(req, res, next) {
 
 router.get('/callback', spotify_controller.spotify_callback);
 
+router.get('/login', function(req, res) {
+  res.render('login');
+});
+
 module.exports = router;
