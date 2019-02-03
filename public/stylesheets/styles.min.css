@@ -11,3 +11,44 @@ footer i {
 footer a {
   margin-right: 20px;
 }
+
+.content {
+  margin-top: 80px;
+}
+
+.display-none {
+  display: none;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.media-object {
+  padding: 10px 15px;
+  background-color: #f4f8fa;
+  opacity: 0.9;
+  border: 1px solid #dbe3e7;
+  box-shadow: 0 2px 3px #dbe3e7;
+}
+/* HOME PAGE */
+.room-list {
+  margin-top: 20px;
+}
+
+.scale-on-hover:hover {
+  transform: scale(1.05);
+  transition: transform .2s;
+}
+
+/* to keep all photos same size */
+.card-img-top {
+    height: 15rem;
+    object-fit: cover;
+}
+
+/* to keep all photos same size */
+.guide.card-img-top {
+    height: 100%;
+    object-fit: cover;
+}

@@ -9,21 +9,6 @@ var delay = (function(){
 })();
 
 $(function() {
-  list_room.forEach(function(room) {
-    var roomId = Object.keys(room)[0];
-    var objectId = 'room' + roomId;
-    $(`#${objectId}`).click(function() {
-      var url = '/api/room/' + roomId;
-      if (room[roomId] === true) {
-        window.location.href = url;
-      } else {
-        // option 2: show the form
-        var formId = 'key_form' + roomId;
-        enterRoom(objectId, formId, roomId);
-      }
-    })
-  });
-
   // search room
   $("#room_search").keyup(function() {
     delay(function() {
@@ -37,24 +22,18 @@ $(function() {
                   $(".modal-body").empty();
                   $(".modal-header").text('Room with ' + query);
                   $("#searchModal").modal("show");
-                  // var newElement = $('<a></a>');
                   resp.forEach(function(ea) {
                     $(".modal-body").append(`
-                        <div class="row mx-auto user-list">
-                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 flex-fill m-auto user-item">
-                                <a class="user-link" id='search_room${ea.id}'>
-                                    <div class="user-container">
-                                        <div class="user-avatar">
-                                          <img class="img-fluid" src='${ea.avatar}' alt="Song Cover" width="48" height="48">
-                                        </div>
-                                        <p class="user-name">
-                                          <strong>${ea.name}</strong>
-                                        </p>
-                                    </div>
-                                </a>
+                      <div class="media-object clickable" id='search_room${ea.id}'>
+                          <div class="media">
+                            <img class="align-self-center mr-3 img-fluid" src='${ea.avatar}' alt="Song Cover" width="48" height="48">
+                            <div class="media-body">
+                              <h6 class="mt-0">${ea.name}</h6>
                             </div>
-                        </div>
-                      `)
+                          </div>
+                      </div>
+                      <br>
+                    `)
 
                       // handle click
                       $(`#search_room${ea.id}`).click(function() {
@@ -63,9 +42,11 @@ $(function() {
                         } else {
                           $("#searchModal").modal("hide");
                           let objectId = 'room' + ea.id;
-                          let formId = 'key_form' + ea.id;
                           let roomId = ea.id;
-                          enterRoom(objectId, formId, roomId);
+                          openRoom(roomId);
+                          $([document.documentElement, document.body]).animate({
+                              scrollTop: $(`#${objectId}`).offset().top
+                          }, 2000);
                         }
                       })
                     })
@@ -78,24 +59,7 @@ $(function() {
 
 })
 
-/* function to handle enter private room with key
-    objectId: div element contains roomId
-    formId: form element to ask for key
-*/
-function enterRoom(objectId, formId, roomId) {
-  // var formId = 'key_form' + roomId;
-  $(`#${formId}`).empty();
-  $(`#${formId}`).append(`
-    <form id="enter_key_form" method="POST" action="/api/room/${roomId}">
-      <div class="form-group">
-        <input class="form-control" placeholder="room key" name="room_key" require="true" value="" type="password">
-      </div>
-      <button class="btn btn-primary" type="submit">Enter Room</button>
-    </form>
-  `)
-  $(`#${formId}`).toggle();
-  $('body, html').animate({ scrollTop: $(`#${objectId}`).offset().top }, 10);
-  if ($(`#${formId}`)) {
-    $(`#${formId}`).find("input").focus();
-  }
+function openRoom(roomId) {
+  var formId = 'key_form' + roomId;
+  $(`#${formId}`).toggleClass('display-none');
 }
