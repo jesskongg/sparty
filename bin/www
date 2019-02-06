@@ -65,18 +65,13 @@ nsp.on('connection', function (socket) {
   })
 
   socket.on('add_candidate', function(ea) {
-    if (candidates[socket.room][ea.id]) {
-      if (!candidates[socket.room][ea.id].remoteAddress.includes(socket.request.connection.remoteAddress)) {
-        candidates[socket.room][ea.id].vote++;
-      }
-    } else {
-      candidates[socket.room][ea.id] = ea;
-      candidates[socket.room][ea.id].remoteAddress = [];
-      candidates[socket.room][ea.id].remoteAddress.push(socket.request.connection.remoteAddress);
-    }
+    addCandidate(socket, ea);
   });
 
   socket.on('update_candidate_list', function(data) {
+    data.forEach(function(ea) {
+      addCandidate(socket, ea);
+    })
     nsp.to(socket.room).emit('show_list', candidates[socket.room]);
   })
 
@@ -111,6 +106,19 @@ nsp.on('connection', function (socket) {
   })
 
 });
+
+function addCandidate(socket, ea) {
+  if (candidates[socket.room][ea.id]) {
+    if (!candidates[socket.room][ea.id].remoteAddress.includes(socket.request.connection.remoteAddress)) {
+      candidates[socket.room][ea.id].vote++;
+      candidates[socket.room][ea.id].remoteAddress.push(socket.request.connection.remoteAddress);
+    }
+  } else {
+    candidates[socket.room][ea.id] = ea;
+    candidates[socket.room][ea.id].remoteAddress = [];
+    candidates[socket.room][ea.id].remoteAddress.push(socket.request.connection.remoteAddress);
+  }
+}
 
 // check every hour if there is a room is expired
 // setInterval(room_controller.room_cleanup, 60 * 60 * 1000);

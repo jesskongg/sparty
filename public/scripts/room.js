@@ -14,12 +14,14 @@ var delay = (function(){
   };
 })();
 
+
 // Shorthand for $( document ).ready()
 $(function() {
 
   socket.on('connect', function(data) {
     socket.emit('room', roomId);
   });
+  var selectSongs = [];
 
   $("#song_search").keyup(function() {
     delay(function() {
@@ -36,14 +38,11 @@ $(function() {
             $("#searchResult").empty();
             $("#searchResult").show();
             resp.forEach(function(ea) {
-              createSongDiv('#searchResult', ea, 'song', 'none');
+              createSongDiv('#searchResult', ea, 'song', 'invisible');
               $('#searchResult').append(`<br>`);
               $(`#${ea.id}song`).click(function(event) {
-                event.stopImmediatePropagation();
-                $(`#${ea.id}song`).css('background-color', 'rgba(0,0,0,0.1)');
-                ea.vote = 1;
-                socket.emit('add_candidate', ea);
-              })
+                selectSong(ea, `${ea.id}song`, selectSongs, event, true);
+              });
             })
           }
         )
@@ -59,14 +58,11 @@ $(function() {
       topSongs = topCandidates;
       $(".modal-body").empty();
       topCandidates.forEach(function(ea) {
-        createSongDiv('.modal-body', ea, 'suggestion', 'none');
+        createSongDiv('.modal-body', ea, 'suggestion', 'invisible');
         $(".modal-body").append(`<br>`);
         $(`#${ea.id}suggestion`).click(function(event) {
-          // event.stopImmediatePropagation(); // to prevent closing modal
-          $(`#${ea.id}suggestion`).css('background-color', 'rgba(0,0,0,0.1)');
-          ea.vote = 1;
-          socket.emit('add_candidate', ea);
-        })
+          selectSong(ea, `${ea.id}suggestion`, selectSongs, event, false);
+        });
       })
     })
   })
@@ -83,13 +79,15 @@ $(function() {
     if ($("#searchResult").contents().length) {
       $("#searchResult").hide();
       $("#song_search").val('');
-      socket.emit('update_candidate_list', 'data');
+      socket.emit('update_candidate_list', selectSongs);
+      selectSongs = [];
     }
   })
 
   // close top 10 songs modal
   $('#topCandidates').on('hidden.bs.modal', function() {
-    socket.emit('update_candidate_list', 'data');
+    socket.emit('update_candidate_list', selectSongs);
+    selectSongs = [];
   })
 
   // update number of people in the room
@@ -117,7 +115,9 @@ $(function() {
       createSongDiv('#candidates', ea, 'candidate', '');
       $("#candidates").append(`<br>`);
       $(`#${ea.id}candidate`).click(function() {
-        socket.emit('add_vote', ea);
+        console.log('remove class');
+        $(`#${ea.id}remove`).removeClass('invisible');
+        // socket.emit('add_vote', ea);
       });
     }
     $('#candidates').show();
@@ -127,7 +127,7 @@ $(function() {
     if (track.uri) {
       $("#currentSong").empty();
       $("#currentSong").append('<p>Playing</p>');
-      createSongDiv('#currentSong', track, '', 'none');
+      createSongDiv('#currentSong', track, '', 'invisible');
     }
   });
 
@@ -152,9 +152,23 @@ function createSongDiv(element, ea, id, style) {
           <p class="detail small">${ea.album}</p>
         </div>
       </div>
-      <div class="bg-success count-icon" style="display: ${style}">
+      <div class="bg-success count-icon ${style}">
         ${ea.vote}
       </div>
     </div>
   `)
+}
+
+function selectSong(ea, id, array, event, stopPropagation) {
+    if (stopPropagation === true) {
+      event.stopImmediatePropagation();
+    }
+    $(`#${id}`).toggleClass('selected');
+    if ($(`#${id}`).hasClass('selected')) {
+      ea.vote = 1;
+      array.push(ea);
+    } else {
+      let eaIndex = array.indexOf(ea);
+      array.splice(eaIndex, 1);
+    }
 }

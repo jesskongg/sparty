@@ -61,6 +61,25 @@ footer a {
   color: white;
   font-size: 80%;
 }
+
+.delete-icon {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 35px;
+  position: absolute;
+  bottom: 0;
+  right: -15px;
+  opacity: 0.9;
+  color: white;
+  font-size: 80%;
+}
+
+.selected {
+  background-color: rgba(0,0,0,0.1);
+}
 /* HOME PAGE */
 .room-list {
   margin-top: 20px;
