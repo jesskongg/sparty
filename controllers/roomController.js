@@ -17,7 +17,7 @@ const avatars = [ '/images/pexels-photo-534031.jpeg',
 
 exports.room_list = function(req, res, next) {
   models.Room.findAll({
-    attributes: ['id', 'name', 'public', 'avatar']
+    attributes: ['id', 'name', 'public', 'avatar', 'description']
   }).then(rooms => {
     res.render('room_list', { title: 'Room List', rooms: rooms });
   })

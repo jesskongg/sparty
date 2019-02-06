@@ -23,12 +23,12 @@ block content
                 img.card-img-top.scale-on-hover(src=room.avatar alt='Card Image')
             else
               img(id='room'+ room.id onclick='openRoom(' + room.id + ')').card-img-top.scale-on-hover(src=room.avatar alt='Card Image')
-            .card-body
+            .card-body.text-center
               h6= room.name
                 if (!room.public)
                   | (
                   i.fa.fa-lock )
-              p.text-muted.card-text !{room.description}
+              p.card-text.text-info !{room.description}
               form(id='key_form' + room.id)(method='POST' action='/api/room/' + room.id).display-none
                 .form-group
                   input.form-control(placeholder='room key' name='room_key' require='true' value='' type='password')
