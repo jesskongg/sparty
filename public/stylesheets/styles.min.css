@@ -90,6 +90,12 @@ footer a {
   transition: transform .2s;
 }
 
+.image-slot {
+  height: 15rem;
+  border: dashed 1px grey;
+  text-align: center;
+}
+
 /* to keep all photos same size */
 .card-img-top {
     height: 15rem;

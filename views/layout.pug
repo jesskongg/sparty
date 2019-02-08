@@ -29,6 +29,9 @@ html
                   | My Room
                 .dropdown-menu(aria-labelledby='navbarDropdown')
                   a.dropdown-item(href='/api/room/create') Create Room
+                  if (isOwner)
+                    a.dropdown-item(href='/api/room/' + room.id + '/update') Edit Room
+                    a.dropdown-item(href='/api/room/' + room.id + '/delete') Delete Room
                   .dropdown-divider
                   a.dropdown-item(href='/api/rooms') My Rooms
             li.nav-item

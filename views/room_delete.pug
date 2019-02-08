@@ -1,19 +1,17 @@
 extend layout
 
 block content
-  #content.subcontent.container
-    #roomDetailContent.row.justify-content-center.text-center
-      #roomList.col-lg-12.col-md-12.col-sm-12
-        .row.justify-content-center.text-center
-          .col-md-6.col-lg-4
-            .card.border-0
-              a(href=room.getUrl())
-                img.card-img-top.scale-on-hover(src=room.avatar alt='Card Image')
-              .card-body
-                h6
-                  a(href=room.getUrl()) #{room.name}
-                p.text-muted.card-text #{room.description}
-              form#delete_form(method='POST' action='')
-                div.form-group
-                  input#roomId.form-control(type='hidden',name='roomId', required='true', value=room.id)
-                button.btn.btn-danger(type='submit') Delete
+  .content.container
+    .row.justify-content-center.text-center
+      .col-md-6.col-lg-4
+        .card.border-0
+          a(href=room.getUrl())
+            img.card-img-top.scale-on-hover(src=room.avatar alt='Card Image')
+          .card-body
+            h6
+              a(href=room.getUrl()) #{room.name}
+            p.card-text !{room.description}
+          form(method='POST' action='')
+            div.form-group
+              input.form-control(type='hidden', name='roomId', required='true', value=room.id)
+            button.btn.btn-danger(type='submit') Delete
