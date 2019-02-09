@@ -1,0 +1,38 @@
+extends layout
+
+block content
+  .container.content
+    .row.justify-content-center
+      .col-md-6
+        input#room_search.form-control(type='text' name='room_search' placeholder="Search room")
+  
+        #searchModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='searchModalTitle' aria-hidden='true')
+          .modal-dialog.modal-dialog-centered(role='document')
+            .modal-content
+              .modal-header
+              .modal-body
+              .modal-footer
+  
+  .container.room-list
+    .row.justify-content-center
+      each room in rooms
+        .col-md-4
+          .card.border-0
+            if (room.public)
+              a(href='/api/room/' + room.id)
+                img.card-img-top.scale-on-hover(src=room.avatar alt='Card Image')
+            else
+              img(id='room'+ room.id onclick='openRoom(' + room.id + ')').card-img-top.scale-on-hover(src=room.avatar alt='Card Image')
+            .card-body.text-center
+              h6= room.name
+                if (!room.public)
+                  | (
+                  i.fa.fa-lock )
+              p.card-text.text-info !{room.description}
+              form(id='key_form' + room.id)(method='POST' action='/api/room/' + room.id).display-none
+                .form-group
+                  input.form-control(placeholder='room key' name='room_key' require='true' value='' type='password')
+                button.btn.btn-primary(type='submit') Enter Room
+  
+  
+    script(src='/scripts/enter_room.js')

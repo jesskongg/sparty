@@ -38,6 +38,8 @@ router.get('/room/search', room_controller.room_search);
 
 router.get('/rooms', room_controller.room_list);
 
+router.get('/room/my-room', room_controller.my_room_list);
+
 router.get('/room/:id', room_controller.room_detail);
 
 router.post('/room/:id', room_controller.room_detail_post);

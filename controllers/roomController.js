@@ -23,6 +23,18 @@ exports.room_list = function(req, res, next) {
   })
 };
 
+exports.my_room_list = function(req, res, next) {
+  models.User.findById(req.user.spotify_id).then(user => {
+    if (user) {
+      user.getRooms().then(rooms => {
+        res.render('my_room', { title: 'My Room', rooms: rooms })
+      })
+    } else {
+      res.redirect('/');
+    }
+  })
+};
+
 exports.room_detail = function(req, res, next) {
   models.Room.findById(req.params.id).then(room => {
     if (room && room.public) {
