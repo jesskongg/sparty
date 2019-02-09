@@ -21,9 +21,9 @@ html
               a.nav-link(href='/')
                 | Home 
                 span.sr-only (current)
-            li.nav-item
+            li.nav-item.active
               a.nav-link(href='/api/guide') Help
-            li.nav-item.dropdown
+            li.nav-item.dropdown.active
               if (loggedIn)
                 a#navbarDropdown.nav-link.dropdown-toggle(href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')
                   | My Room
@@ -34,7 +34,7 @@ html
                     a.dropdown-item(href='/api/room/' + room.id + '/delete') Delete Room
                   .dropdown-divider
                   a.dropdown-item(href='/api/room/my-room') My Rooms
-            li.nav-item
+            li.nav-item.active
               if (!loggedIn)
                 a#login.nav-link Login
               else

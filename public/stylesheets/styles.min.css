@@ -4,6 +4,10 @@ nav a {
   cursor: pointer;
 }
 
+.nav-item a:hover {
+  text-decoration: underline !important;
+}
+
 footer i {
   font-size: 1.5rem;
 }
@@ -106,4 +110,5 @@ footer a {
 .guide.card-img-top {
     height: 100%;
     object-fit: cover;
+    border: solid 1px green;
 }
