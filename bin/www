@@ -112,7 +112,7 @@ nsp.on('connection', function (socket) {
 function addCandidate(socket, ea) {
   let ip = getClientIp(socket.request);
   if (candidates[socket.room][ea.id]) {
-    if (!candidates[socket.room][ea.id].remoteAddress.includes(ip) {
+    if (!candidates[socket.room][ea.id].remoteAddress.includes(ip)) {
       candidates[socket.room][ea.id].vote++;
       candidates[socket.room][ea.id].remoteAddress.push(ip);
     }
