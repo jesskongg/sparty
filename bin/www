@@ -77,8 +77,8 @@ nsp.on('connection', function (socket) {
 
   socket.on('add_vote', function(ea) {
     let ip = getClientIp(socket.request);
+    console.log('add-vote: ip' + ip);
     if (!candidates[socket.room][ea.id].remoteAddress.includes(ip)) {
-      console.log(ip);
       candidates[socket.room][ea.id].vote++;
       candidates[socket.room][ea.id].remoteAddress.push(ip);
       nsp.to(socket.room).emit('show_list', candidates[socket.room]);
@@ -111,6 +111,7 @@ nsp.on('connection', function (socket) {
 
 function addCandidate(socket, ea) {
   let ip = getClientIp(socket.request);
+  console.log('add-candidate ip' + ip);
   if (candidates[socket.room][ea.id]) {
     if (!candidates[socket.room][ea.id].remoteAddress.includes(ip)) {
       candidates[socket.room][ea.id].vote++;
