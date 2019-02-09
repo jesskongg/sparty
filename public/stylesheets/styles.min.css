@@ -1,5 +1,11 @@
 /* GLOBAL */
 
+@media screen and (max-width: 480px) {
+  html {
+    cursor: pointer;
+  }
+}
+
 nav a {
   cursor: pointer;
 }
