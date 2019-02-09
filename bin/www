@@ -76,9 +76,11 @@ nsp.on('connection', function (socket) {
   })
 
   socket.on('add_vote', function(ea) {
-    if (!candidates[socket.room][ea.id].remoteAddress.includes(socket.request.connection.remoteAddress)) {
+    let ip = getClientIp(socket.request);
+    if (!candidates[socket.room][ea.id].remoteAddress.includes(ip)) {
+      console.log(ip);
       candidates[socket.room][ea.id].vote++;
-      candidates[socket.room][ea.id].remoteAddress.push(socket.request.connection.remoteAddress);
+      candidates[socket.room][ea.id].remoteAddress.push(ip);
       nsp.to(socket.room).emit('show_list', candidates[socket.room]);
     }
   })
@@ -108,17 +110,38 @@ nsp.on('connection', function (socket) {
 });
 
 function addCandidate(socket, ea) {
+  let ip = getClientIp(socket.request);
   if (candidates[socket.room][ea.id]) {
-    if (!candidates[socket.room][ea.id].remoteAddress.includes(socket.request.connection.remoteAddress)) {
+    if (!candidates[socket.room][ea.id].remoteAddress.includes(ip) {
       candidates[socket.room][ea.id].vote++;
-      candidates[socket.room][ea.id].remoteAddress.push(socket.request.connection.remoteAddress);
+      candidates[socket.room][ea.id].remoteAddress.push(ip);
     }
   } else {
     candidates[socket.room][ea.id] = ea;
     candidates[socket.room][ea.id].remoteAddress = [];
-    candidates[socket.room][ea.id].remoteAddress.push(socket.request.connection.remoteAddress);
+    candidates[socket.room][ea.id].remoteAddress.push(ip);
   }
 }
+
+// https://stackoverflow.com/questions/14382725/how-to-get-the-correct-ip-address-of-a-client-into-a-node-socket-io-app-hosted-o?lq=1
+function getClientIp(req) {
+  var ipAddress;
+  // Amazon EC2 / Heroku workaround to get real client IP
+  var forwardedIpsStr = req.headers['x-forwarded-for'];
+  if (forwardedIpsStr) {
+    // 'x-forwarded-for' header may return multiple IP addresses in
+    // the format: "client IP, proxy 1 IP, proxy 2 IP" so take the
+    // the first one
+    var forwardedIps = forwardedIpsStr.split(',');
+    ipAddress = forwardedIps[0];
+  }
+  if (!ipAddress) {
+    // Ensure getting client IP address still works in
+    // development environment
+    ipAddress = req.connection.remoteAddress;
+  }
+  return ipAddress;
+};
 
 // check every hour if there is a room is expired
 // setInterval(room_controller.room_cleanup, 60 * 60 * 1000);
