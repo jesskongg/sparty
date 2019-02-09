@@ -27,7 +27,6 @@ exports.spotify_search = function(req, res, next) {
   //Make a request to Spotify
   spotifyApi.searchTracks(query)
       .then(function (spotRes) {
-        console.log(spotRes);
         //Store the artist, song, preview link, and album in the results array
         spotRes.body.tracks.items.forEach(function(ea){
           var album_cover = (ea.album.images.length) ? ea.album.images[0].url : '';
