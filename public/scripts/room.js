@@ -115,9 +115,8 @@ $(function() {
       createSongDiv('#candidates', ea, 'candidate', '');
       $("#candidates").append(`<br>`);
       $(`#${ea.id}candidate`).click(function() {
-        console.log('remove class');
         $(`#${ea.id}remove`).removeClass('invisible');
-        // socket.emit('add_vote', ea);
+        socket.emit('add_vote', ea);
       });
     }
     $('#candidates').show();
