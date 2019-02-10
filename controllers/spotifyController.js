@@ -1,15 +1,8 @@
-// Import the Spotify API
-var Spotify = require('node-spotify-api');
 var passport = require('passport');
-
 var http = require('http');
 var SpotifyWebApi = require('spotify-web-api-node');
 
-//Import our Keys File
-var keys = require('../routes/key');
-
 //Create a Spotify Client
-var spotify = new Spotify(keys.spotifyKeys);
 var spotifyApi = new SpotifyWebApi({
   clientId: process.env.CLIENT_ID,
   clientSecret: process.env.CLIENT_SECRET,
@@ -17,6 +10,12 @@ var spotifyApi = new SpotifyWebApi({
   redirectUri: 'https://chardonnay.herokuapp.com/callback'
 
 });
+
+spotifyApi.clientCredentialsGrant().then(
+  function(data) {
+    spotifyApi.setAccessToken(data.body['access_token']);
+  }
+);
 
 exports.spotify_search = function(req, res, next) {
   //Set the type of query: track
@@ -26,10 +25,10 @@ exports.spotify_search = function(req, res, next) {
   var results = [];
 
   //Make a request to Spotify
-  spotify.search({type: type, query: query})
+  spotifyApi.searchTracks(query)
       .then(function (spotRes) {
         //Store the artist, song, preview link, and album in the results array
-        spotRes.tracks.items.forEach(function(ea){
+        spotRes.body.tracks.items.forEach(function(ea){
           var album_cover = (ea.album.images.length) ? ea.album.images[0].url : '';
           results.push({
                         artist: ea.artists[0].name,

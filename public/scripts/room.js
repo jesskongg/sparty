@@ -1,7 +1,7 @@
 // match the namespace defined on server
 // var socket = io.connect('https://www.spartyfy.me/api/rooms');
-// var socket = io.connect('http://localhost:3000/api/rooms');
-var socket = io.connect('https://chardonnay.herokuapp.com/api/rooms');
+var socket = io.connect('http://localhost:3000/api/rooms');
+// var socket = io.connect('https://chardonnay.herokuapp.com/api/rooms');
 
 
 // function to delay ms before execute
@@ -14,12 +14,14 @@ var delay = (function(){
   };
 })();
 
+
 // Shorthand for $( document ).ready()
 $(function() {
 
   socket.on('connect', function(data) {
     socket.emit('room', roomId);
   });
+  var selectSongs = [];
 
   $("#song_search").keyup(function() {
     delay(function() {
@@ -36,13 +38,11 @@ $(function() {
             $("#searchResult").empty();
             $("#searchResult").show();
             resp.forEach(function(ea) {
-              createSongDiv('#searchResult', ea, 'song', 'search-song', 'none');
+              createSongDiv('#searchResult', ea, 'song', 'invisible');
+              $('#searchResult').append(`<br>`);
               $(`#${ea.id}song`).click(function(event) {
-                event.stopImmediatePropagation();
-                $(`#${ea.id}search-song`).css('background-color', 'rgba(0,0,0,0.1)');
-                ea.vote = 1;
-                socket.emit('add_candidate', ea);
-              })
+                selectSong(ea, `${ea.id}song`, selectSongs, event, true);
+              });
             })
           }
         )
@@ -58,13 +58,11 @@ $(function() {
       topSongs = topCandidates;
       $(".modal-body").empty();
       topCandidates.forEach(function(ea) {
-        createSongDiv('.modal-body', ea, 'suggestion', 'suggestion-song', 'none');
+        createSongDiv('.modal-body', ea, 'suggestion', 'invisible');
+        $(".modal-body").append(`<br>`);
         $(`#${ea.id}suggestion`).click(function(event) {
-          // event.stopImmediatePropagation(); // to prevent closing modal
-          $(`#${ea.id}suggestion-song`).css('background-color', 'rgba(0,0,0,0.1)');
-          ea.vote = 1;
-          socket.emit('add_candidate', ea);
-        })
+          selectSong(ea, `${ea.id}suggestion`, selectSongs, event, false);
+        });
       })
     })
   })
@@ -81,13 +79,15 @@ $(function() {
     if ($("#searchResult").contents().length) {
       $("#searchResult").hide();
       $("#song_search").val('');
-      socket.emit('update_candidate_list', 'data');
+      socket.emit('update_candidate_list', selectSongs);
+      selectSongs = [];
     }
   })
 
   // close top 10 songs modal
   $('#topCandidates').on('hidden.bs.modal', function() {
-    socket.emit('update_candidate_list', 'data');
+    socket.emit('update_candidate_list', selectSongs);
+    selectSongs = [];
   })
 
   // update number of people in the room
@@ -112,8 +112,10 @@ $(function() {
     $('#candidates').empty();
     for (var key in candidates) {
       let ea = candidates[key];
-      createSongDiv('#candidates', ea, 'candidate', 'candidate-song', '');
+      createSongDiv('#candidates', ea, 'candidate', '');
+      $("#candidates").append(`<br>`);
       $(`#${ea.id}candidate`).click(function() {
+        $(`#${ea.id}remove`).removeClass('invisible');
         socket.emit('add_vote', ea);
       });
     }
@@ -124,7 +126,7 @@ $(function() {
     if (track.uri) {
       $("#currentSong").empty();
       $("#currentSong").append('<p>Playing</p>');
-      createSongDiv('#currentSong', track, '', '', 'none');
+      createSongDiv('#currentSong', track, '', 'invisible');
     }
   });
 
@@ -138,26 +140,34 @@ $(function() {
   id2: <div id=id2> for css when id1 is on click
   style: 'none' or '' for showing #vote el
 */
-function createSongDiv(element, ea, id1, id2, style) {
+function createSongDiv(element, ea, id, style) {
   $(element).append(`
-      <div class="row no-gutters mx-auto user-list">
-          <div class="col flex-fill m-auto user-item">
-            <a class="user-link" id='${ea.id}${id1}'>
-              <div class="user-container" id='${ea.id}${id2}'>
-                <div class="user-avatar">
-                  <img class="rounded-circle img-fluid" src='${ea.image}' alt="Cover" width="48" height="48">
-                </div>
-                <p class="user-name">
-                  <strong>${ea.name}</strong>
-                  <span>${ea.artist}</span>
-                  <span>${ea.album}</span>
-                </p>
-                <p class="bg-primary user-delete" style="display: ${style}">
-                  <span>${ea.vote}</span>
-                </p>
-              </div>
-            </a>
-          </div>
+    <div class="media-object clickable rounded" id='${ea.id}${id}'>
+      <div class="media">
+        <img class="rounded-circle align-self-center mr-3 img-fluid" src='${ea.image}' alt="Song Cover" width="48" height="48">
+        <div class="media-body">
+          <h6 class="mt-0 detail">${ea.name}</h6>
+          <p class="detail small">${ea.artist}</p>
+          <p class="detail small">${ea.album}</p>
+        </div>
       </div>
+      <div class="bg-success count-icon ${style}">
+        ${ea.vote}
+      </div>
+    </div>
   `)
+}
+
+function selectSong(ea, id, array, event, stopPropagation) {
+    if (stopPropagation === true) {
+      event.stopImmediatePropagation();
+    }
+    $(`#${id}`).toggleClass('selected');
+    if ($(`#${id}`).hasClass('selected')) {
+      ea.vote = 1;
+      array.push(ea);
+    } else {
+      let eaIndex = array.indexOf(ea);
+      array.splice(eaIndex, 1);
+    }
 }

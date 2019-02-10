@@ -1,46 +1,43 @@
 extend layout
 
 block content
-  main.page.projects-page
-  section.portfolio-block.projects-cards
-    .container
-      .heading
-        h5 Sparty = Spotify + Party 
+  .content.container
+    .row.justify-content-center
+      .col-md-6
+        h5.text-center Sparty = Spotify + Party 
         p is a web application that provides real-time jukebox rooms where a user can join and suggest songs into a queue from Spotify and everyone else can vote up which songs in the queue they want to hear next. The application will pick the song with the most votes to play.
-        br
         strong Spotify web player currently only supports premium accounts on Chrome, Firefox and Edge
         br
         strong Restriction: created rooms are expired after 7 days.
         
-      .row.justify-content-center
-        .col-md-5.col-lg-5
-          .card.border-0
-            a(href='#')
-              img.guide.card-img-top(src='/images/guide_login.gif' alt='Card Image')
-            .card-body
-              h6
-                a(href='#') Login
-              p.text-muted.card-text The authentication is done with Spotify authentication flow. The application needs your permission to play music. You can <span><strong>withdraw these permissions anytime </strong></span>from Spotify application.
-        .col-md-5.col-lg-5
-          .card.border-0
-            a(href='#')
-              img.guide.card-img-top(src='/images/guide_createroom.gif' alt='Card Image')
-            .card-body
-              h6
-                a(href='#') Create Room and Start the party
-              p.text-muted.card-text You can load top songs (in real time) from all other rooms or search for songs as suggestion for your party. Click Start the party to enjoy the music.
-      
-      .heading  
-        h6 Wait. How about your friends? It's time for them to vote.
-      .row.justify-content-center
-        .col-md-5.col-lg-5
-          .card.border-0
-            a(href='#')
-              img.guide.card-img-top(src='/images/guide_users.gif' alt='Card Image')
-            .card-body
-              h6
-                a(href='#') Vote for songs.
-              p.text-muted.card-text Access the website, enter the room, search and vote for songs. The songs with most votes will be played.
+    .row.justify-content-center.gap20
+      .col-md-4
+        .card.border-0
+          a(href='#')
+            img.guide.card-img-top(src='/images/guide_login.gif' alt='Card Image')
+          .card-body
+            h6
+              a(href='#') Login
+            p.text-muted.card-text The authentication is done with Spotify authentication flow. The application needs your permission to play music. You can <span><strong>withdraw these permissions anytime </strong></span>from Spotify application.
+      .col-md-4
+        .card.border-0
+          a(href='#')
+            img.guide.card-img-top(src='/images/guide_createroom.gif' alt='Card Image')
+          .card-body
+            h6
+              a(href='#') Create Room and Start the party
+            p.text-muted.card-text You can load top songs (in real time) from all other rooms or search for songs as suggestion for your party. Click Start the party to enjoy the music.
+    
+    h6.text-center Wait. How about your friends? It's time for them to vote.
+    .row.justify-content-center
+      .col-md-4
+        .card.border-0
+          a(href='#')
+            img.guide.card-img-top(src='/images/guide_users.gif' alt='Card Image')
+          .card-body
+            h6
+              a(href='#') Vote for songs.
+            p.text-muted.card-text Access the website, enter the room, search and vote for songs. The songs with most votes will be played.
         
 
         

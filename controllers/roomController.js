@@ -17,9 +17,21 @@ const avatars = [ '/images/pexels-photo-534031.jpeg',
 
 exports.room_list = function(req, res, next) {
   models.Room.findAll({
-    attributes: ['id', 'name', 'public', 'avatar']
+    attributes: ['id', 'name', 'public', 'avatar', 'description']
   }).then(rooms => {
     res.render('room_list', { title: 'Room List', rooms: rooms });
+  })
+};
+
+exports.my_room_list = function(req, res, next) {
+  models.User.findById(req.user.spotify_id).then(user => {
+    if (user) {
+      user.getRooms().then(rooms => {
+        res.render('my_room', { title: 'My Room', rooms: rooms })
+      })
+    } else {
+      res.redirect('/');
+    }
   })
 };
 
@@ -74,6 +86,7 @@ exports.room_create_post = [
   sanitizeBody('room_name').trim().escape(),
   sanitizeBody('room_key').trim().escape(),
   sanitizeBody('room_description').trim().escape(),
+  // sanitizeBody('room_avatar').trim().escape(),
   // sanitizeBody('room_expired').toDate(),
 
   (req, res, next) => {
@@ -86,6 +99,9 @@ exports.room_create_post = [
       room_type = false;
     }
 
+    var avatar = req.body.room_avatar;
+    if (avatar == '') avatar = avatars[getRandomInt(0, avatars.length)];
+
     var expired = new Date();
     expired = date.addDays(expired, 7);
 
@@ -93,7 +109,7 @@ exports.room_create_post = [
       name: req.body.room_name,
       key: req.body.room_key,
       public: room_type,
-      avatar: avatars[getRandomInt(0, avatars.length)],
+      avatar: avatar,
       expired: expired,
       description: req.body.room_description,
       owner: req.user.spotify_id,
@@ -132,7 +148,9 @@ exports.room_update_post = [
   body('room_key').trim().isAlphanumeric().withMessage('Room key has non-alphanumeric characters.'),
 
   // Sanitize fields.
-  sanitizeBody('*').trim().escape(),
+  sanitizeBody('room_name').trim().escape(),
+  sanitizeBody('room_key').trim().escape(),
+  sanitizeBody('room_description').trim().escape(),
 
   (req, res, next) => {
     // Extract the validation errors from a request.
@@ -155,6 +173,7 @@ exports.room_update_post = [
           key: req.body.room_key,
           public: room_type,
           description: req.body.room_description,
+          avatar: req.body.room_avatar
         }
 
         // Create a Room object with escaped and trimmed data.
@@ -270,7 +289,6 @@ exports.room_candidate_suggestion_get = function(req, res, next) {
       }
   })
 }
-
 
 function isOwner(room, user) {
   if (user) {

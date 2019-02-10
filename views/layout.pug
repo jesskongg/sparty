@@ -4,66 +4,55 @@ html
     meta(charset='utf-8')
     meta(name='viewport', content='width=device-width, initial-scale=1 maximum-scale=1')
     title= title
-    
-    script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js')
+    link(rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css' integrity='sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS' crossorigin='anonymous')
+    link(rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.1/css/all.css' integrity='sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr' crossorigin='anonymous')
     script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js')
-    link(rel='stylesheet' href='https://fonts.googleapis.com/css?family=Lato:300,400,700')
-    //- link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
-    link(rel="stylesheet" href='https://use.fontawesome.com/releases/v5.4.2/css/all.css')
-    link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css')
-    link(rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,80')
-    link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.6.1/css/pikaday.min.css')
-    link(rel='stylesheet' href='/stylesheets/bootstrap.min.css')
     link(rel='stylesheet' href='/stylesheets/styles.min.css')
     
   body
-    .content
-      block navigation
-        nav.navbar.navbar-dark.navbar-expand-lg.fixed-top.bg-white.portfolio-navbar.gradient
-          .container
-            a.navbar-brand.logo(href='/') Sparty
-            button.navbar-toggler(data-toggle='collapse' data-target='#navbarNav')
-              span.sr-only Toggle navigation
-              span.navbar-toggler-icon
-            #navbarNav.collapse.navbar-collapse
-              ul.nav.navbar-nav.ml-auto
-                li.nav-item(role='presentation')
-                  a.nav-link.active(href='/') Home
-                li.nav-item(role='presentation')
-                  a.nav-link.active(href='/api/guide') Help
-                if (!loggedIn)
-                  li.nav-item(role='presentation')
-                    a#login.nav-link() Login
-                else
-                  li.nav-item(role='presentation')
-                    a.nav-link(href='/api/room/create') Create Room
+    block header
+      nav.navbar.navbar-expand-lg.navbar-dark.bg-success.fixed-top
+        a.navbar-brand(href='/') Sparty
+        button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navbarSupportedContent' aria-controls='navbarSupportedContent' aria-expanded='false' aria-label='Toggle navigation')
+          span.navbar-toggler-icon
+        #navbarSupportedContent.collapse.navbar-collapse
+          ul.navbar-nav.ml-auto
+            li.nav-item.active
+              a.nav-link(href='/')
+                | Home 
+                span.sr-only (current)
+            li.nav-item.active
+              a.nav-link(href='/api/guide') Help
+            li.nav-item.dropdown.active
+              if (loggedIn)
+                a#navbarDropdown.nav-link.dropdown-toggle(href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')
+                  | My Room
+                .dropdown-menu(aria-labelledby='navbarDropdown')
+                  a.dropdown-item(href='/api/room/create') Create Room
                   if (isOwner)
-                    li.nav-item(role='presentation')
-                      a.nav-link(href=room.getUrl() + '/update') Edit Room
-                      li.nav-item(role='presentation')
-                        a.nav-link(href=room.getUrl() + '/delete') Delete Room
-                  li.nav-item(role='presentation')
-                    a.nav-link(href='/api/auth/logout') Logout
+                    a.dropdown-item(href='/api/room/' + room.id + '/update') Edit Room
+                    a.dropdown-item(href='/api/room/' + room.id + '/delete') Delete Room
+                  .dropdown-divider
+                  a.dropdown-item(href='/api/room/my-room') My Rooms
+            li.nav-item.active
+              if (!loggedIn)
+                a#login.nav-link Login
+              else
+                a.nav-link(href='/api/auth/logout') Logout
 
       block content
       
-    block footer
-      footer(class="page-footer")
-        div.container
-          //- div(class="links")
-            //- a(href="/api/about") Author
-            a(href="/api/guide") About
-            //- a(href="/api/credit") Credit
-          div(class="social-icons")
-            a(href="https://www.linkedin.com/in/tudatnguyen" target="_blank")
-              i(class="icon ion-social-linkedin")
-            a(href="https://tudatn.github.io" target="_blank")
-              i(class="icon ion-social-github")
-            a(href="https://twitter.com/nguyentudat" target="_blank")
-              i(class="icon ion-social-twitter")
-    script(src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js')
-    script(src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.2/js/bootstrap.bundle.min.js')
-    script(src='https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.6.1/pikaday.min.js')
-    script(src='/scripts/script.min.js')
+      block footer
+        hr
+        footer.container.d-flex.align-content-center
+          p.d-flex.align-items-center 
+            <i class="far fa-copyright"></i> TD-2019
+          a.ml-auto(href="https://www.linkedin.com/in/tudatnguyen" target="_blank")
+            <i class="fab fa-linkedin-in"></i>
+          a(href="https://tudatn.github.io" target="_blank")
+            <i class="fab fa-github"></i>
+      script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js' integrity='sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut' crossorigin='anonymous')
+      script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js' integrity='sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k' crossorigin='anonymous')
+      script(src='/scripts/script.min.js')
 
           

@@ -1,131 +1,109 @@
-
-/* style for footer */
-/* ref: https://css-tricks.com/couple-takes-sticky-footer/ */
-html {
-  height:100%;
-  /* cursor: pointer; */
-}
-
-body {
-  display:flex;
-  height:100%;
-  flex-direction:column;
-  /*padding-top:5rem;*/
-}
-
-.content {
-  /* padding-top:40px; */
-  flex:1 0 auto;
-}
-
-.subcontent {
-  margin-top: 80px;
-  padding: 15px;
-}
+/* GLOBAL */
 
 @media screen and (max-width: 480px) {
-  .subcontent {
-    margin-top: 60px;
-  }
   html {
     cursor: pointer;
   }
 }
 
-footer {
-  flex-shrink:0;
-  /* padding:20px; */
+nav a {
+  cursor: pointer;
 }
 
-.page-footer {
-  padding: 0;
+.nav-item a:hover {
+  text-decoration: underline !important;
 }
 
-.user-item {
-  padding:10px;
-  position:relative;
+footer i {
+  font-size: 1.5rem;
 }
 
-.user-item div.user-container {
-  text-align:left;
-  font:normal 14px sans-serif;
-  background-color:#f4f8fa;
-  border:1px solid #dbe3e7;
-  box-shadow:0 2px 3px #dbe3e7;
-  padding-right:50px;
-  overflow:hidden;
+footer a {
+  margin-right: 20px;
 }
 
-.user-item div.user-container:hover {
+.content {
+  margin-top: 80px;
+}
+
+.display-none {
+  display: none;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.media-object {
+  padding: 10px 15px;
+  background-color: #f4f8fa;
+  opacity: 0.9;
+  border: 1px solid #dbe3e7;
+  box-shadow: 0 2px 3px #dbe3e7;
+  position: relative;
+}
+
+.detail {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.gap10 {
+  padding-top: 10px;
+}
+
+.gap20 {
+  padding-top: 20px;
+}
+
+.count-icon {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 35px;
+  position: absolute;
+  top: -15px;
+  right: -15px;
+  background-color: #28a745;
+  opacity: 0.9;
+  color: white;
+  font-size: 80%;
+}
+
+.delete-icon {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 35px;
+  position: absolute;
+  bottom: 0;
+  right: -15px;
+  opacity: 0.9;
+  color: white;
+  font-size: 80%;
+}
+
+.selected {
   background-color: rgba(0,0,0,0.1);
 }
-
-.user-item div.user-avatar {
-  float:left;
-  padding:10px 15px;
+/* HOME PAGE */
+.room-list {
+  margin-top: 20px;
 }
 
-.user-item p.user-name {
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  margin:10px 0 0;
+.scale-on-hover:hover {
+  transform: scale(1.05);
+  transition: transform .2s;
 }
 
-.user-item p.user-name span {
-  display:block;
-  font-size:11px;
-  color:#808d93;
-  padding-top:4px;
-}
-
-.user-item p.user-delete {
-  background-color:#de4a4a;
-  border-radius:50%;
-  color:#fff;
-  font-size:10px;
-  line-height:40px;
-  width:35px;
-  height:35px;
-  position:absolute;
-  top:0;
-  right:0px;
-  text-align:center;
-  text-decoration:none;
-}
-
-.search-container {
-  display:flex;
-  font-size:14px;
-  margin:25px 0px;
-}
-
-.search-input {
-  border:1px solid #ddd;
-  border-radius:5px;
-  padding:10px;
-  /*border-right:none;*/
-  width:100%;
-}
-
-#song_search, #room_search {
-  /* border-radius:5px; */
-  padding:10px;
-}
-
-.btn.btn-default.search-btn {
-  border:1px solid #ddd;
-  background-color:#FFFFFF !important;
-  border-radius:0 5px 5px 0;
-  border-left:none;
-  background-image:none;
-  box-shadow:none;
-  color:#919693;
-}
-
-#delete_form {
-  box-shadow: none;
-  padding: 0;
+.image-slot {
+  height: 15rem;
+  border: dashed 1px grey;
+  text-align: center;
 }
 
 /* to keep all photos same size */
@@ -138,15 +116,5 @@ footer {
 .guide.card-img-top {
     height: 100%;
     object-fit: cover;
-}
-
-#searchResult, #topCandidates {
-  margin-top: -16px;
-  border-radius:5px;
-  border:1px solid #928FEB;
-  box-shadow:0 2px 3px #928FEB;
-}
-
-#searchSong {
-  margin: 10px 0;
+    border: solid 1px green;
 }

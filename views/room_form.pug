@@ -1,21 +1,26 @@
 extend layout
 
 block content
-  #content.subcontent.container
-    #roomDetailContent.row.justify-content-center.text-center.flex-direction-column
-      .col-md-12
-        h3= title
-      .col-md-6
+  .content.container
+    h4.text-center= title
+    .row.justify-content-center.align-items-center
+      .col-md-5
+        if room
+          img#avatar.card-img-top(src=room.avatar alt='Card Image')
+        else
+          .image-slot
+            img#avatar.card-img-top(src='' alt='Card Image')
+      .col-md-6.flex-direction-column
         form(method='POST' action='')
+          .form-group
+            label Room Avatar
+            input#room_avatar.gap10.form-control(type='text', placeholder='photo url' name='room_avatar' value=(undefined===room ? '' : room.avatar))
           .form-group
             label Room Name
             input#room_name.form-control(type='text', placeholder='room name' name='room_name' require='true' value=(undefined===room ? '' : room.name))
           .form-group
             label Room Key
-            input#room_key.form-control(type='text', placeholder='room key' name='room_key' require='true' value=(undefined===room ? '' : room.key))
-          //- .form-group
-          //-   label Room Avatar
-          //-   input#room_avatar.form-control(type='text', placeholder='photo url' name='room_avatar' value=(undefined===room ? '' : room.avatar))
+            input#room_key.form-control(type='password', placeholder='room key' name='room_key' require='true' value=(undefined===room ? '' : room.key))
           .form-group
           label Description
           if room
@@ -25,8 +30,8 @@ block content
           //- .form-group
           //-   label Expired
           //-   input#room_expired.form-control(type='datetime-local', placeholder='yyyy-mm-dd' name='room_expired' value=(undefined===room ? '' : room.expired))
-
-          .form-group
+          
+          .form-group.gap10
             .form-check
               if room && !room.public
                 input#room_type.form-check-input(type='checkbox' checked name='room_type' value='true')

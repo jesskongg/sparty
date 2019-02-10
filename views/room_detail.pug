@@ -1,54 +1,51 @@
 extend layout
 
 block content
-  #content.subcontent.container
-    #roomDetailContent.row.justify-content-center.text-center
-      #welcome.col-lg-7.col-md-7.col-sm-12
-        p(style='font-weight: bold;' color='blue') #{room.name} (
-          i#num_peope
-          i 
-          i.fas.fa-users )
-      #currentSong.col-lg-7.col-md-7.col-sm-12
+  .content.container
+    .row.justify-content-center
+      p.strong #{room.name} (
+        i#num_peope
+        i 
+        i.fas.fa-users )
+    .row.justify-content-center
+      .col-md-6
+        #currentSong
+            
+    if (isOwner)
+      .row.justify-content-center.gap10      
+          .col-md-6
+            #playerController.d-flex.justify-content-center
+              .btn-group(role='group').mr-1
+                button#getCandidates.btn.btn-success(type='button' data-toggle='modal' data-target='#topCandidates') Get top songs
+              .btn-group(role='group').ml-1
+                button#start.btn.btn-success.pull-right(type='button') Start the party
+              #controller.btn-group.display-none(role='group')
+                button#resume.btn.btn-success.pull-right(type='button')
+                  i.fa.fa-play
+                button#pause.btn.btn-success.pull-right(type='button')
+                  i.fa.fa-pause
+                button#skip.btn.btn-success.pull-right(type='button')
+                  i.fa.fa-step-forward    
+      
+            #topCandidates.modal.fade(tabindex='-1' role='dialog' aria-labelledby='topCandidatesTitle' aria-hidden='true')
+              .modal-dialog.modal-dialog-centered(role='document')
+                .modal-content
+                  .modal-header
+                    h5#topCandidatesTitle.modal-title Top songs
+                    button.close(type='button' data-dismiss='modal' aria-label='Close')
+                      span(aria-hidden='true') &times;
+                  .modal-body
+                  .modal-footer
+                    button.btn.btn-secondary(type='button' data-dismiss='modal') Close
+                    button#addAll.btn.btn-secondary(type='button') Add All
 
-      if (isOwner)
-        #playerController.col-lg-7.col-md-7.col-sm-12.text-center
-          .btn-group(role='group')
-            button#getCandidates.btn.btn-primary(type='button' data-toggle='modal' data-target='#topCandidates') Get top songs
-          <span> </span>
-          .btn-group(role='group')
-            button#start.btn.btn-primary.pull-right(type='button') Start the party
-          
-          #topCandidates.modal.fade(tabindex='-1' role='dialog' aria-labelledby='topCandidatesTitle' aria-hidden='true')
-            .modal-dialog.modal-dialog-centered(role='document')
-              .modal-content
-                .modal-header
-                  h5#topCandidatesTitle.modal-title Top songs
-                  button.close(type='button' data-dismiss='modal' aria-label='Close')
-                    span(aria-hidden='true') &times;
-                .modal-body
-                .modal-footer
-                  button.btn.btn-secondary(type='button' data-dismiss='modal') Close
-                  button#addAll.btn.btn-secondary(type='button') Add All
-
-          #controller.btn-group.mx-auto(role='group', style='display:none')
-            button#resume.btn.btn-primary.pull-right(type='button')
-              i.fa.fa-play
-            button#pause.btn.btn-primary.pull-right(type='button')
-              i.fa.fa-pause
-            button#skip.btn.btn-primary.pull-right(type='button')
-              i.fa.fa-step-forward
-
-      #searchSong.col-lg-7.col-md-7.col-sm-12
-        //- .search-container
-        //-   input#song_search.search-input(type='text' name='song_search' placeholder='Search song')
-        .input-group.mb-3
-          input#song_search.form-control(type='text' name='song_search' placeholder="Search song")
-          .input-group-append
-            button#seach_button.btn.btn-default.search-btn(type='button') <i class="fas fa-search"></i>
-        #searchResult.col-12(style='display:none;')
-
-
-      #candidates.col-lg-7.col-md-7.col-sm-12
+    .row.justify-content-center.gap20
+      .col-md-6
+        input#song_search.form-control(type='text' name='song_search' placeholder="Search song")
+    .row.justify-content-center
+      .col-md-6
+        .container#searchResult.border.border-success.rounded.gap10(style='display:none;')
+        #candidates.gap20
   
   script(src='/socket.io/socket.io.js')
   script(src='/scripts/room.js')
