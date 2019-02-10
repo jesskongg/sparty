@@ -134,7 +134,7 @@ function getClientIp(req) {
     // the format: "client IP, proxy 1 IP, proxy 2 IP" so take the
     // the first one
     var forwardedIps = forwardedIpsStr.split(',');
-    ipAddress = forwardedIps[0];
+    ipAddress = forwardedIps[forwardedIps.length - 1];
   }
   if (!ipAddress) {
     // Ensure getting client IP address still works in
