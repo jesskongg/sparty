@@ -76,6 +76,7 @@ nsp.on('connection', function (socket) {
   })
 
   socket.on('add_vote', function(ea) {
+    console.log(socket.request);
     let ip = getClientIp(socket.request);
     console.log('add-vote: ip' + ip);
     if (!candidates[socket.room][ea.id].remoteAddress.includes(ip)) {
@@ -127,6 +128,7 @@ function addCandidate(socket, ea) {
 // https://stackoverflow.com/questions/14382725/how-to-get-the-correct-ip-address-of-a-client-into-a-node-socket-io-app-hosted-o?lq=1
 function getClientIp(req) {
   var ipAddress;
+  console.log(req.headers);
   // Amazon EC2 / Heroku workaround to get real client IP
   var forwardedIpsStr = req.headers['x-forwarded-for'];
   if (forwardedIpsStr) {
