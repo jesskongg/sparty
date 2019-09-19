@@ -19,6 +19,5 @@ Sparty is a web application where users join virtual rooms, add songs to a playl
 
 
 
-#### Original idea
-Based on the general idea of the author's group project of the CMPT470 course at SFU, the author redesigned (completely), developed and implemented all features.
-
+#### Background
+The idea for Sparty originated as a course project in CMPT 470 (Web-based Information Systems). I have independently redeveloped the application to include new features and an improved user experience.
