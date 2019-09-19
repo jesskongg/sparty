@@ -1,6 +1,6 @@
 # sparty
 ## Introduction
-Sparty is a web application that provides real-time jukebox rooms where a user can join and suggest songs into a queue from Spotify and everyone else can vote up which songs in the queue they want to hear next. The application will pick the song with the most votes to play.
+Sparty is a web application where users join virtual rooms, add songs to a playlist, and vote on songs. The song with the most votes is automatically played next.
 
 ## Overview of Design
 
